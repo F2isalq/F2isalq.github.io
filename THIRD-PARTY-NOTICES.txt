@@ -2,13 +2,16 @@ QClips - third-party software
 ============================
 
 FFmpeg (ffmpeg\QClips Engine.exe = ffmpeg.exe, ffmpeg\QClips Probe.exe = ffprobe.exe, and the FFmpeg DLLs)
-  QClips runs FFmpeg as a separate program, built from the FFmpeg source with one small patch and only the parts
+  QClips runs FFmpeg as a separate program, built from the FFmpeg source with two small patches and only the parts
   QClips uses. Because it includes x264, this FFmpeg build is licensed under the GNU General Public License
   version 2 or later; the license text is in ffmpeg\LICENSE.txt, and ffmpeg\README.txt lists the exact source
-  archive, its SHA-256, the library versions and the configure line of the bundled build, and contains the patch
-  in full. The source of this build is that archive plus that patch.
-  The patch (0001-scale_d3d11-single-textures.patch): the scale_d3d11 filter makes its output pictures as single
-  textures, as FFmpeg 8.0 did; FFmpeg 8.1 makes them as one texture array, which some graphics drivers refuse.
+  archive, its SHA-256, the library versions and the configure line of the bundled build, and contains the patches
+  in full. The source of this build is that archive plus those patches.
+  The patches (both to the scale_d3d11 filter):
+    0001-scale_d3d11-single-textures.patch: the filter makes its output pictures as single textures, as FFmpeg 8.0
+      did; FFmpeg 8.1 makes them as one texture array, which some graphics drivers refuse.
+    0002-scale_d3d11-bt709-limited-output.patch: the filter converts RGB pictures to BT.709 limited-range YUV
+      instead of leaving the conversion to the graphics driver.
   FFmpeg source code: https://ffmpeg.org/releases/ffmpeg-8.1.3.tar.xz
     (SHA-256 7138d28c96d9d3e3af4ee3d8cad72741f8ffb40da90c1112235dea3ecd3178a3), https://github.com/FFmpeg/FFmpeg
   Built with MSYS2 MinGW-w64 (https://www.msys2.org) and these libraries, linked into the FFmpeg DLLs:
