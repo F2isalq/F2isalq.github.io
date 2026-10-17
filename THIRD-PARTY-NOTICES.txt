@@ -2,12 +2,15 @@ QClips - third-party software
 ============================
 
 FFmpeg (ffmpeg\QClips Engine.exe = ffmpeg.exe, ffmpeg\QClips Probe.exe = ffprobe.exe, and the FFmpeg DLLs)
-  QClips runs FFmpeg as a separate program. The FFmpeg source is unmodified; the build contains only the parts
+  QClips runs FFmpeg as a separate program, built from the FFmpeg source with one small patch and only the parts
   QClips uses. Because it includes x264, this FFmpeg build is licensed under the GNU General Public License
   version 2 or later; the license text is in ffmpeg\LICENSE.txt, and ffmpeg\README.txt lists the exact source
-  archive, its SHA-256, the library versions and the configure line of the bundled build.
-  FFmpeg source code: https://ffmpeg.org/releases/ffmpeg-8.0.tar.xz
-    (SHA-256 b2751fccb6cc4c77708113cd78b561059b6fa904b24162fa0be2d60273d27b8e), https://github.com/FFmpeg/FFmpeg
+  archive, its SHA-256, the library versions and the configure line of the bundled build, and contains the patch
+  in full. The source of this build is that archive plus that patch.
+  The patch (0001-scale_d3d11-single-textures.patch): the scale_d3d11 filter makes its output pictures as single
+  textures, as FFmpeg 8.0 did; FFmpeg 8.1 makes them as one texture array, which some graphics drivers refuse.
+  FFmpeg source code: https://ffmpeg.org/releases/ffmpeg-8.1.3.tar.xz
+    (SHA-256 7138d28c96d9d3e3af4ee3d8cad72741f8ffb40da90c1112235dea3ecd3178a3), https://github.com/FFmpeg/FFmpeg
   Built with MSYS2 MinGW-w64 (https://www.msys2.org) and these libraries, linked into the FFmpeg DLLs:
     x264 - GNU GPL v2 or later - https://code.videolan.org/videolan/x264
     dav1d - BSD 2-Clause - https://code.videolan.org/videolan/dav1d
@@ -16,7 +19,7 @@ FFmpeg (ffmpeg\QClips Engine.exe = ffmpeg.exe, ffmpeg\QClips Probe.exe = ffprobe
     AMD AMF headers - MIT - https://github.com/GPUOpen-LibrariesAndSDKs/AMF
     zlib - zlib License - https://zlib.net
     GCC runtime libraries (libgcc, libstdc++, winpthreads) - GPL with the GCC Runtime Library Exception / MIT
-  Configure line (FFmpeg 8.0):
+  Configure line (FFmpeg 8.1.3):
     --prefix=/ffmpeg --target-os=mingw32 --arch=x86_64 --enable-gpl --enable-shared --disable-static
     --disable-autodetect --disable-everything --disable-doc --disable-ffplay --disable-network --disable-debug
     --enable-w32threads --enable-d3d11va --enable-ffnvcodec --enable-nvenc --enable-amf --enable-libvpl
