@@ -63,3 +63,5 @@
 .st-sec h2 { font-size: clamp(1.7rem, 3vw, var(--s3)); }
 
 .st-cta { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 28px; }
+.st-field select option { background-color: #1a1d26; color: #edf1fb; }
+.st-field select option:checked { background-color: #1a8cff; color: #fff; }

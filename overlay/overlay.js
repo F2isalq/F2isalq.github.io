@@ -18,7 +18,11 @@
      opacity=1             overall opacity (0.4-1), e.g. 0.85 for a quieter badge
      delay=2               seconds before the first appearance
      scale=1               size (0.5-1.5)
-     accent=1a8cff         accent colour (hex, no #)
+     accent=1a8cff         accent colour (hex, no #); the builder offers the app's accents
+     theme=dark|light|neon look of the panel (default dark)
+     corners=round|square  (default round)
+     enter=slide|pop|fade|flip  how it comes in and goes out (default slide)
+     shot=0                bar and card without the gameplay screen
      bg=1 / checker=1      preview over a game picture / a checkerboard
      t=<ms>                stop at that moment of the cycle */
 (function () {
@@ -51,7 +55,11 @@
   var delay = num("delay", 2, 0, 600) * 1000;
   var scale = small ? 1 : num("scale", 1, 0.5, 1.5);
   var opacity = num("opacity", 1, 0.4, 1);
-  var accent = /^[0-9a-f]{6}$/i.test(q.get("accent") || "") ? "#" + q.get("accent") : null;
+  var accent = /^[0-9a-f]{6}$/i.test(q.get("accent") || "") ? q.get("accent").toLowerCase() : null;
+  var theme = pick("theme", ["dark", "light", "neon"], "dark");
+  var corners = pick("corners", ["round", "square"], "round");
+  var enter = pick("enter", ["slide", "pop", "fade", "flip"], "slide");
+  var noShot = q.get("shot") === "0" && (layout === "bar" || layout === "card");
   var seekTo = q.has("t") ? num("t", 0, 0, 1e7) : null;
 
   var IN = small ? 900 : 1100, OUT = small ? 650 : 800;
@@ -98,13 +106,35 @@
   root.dir = lang === "ar" ? "rtl" : "ltr";
   if (q.get("bg") === "1") document.body.classList.add("bg");
   if (q.get("checker") === "1") document.body.classList.add("checker");
-  if (accent) root.style.setProperty("--accent", accent);
+
+  /* From one accent colour: a light tint (a1), the colour (a2), a deeper shade (a3) and a neighbouring hue (b)
+     for the second light, as the default blue set does with cyan and violet. */
+  function setAccent(hex) {
+    var rgb = [0, 2, 4].map(function (i) { return parseInt(hex.substr(i, 2), 16); });
+    var mix = function (c, w, f) { return c.map(function (v) { return Math.round(v + (w - v) * f); }); };
+    var a1 = mix(rgb, 255, 0.45), a3 = mix(rgb, 0, 0.12);
+    var r = rgb[0] / 255, g = rgb[1] / 255, bl = rgb[2] / 255, mx = Math.max(r, g, bl), mn = Math.min(r, g, bl);
+    var h = 0, l = (mx + mn) / 2, s = mx === mn ? 0 : (l > 0.5 ? (mx - mn) / (2 - mx - mn) : (mx - mn) / (mx + mn));
+    if (mx !== mn) h = mx === r ? (g - bl) / (mx - mn) + (g < bl ? 6 : 0) : mx === g ? (bl - r) / (mx - mn) + 2 : (r - g) / (mx - mn) + 4;
+    h = (h * 60 + 40) % 360;
+    var hsl = function (p, q2, t) { t = (t + 1) % 1; return t < 1 / 6 ? p + (q2 - p) * 6 * t : t < 1 / 2 ? q2 : t < 2 / 3 ? p + (q2 - p) * (2 / 3 - t) * 6 : p; };
+    var q2 = l < 0.5 ? l * (1 + s) : l + s - l * s, p2 = 2 * l - q2, hh = h / 360;
+    var b = [hh + 1 / 3, hh, hh - 1 / 3].map(function (t) { return Math.round(hsl(p2, q2, t) * 255); });
+    var css = function (c) { return "rgb(" + c.join(",") + ")"; };
+    [["--a1", css(a1)], ["--a1-rgb", a1.join(",")], ["--a2", css(rgb)], ["--a2-rgb", rgb.join(",")],
+      ["--a3", css(a3)], ["--b-rgb", b.join(",")]].forEach(function (v) { root.style.setProperty(v[0], v[1]); });
+  }
 
   var $ = function (sel, el) { return (el || document).querySelector(sel); };
   var $$ = function (sel, el) { return Array.prototype.slice.call((el || document).querySelectorAll(sel)); };
 
   var t = TEXT[lang];
   var stage = $("#stage"), ad = $("#ad");
+  if (accent && accent !== "1a8cff") setAccent(accent);
+  root.classList.add("t-" + theme);
+  if (corners === "square") root.classList.add("sq");
+  if (theme === "light") $(".logo").src = "logo-light.svg";
+  if (noShot) ad.classList.add("noshot");
   ad.classList.add(layout, "pos-" + pos, "align-" + align);
   $$("[data-t]").forEach(function (el) { el.textContent = t[el.getAttribute("data-t")]; });
   $(".headline").innerHTML = t.headline.map(function (w) {
@@ -171,14 +201,21 @@
     var dxOut = layout !== "card" ? (from === "left" ? (W - left + gap) : -(right + gap)) * stageScale / k : dxIn;
     var w = frame.offsetWidth;
 
-    track(frame, [
-      [0, { transform: "translateX(" + dxIn + "px) skewX(" + (sgn * skew) + "deg)", opacity: 1 }, BACK],
-      [small ? 850 : 1000, { transform: "translateX(0) skewX(0deg)", opacity: 1 }],
-      [IN + hold, { transform: "translateX(0) skewX(0deg)", opacity: 1 }, IN_QUAD],
-      [D, { transform: "translateX(" + dxOut + "px) skewX(" + (dxOut < 0 ? skew : -skew) + "deg)", opacity: 1 }]
-    ]);
+    var t1 = small ? 850 : 1000;
+    if (enter === "slide") {
+      track(frame, [
+        [0, { transform: "translateX(" + dxIn + "px) skewX(" + (sgn * skew) + "deg)", opacity: 1 }, BACK],
+        [t1, { transform: "translateX(0) skewX(0deg)", opacity: 1 }],
+        [IN + hold, { transform: "translateX(0) skewX(0deg)", opacity: 1 }, IN_QUAD],
+        [D, { transform: "translateX(" + dxOut + "px) skewX(" + (dxOut < 0 ? skew : -skew) + "deg)", opacity: 1 }]
+      ]);
+    } else {
+      frameEnter(frame, t1, true);
+    }
+    glowPulse();
 
     var streak = $(".streak", ad);
+    if (enter !== "slide") streak.style.display = "none";
     var sx = from === "left" ? -1 : 1;
     track(streak, [
       [0, { transform: "translateX(" + (sx * 900) + "px) scaleX(.4)", opacity: 0 }, "ease-out"],
@@ -304,12 +341,38 @@
     anims.push(a);
   }
 
+  /* pop, fade and flip: the panel appears in place (with an exit unless it is the badge) */
+  function frameEnter(frame, t1, withExit) {
+    var top = layout === "bar" ? pos === "top" : layout === "card" ? pos.charAt(0) === "t" : false;
+    var a = {
+      pop: ["scale(.55)", "scale(1)", "scale(.88)", BACK],
+      fade: ["translateY(" + (top ? -26 : 26) + "px)", "translateY(0)", "translateY(" + (top ? -12 : 12) + "px)", OUT_EXPO],
+      flip: ["perspective(1400px) rotateX(" + (top ? 80 : -80) + "deg)", "perspective(1400px) rotateX(0deg)",
+        "perspective(1400px) rotateX(" + (top ? -70 : 70) + "deg)", BACK]
+    }[enter];
+    frame.style.transformOrigin = top ? "50% 0" : "50% 100%";
+    var fr = [[0, { transform: a[0], opacity: 0 }, a[3]], [t1, { transform: a[1], opacity: 1 }]];
+    if (withExit) fr.push([IN + hold, { transform: a[1], opacity: 1 }, IN_QUAD], [D, { transform: a[2], opacity: 0 }]);
+    track(frame, fr);
+  }
+
+  /* neon: the glow around the edge breathes */
+  function glowPulse() {
+    if (theme !== "neon") return;
+    loop($(".glow", ad), [[0, { opacity: 0.25 }, "ease-in-out"], [0.5, { opacity: 0.95 }, "ease-in-out"], [1, { opacity: 0.25 }]], 2600, 0);
+  }
+
   function buildBadge() {
     var sgn = from === "left" ? -1 : 1;
-    track($(".frame", ad), [
-      [0, { transform: "translateX(" + (sgn * 48) + "px)", opacity: 0 }, OUT_EXPO],
-      [900, { transform: "translateX(0)", opacity: 1 }]
-    ]);
+    if (enter === "slide") {
+      track($(".frame", ad), [
+        [0, { transform: "translateX(" + (sgn * 48) + "px)", opacity: 0 }, OUT_EXPO],
+        [900, { transform: "translateX(0)", opacity: 1 }]
+      ]);
+    } else {
+      frameEnter($(".frame", ad), 900, false);
+    }
+    glowPulse();
     track($(".brand", ad), [[250, { transform: "translateY(6px)", opacity: 0 }, OUT_EXPO], [850, { transform: "translateY(0)", opacity: 1 }]]);
     track($(".qr", ad), [[300, { transform: "scale(.7)", opacity: 0 }, BACK], [950, { transform: "scale(1)", opacity: 1 }]]);
     track($(".card-url", ad), [[550, { transform: "translateY(6px)", opacity: 0 }, OUT_EXPO], [1150, { transform: "translateY(0)", opacity: 1 }]]);

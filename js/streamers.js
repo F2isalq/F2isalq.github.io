@@ -43,6 +43,7 @@
     if (l === 'mini' && hold.value === '12') hold.value = '10';
     if (l !== 'mini' && lastLayout === 'mini' && hold.value === '10') hold.value = '12';
     field('every').hidden = field('hold').hidden = l === 'badge';
+    field('scale').hidden = field('shot').hidden = l === 'mini' || l === 'badge';
     lastLayout = l;
   }
 
@@ -55,6 +56,15 @@
     if (l !== 'badge') {
       if (val('every') !== '600') q.set('every', val('every'));
       if (val('hold') !== (l === 'mini' ? '10' : '12')) q.set('hold', val('hold'));
+    }
+    // look: only what differs from the defaults
+    if (val('accent')) q.set('accent', val('accent'));
+    if (val('theme') !== 'dark') q.set('theme', val('theme'));
+    if (val('corners') !== 'round') q.set('corners', val('corners'));
+    if (val('enter') !== 'slide') q.set('enter', val('enter'));
+    if (l === 'bar' || l === 'card') {
+      if (val('scale') !== '1') q.set('scale', val('scale'));
+      if (val('shot') === '0') q.set('shot', '0');
     }
     for (var k in extra) q.set(k, extra[k]);
     return q.toString();
