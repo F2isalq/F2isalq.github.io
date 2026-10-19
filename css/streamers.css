@@ -1,0 +1,65 @@
+/* "For streamers" page: the overlay preview, the link builder, setup steps and the video files. Builds on site.css. */
+
+.st-hero { padding-block: clamp(56px, 9vw, 110px) clamp(28px, 4vw, 48px); }
+.st-hero .lead { margin-top: 20px; }
+.st-hero .eyebrow {
+  display: inline-block; margin-bottom: 18px; padding: 5px 12px; border-radius: 999px; font-size: .85rem; font-weight: 700;
+  color: #dff3ff; background: rgba(26, 140, 255, .16); border: 1px solid rgba(77, 166, 255, .4);
+}
+
+.st-grid { display: grid; grid-template-columns: minmax(0, 1.55fr) minmax(0, 1fr); gap: clamp(20px, 3vw, 36px); align-items: start; }
+@media (max-width: 960px) { .st-grid { grid-template-columns: 1fr; } }
+
+.st-preview { padding: 7px; }
+.st-preview iframe { display: block; margin-inline: auto; width: 100%; aspect-ratio: 16 / 9; border: 0; border-radius: 12px; background: #14171f; color-scheme: normal; } /* same scheme as the overlay page, or the frame turns opaque white */
+.st-preview figcaption { padding: 10px 8px 4px; font-size: .9rem; color: var(--dim); }
+
+.st-builder { padding: clamp(18px, 2.4vw, 26px); display: flex; flex-direction: column; gap: 16px; }
+.st-builder h2 { font-size: var(--s1); line-height: 1.2; }
+.st-fields { display: grid; grid-template-columns: 1fr 1fr; gap: 12px 14px; }
+@media (max-width: 420px) { .st-fields { grid-template-columns: 1fr; } }
+.st-field { display: flex; flex-direction: column; gap: 6px; min-width: 0; }
+.st-field label { font-size: .85rem; font-weight: 650; color: var(--muted); }
+.st-field select {
+  font: inherit; font-size: .95rem; color: var(--text); min-height: 42px; padding: 0 12px; border-radius: 11px; width: 100%;
+  background: rgba(255, 255, 255, .06); border: 1px solid var(--edge); color-scheme: dark;
+}
+.st-field select:focus-visible { outline: 2px solid var(--blue-hi); outline-offset: 2px; }
+
+.st-url { display: flex; gap: 8px; align-items: stretch; }
+.st-url input {
+  flex: 1; min-width: 0; font: inherit; font-size: .88rem; color: var(--cyan); padding: 0 12px; min-height: 46px; border-radius: 11px;
+  background: rgba(0, 0, 0, .35); border: 1px solid var(--edge); direction: ltr; text-align: left;
+}
+.st-url .btn { min-height: 46px; white-space: nowrap; }
+.st-size { font-size: .9rem; color: var(--muted); }
+.st-size b { color: var(--text); }
+
+.st-steps { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: clamp(14px, 2vw, 22px); counter-reset: step; }
+@media (max-width: 900px) { .st-steps { grid-template-columns: 1fr; } }
+.st-step { padding: 22px; display: flex; flex-direction: column; gap: 10px; }
+.st-step::before {
+  counter-increment: step; content: counter(step); width: 34px; height: 34px; border-radius: 50%; display: grid; place-items: center;
+  font-weight: 800; color: #fff; background: linear-gradient(140deg, var(--cyan), var(--deep));
+}
+.st-step h3 { font-size: 1.2rem; }
+.st-step p, .st-step li { color: var(--muted); font-size: .98rem; }
+.st-step ul { margin: 0; padding-inline-start: 1.1em; display: flex; flex-direction: column; gap: 6px; }
+.st-step b { color: var(--text); }
+
+.st-videos { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 14px; margin-top: 24px; }
+@media (max-width: 900px) { .st-videos { grid-template-columns: 1fr 1fr; } }
+@media (max-width: 480px) { .st-videos { grid-template-columns: 1fr; } }
+.st-videos .btn { width: 100%; }
+
+.st-tips { margin: 0; padding: 0; list-style: none; display: grid; grid-template-columns: 1fr 1fr; gap: 12px 28px; }
+@media (max-width: 760px) { .st-tips { grid-template-columns: 1fr; } }
+.st-tips li { position: relative; padding-inline-start: 26px; color: var(--muted); }
+.st-tips li::before { content: ""; position: absolute; inset-inline-start: 4px; top: .7em; width: 8px; height: 8px; border-radius: 50%; background: var(--blue-hi); }
+.st-tips b { color: var(--text); }
+
+.st-sec { padding-block: clamp(40px, 6vw, 80px); }
+.st-sec .sec-head { margin-bottom: clamp(22px, 3vw, 34px); }
+.st-sec h2 { font-size: clamp(1.7rem, 3vw, var(--s3)); }
+
+.st-cta { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 28px; }

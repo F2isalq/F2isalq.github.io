@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>QClips stream overlay</title>
+<!-- Transparent 1920x1080 OBS / Streamlabs browser source. Options are in the address, see overlay.js. -->
+<link rel="preload" href="../fonts/archivo.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="overlay.css">
+</head>
+<body>
+<div id="stage">
+  <div class="ad" id="ad" hidden>
+    <div class="streak" aria-hidden="true"></div>
+    <div class="frame">
+      <div class="panel">
+        <div class="lights" aria-hidden="true"><i class="l1"></i><i class="l2"></i><i class="l3"></i></div>
+        <div class="sheen" aria-hidden="true"></div>
+
+        <div class="shot">
+          <div class="screen">
+            <video class="s1" data-src="clip.mp4" muted playsinline loop preload="auto" disablepictureinpicture></video>
+            <img class="s2" src="../img/editor-simple-800.webp" alt="" decoding="async">
+            <img class="toast" src="../img/toast.webp" alt="" decoding="async">
+          </div>
+        </div>
+
+        <div class="copy">
+          <div class="brand">
+            <img class="logo" src="logo.svg" alt="QClips">
+            <span class="badge" data-t="badge"></span>
+          </div>
+          <h1 class="headline"></h1>
+          <p class="sub" data-t="sub"></p>
+          <div class="card-url"><span class="scan-label" data-t="scan"></span><span class="url">qclips.app</span></div>
+          <ul class="feats"></ul>
+          <ul class="lines"></ul>
+        </div>
+
+        <div class="cta">
+          <div class="qr">
+            <img class="code" alt="">
+            <i class="scan" aria-hidden="true"></i>
+            <i class="ring" aria-hidden="true"></i>
+          </div>
+          <div class="link">
+            <span class="scan-label" data-t="scan"></span>
+            <span class="url">qclips.app</span>
+          </div>
+        </div>
+
+        <div class="timer" aria-hidden="true"></div>
+      </div>
+    </div>
+  </div>
+</div>
+<script src="overlay.js"></script>
+</body>
+</html>

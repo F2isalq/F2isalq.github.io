@@ -1,0 +1,190 @@
+<!doctype html>
+<html lang="en" dir="ltr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>QClips for streamers: a free animated overlay for OBS and Streamlabs</title>
+<meta name="description" content="Put QClips on your stream: an animated overlay with a live look at the app, the site link and a QR code. One link for an OBS or Streamlabs browser source, in English or Arabic.">
+<meta name="theme-color" content="#0d0f14">
+<meta name="color-scheme" content="dark">
+<link rel="icon" href="favicon.ico" sizes="any">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="icon" href="favicon-32.png" type="image/png" sizes="32x32">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="alternate" hreflang="en" href="streamers.html">
+<link rel="alternate" hreflang="ar" href="ar/streamers.html">
+<meta property="og:title" content="QClips for streamers">
+<meta property="og:description" content="A free animated overlay for your stream: the app, the link and a QR code.">
+<meta property="og:type" content="website">
+<meta property="og:image" content="img/og.jpg">
+<link rel="preload" href="fonts/archivo.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="css/site.css">
+<link rel="stylesheet" href="css/streamers.css">
+<script src="js/site.js" defer></script>
+<script src="js/streamers.js" defer></script>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<div class="aurora" aria-hidden="true"><i class="a1"></i><i class="a2"></i><i class="a3"></i><i class="a4"></i></div>
+
+<header class="site-header">
+  <div class="wrap">
+    <a class="brand" href="./" aria-label="QClips home"><img src="img/logo.png" alt="" width="28" height="28">QClips</a>
+    <nav class="nav" id="nav" aria-label="Main">
+      <a href="#link">Overlay link</a>
+      <a href="#setup">Setup</a>
+      <a href="#video">Video files</a>
+    </nav>
+    <a class="lang" href="ar/streamers.html" hreflang="ar" lang="ar">العربية</a>
+    <a class="btn primary sm" href="./#download">Download</a>
+  </div>
+</header>
+
+<main id="main">
+
+<section class="st-hero">
+  <div class="wrap">
+    <span class="eyebrow">For streamers</span>
+    <h1>Put QClips on your stream.</h1>
+    <p class="lead">An animated overlay that slides in, shows the app, the link and a QR code your viewers can scan, then slides away. Free, no sign-up, nothing to install: one link in OBS or Streamlabs.</p>
+    <div class="st-cta">
+      <a class="btn primary" href="overlay/media/QClips-Streamer-Kit.zip" download><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4v11m0 0l-4.5-4.5M12 15l4.5-4.5M5 19h14"/></svg>Download the streamer kit <small>ZIP, 16 MB</small></a>
+      <a class="btn ghost" href="#link">Get your overlay link</a>
+    </div>
+  </div>
+</section>
+
+<section class="st-sec" id="link" aria-labelledby="link-title" style="padding-top:0">
+  <div class="wrap st-grid">
+    <figure class="glass st-preview" style="margin:0">
+      <iframe id="st-frame" title="Overlay preview" loading="lazy"></iframe>
+      <figcaption>Live preview over a game. On your stream the background is transparent.</figcaption>
+    </figure>
+
+    <form class="glass st-builder" id="st-form" data-base="overlay/">
+      <h2 id="link-title">Your overlay link</h2>
+      <div class="st-fields">
+        <div class="st-field">
+          <label for="f-lang">Language</label>
+          <select id="f-lang" name="lang"><option value="en" selected>English</option><option value="ar">Arabic</option></select>
+        </div>
+        <div class="st-field">
+          <label for="f-layout">Style</label>
+          <select id="f-layout" name="layout"><option value="bar" selected>Bar (lower third)</option><option value="card">Corner card</option><option value="mini">Mini strip (under your webcam)</option><option value="badge">Always-on badge (small, quiet)</option></select>
+        </div>
+        <div class="st-field">
+          <label for="f-pos">Position</label>
+          <select id="f-pos" name="pos"></select>
+        </div>
+        <div class="st-field">
+          <label for="f-from">Slides in from</label>
+          <select id="f-from" name="from"><option value="" selected>Automatic</option><option value="left">Left</option><option value="right">Right</option></select>
+        </div>
+        <div class="st-field">
+          <label for="f-every">Shows up</label>
+          <select id="f-every" name="every">
+            <option value="60">Every minute</option>
+            <option value="120">Every 2 minutes</option>
+            <option value="180">Every 3 minutes</option>
+            <option value="300">Every 5 minutes</option>
+            <option value="600" selected>Every 10 minutes</option>
+            <option value="900">Every 15 minutes</option>
+            <option value="1200">Every 20 minutes</option>
+            <option value="1800">Every 30 minutes</option>
+            <option value="0">Only when I show the source</option>
+          </select>
+        </div>
+        <div class="st-field">
+          <label for="f-hold">Stays for</label>
+          <select id="f-hold" name="hold">
+            <option value="10">10 seconds</option>
+            <option value="12" selected>12 seconds</option>
+            <option value="15">15 seconds</option>
+            <option value="20">20 seconds</option>
+          </select>
+        </div>
+      </div>
+      <div class="st-url">
+        <input id="st-link" type="text" readonly aria-label="Overlay link" spellcheck="false">
+        <button class="btn primary" type="button" id="st-copy">Copy link</button>
+      </div>
+      <p class="st-size">Browser source size: <b class="ltr" id="st-size">1920 × 1080</b> <span id="st-size-note" data-full="(or 1280 × 720, it scales)." data-small="Drag it anywhere in OBS, for example under your webcam. Keep the same shape when you resize it."></span></p>
+    </form>
+  </div>
+</section>
+
+<section class="st-sec" id="setup" aria-labelledby="setup-title">
+  <div class="wrap">
+    <div class="sec-head"><h2 id="setup-title">Add it in a minute.</h2></div>
+    <ol class="st-steps" style="list-style:none;margin:0;padding:0">
+      <li class="glass st-step">
+        <h3>Add a browser source</h3>
+        <p><b>OBS:</b> Sources, <b>+</b>, <b>Browser</b>. <b>Streamlabs:</b> <b>+</b> Source, <b>Browser Source</b>.</p>
+      </li>
+      <li class="glass st-step">
+        <h3>Paste the link</h3>
+        <ul>
+          <li>URL: your overlay link.</li>
+          <li>Width <b>1920</b>, height <b>1080</b>.</li>
+          <li>Tick <b>Shutdown source when not visible</b> and <b>Refresh browser when scene becomes active</b>.</li>
+        </ul>
+      </li>
+      <li class="glass st-step">
+        <h3>Put it on top</h3>
+        <p>Keep it above your game in the source list, full screen. The page is transparent, so only the overlay shows. It has no sound.</p>
+      </li>
+    </ol>
+  </div>
+</section>
+
+<section class="st-sec" id="video" aria-labelledby="video-title">
+  <div class="wrap">
+    <div class="sec-head">
+      <h2 id="video-title">Rather have a video file?</h2>
+      <p>The same animation as a transparent WebM (1920 × 1080, 60 fps). Add it in OBS as a <b>Media Source</b>, untick <b>Loop</b>, and show it when you like, or play it from a stinger or a hotkey.</p>
+    </div>
+    <p style="margin-bottom:18px"><a class="btn primary" href="overlay/media/QClips-Streamer-Kit.zip" download><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4v11m0 0l-4.5-4.5M12 15l4.5-4.5M5 19h14"/></svg>Everything in one file <small>ZIP, 16 MB: all videos, badges and a guide</small></a></p>
+    <div class="st-videos">
+      <a class="btn ghost" href="overlay/media/qclips-overlay-en-bar.webm" download>English bar</a>
+      <a class="btn ghost" href="overlay/media/qclips-overlay-en-card.webm" download>English card</a>
+      <a class="btn ghost" href="overlay/media/qclips-overlay-ar-bar.webm" download lang="ar">شريط عربي</a>
+      <a class="btn ghost" href="overlay/media/qclips-overlay-ar-card.webm" download lang="ar">بطاقة عربية</a>
+      <a class="btn ghost" href="overlay/media/qclips-overlay-en-mini.webm" download>English mini</a>
+      <a class="btn ghost" href="overlay/media/qclips-overlay-ar-mini.webm" download lang="ar">شريط صغير عربي</a>
+      <a class="btn ghost" href="overlay/media/qclips-overlay-en-badge.png" download>English badge (PNG)</a>
+      <a class="btn ghost" href="overlay/media/qclips-overlay-ar-badge.png" download lang="ar">شارة عربية (PNG)</a>
+    </div>
+    <p class="st-size" style="margin-top:14px">Mini videos are 600 × 188 and the badge pictures 420 × 136: add them as they are and move them into place.</p>
+  </div>
+</section>
+
+<section class="st-sec" aria-labelledby="tips-title">
+  <div class="wrap">
+    <div class="sec-head"><h2 id="tips-title">Tips</h2></div>
+    <ul class="st-tips">
+      <li><b>Once every 10 to 20 minutes</b> is plenty for the big bar. The mini strip under your webcam can come more often, every 1 to 5 minutes.</li>
+      <li>The <b>always-on badge</b> stays put and only changes its line every few seconds, so it never gets in the way.</li>
+      <li>Keep it clear of your <b>webcam, chat and alerts</b>. Pick the corner card if the bar covers your HUD.</li>
+      <li>Want it on demand? Choose <b>Only when I show the source</b> and toggle the source, or bind it to a hotkey.</li>
+      <li>The QR codes of the bar, card and mini strip scan from a phone at 720p and above; the badge’s smaller one is best at 1080p. Mention it on stream once in a while.</li>
+    </ul>
+  </div>
+</section>
+
+</main>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <p class="f-brand"><img src="img/logo.png" alt="" width="24" height="24" loading="lazy"><span><b>QClips</b> Free game clipping for Windows.</span></p>
+    <ul class="f-links">
+      <li><a href="./">Home</a></li>
+      <li><a href="https://github.com/F2isalq/QClips-Releases/releases">Releases</a></li>
+      <li><a href="licenses.html">Licenses and credits</a></li>
+      <li><a href="ar/streamers.html" hreflang="ar" lang="ar">العربية</a></li>
+    </ul>
+    <p class="credit"><span>© QClips by F2isalq</span></p>
+    <p class="credit owners">The gameplay in the overlay and behind the preview is VALORANT, recorded with QClips; player names are blurred. VALORANT belongs to Riot Games. QClips isn’t affiliated with or endorsed by them.</p>
+  </div>
+</footer>
+</body>
+</html>

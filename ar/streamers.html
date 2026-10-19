@@ -1,0 +1,190 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>QClips للستريمرز: أوفرلاي متحرك مجاني لـ OBS و Streamlabs</title>
+<meta name="description" content="حط QClips في بثك: أوفرلاي متحرك يعرض البرنامج ورابط الموقع وQR كود. رابط واحد تحطه كمصدر متصفح في OBS أو Streamlabs، بالعربي أو بالإنجليزي.">
+<meta name="theme-color" content="#0d0f14">
+<meta name="color-scheme" content="dark">
+<link rel="icon" href="../favicon.ico" sizes="any">
+<link rel="icon" href="../favicon.svg" type="image/svg+xml">
+<link rel="icon" href="../favicon-32.png" type="image/png" sizes="32x32">
+<link rel="apple-touch-icon" href="../apple-touch-icon.png">
+<link rel="alternate" hreflang="en" href="../streamers.html">
+<link rel="alternate" hreflang="ar" href="streamers.html">
+<meta property="og:title" content="QClips للستريمرز">
+<meta property="og:description" content="أوفرلاي متحرك مجاني لبثك: البرنامج والرابط وQR كود.">
+<meta property="og:type" content="website">
+<meta property="og:image" content="../img/og.jpg">
+<link rel="preload" href="../fonts/noto-kufi-arabic.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="../css/site.css">
+<link rel="stylesheet" href="../css/streamers.css">
+<script src="../js/site.js" defer></script>
+<script src="../js/streamers.js" defer></script>
+</head>
+<body>
+<a class="skip" href="#main">انتقل إلى المحتوى</a>
+<div class="aurora" aria-hidden="true"><i class="a1"></i><i class="a2"></i><i class="a3"></i><i class="a4"></i></div>
+
+<header class="site-header">
+  <div class="wrap">
+    <a class="brand" href="./" aria-label="الصفحة الرئيسية لـ QClips"><img src="../img/logo.png" alt="" width="28" height="28"><span lang="en">QClips</span></a>
+    <nav class="nav" id="nav" aria-label="القائمة الرئيسية">
+      <a href="#link">رابط الأوفرلاي</a>
+      <a href="#setup">طريقة الإضافة</a>
+      <a href="#video">ملفات الفيديو</a>
+    </nav>
+    <a class="lang" href="../streamers.html" hreflang="en" lang="en">English</a>
+    <a class="btn primary sm" href="./#download">تنزيل</a>
+  </div>
+</header>
+
+<main id="main">
+
+<section class="st-hero">
+  <div class="wrap">
+    <span class="eyebrow">للستريمرز</span>
+    <h1>حط <span lang="en">QClips</span> في بثك.</h1>
+    <p class="lead">أوفرلاي متحرك يدخل على الشاشة، يعرض البرنامج والرابط وQR كود يمسحه المتابعين بجوالاتهم، وبعدين يطلع. مجاني، بدون تسجيل، وما يحتاج تثبيت: رابط واحد في OBS أو Streamlabs.</p>
+    <div class="st-cta">
+      <a class="btn primary" href="../overlay/media/QClips-Streamer-Kit.zip" download><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4v11m0 0l-4.5-4.5M12 15l4.5-4.5M5 19h14"/></svg>حمّل حزمة الستريمرز <small>ZIP، 16 ميجا</small></a>
+      <a class="btn ghost" href="#link">سوّ رابط الأوفرلاي حقك</a>
+    </div>
+  </div>
+</section>
+
+<section class="st-sec" id="link" aria-labelledby="link-title" style="padding-top:0">
+  <div class="wrap st-grid">
+    <figure class="glass st-preview" style="margin:0">
+      <iframe id="st-frame" title="معاينة الأوفرلاي" loading="lazy"></iframe>
+      <figcaption>معاينة حية فوق لعبة. في بثك تكون الخلفية شفافة.</figcaption>
+    </figure>
+
+    <form class="glass st-builder" id="st-form" data-base="../overlay/">
+      <h2 id="link-title">رابط الأوفرلاي حقك</h2>
+      <div class="st-fields">
+        <div class="st-field">
+          <label for="f-lang">اللغة</label>
+          <select id="f-lang" name="lang"><option value="ar" selected>العربية</option><option value="en">الإنجليزية</option></select>
+        </div>
+        <div class="st-field">
+          <label for="f-layout">الشكل</label>
+          <select id="f-layout" name="layout"><option value="bar" selected>شريط سفلي</option><option value="card">بطاقة في الزاوية</option><option value="mini">شريط صغير (تحت الكام)</option><option value="badge">شارة دائمة (صغيرة وهادية)</option></select>
+        </div>
+        <div class="st-field">
+          <label for="f-pos">المكان</label>
+          <select id="f-pos" name="pos"></select>
+        </div>
+        <div class="st-field">
+          <label for="f-from">يدخل من</label>
+          <select id="f-from" name="from"><option value="" selected>تلقائي</option><option value="right">اليمين</option><option value="left">اليسار</option></select>
+        </div>
+        <div class="st-field">
+          <label for="f-every">يظهر</label>
+          <select id="f-every" name="every">
+            <option value="60">كل دقيقة</option>
+            <option value="120">كل دقيقتين</option>
+            <option value="180">كل 3 دقائق</option>
+            <option value="300">كل 5 دقائق</option>
+            <option value="600" selected>كل 10 دقائق</option>
+            <option value="900">كل 15 دقيقة</option>
+            <option value="1200">كل 20 دقيقة</option>
+            <option value="1800">كل 30 دقيقة</option>
+            <option value="0">بس لما أظهّر المصدر</option>
+          </select>
+        </div>
+        <div class="st-field">
+          <label for="f-hold">يبقى</label>
+          <select id="f-hold" name="hold">
+            <option value="10">10 ثواني</option>
+            <option value="12" selected>12 ثانية</option>
+            <option value="15">15 ثانية</option>
+            <option value="20">20 ثانية</option>
+          </select>
+        </div>
+      </div>
+      <div class="st-url">
+        <input id="st-link" type="text" readonly aria-label="رابط الأوفرلاي" spellcheck="false">
+        <button class="btn primary" type="button" id="st-copy">انسخ الرابط</button>
+      </div>
+      <p class="st-size">مقاس مصدر المتصفح: <b class="ltr" id="st-size">1920 × 1080</b> <span id="st-size-note" data-full="(أو 1280 × 720، يتكيّف)." data-small="اسحبه لأي مكان في OBS، مثلاً تحت الكام. وإذا كبّرته أو صغّرته خلّه بنفس الشكل."></span></p>
+    </form>
+  </div>
+</section>
+
+<section class="st-sec" id="setup" aria-labelledby="setup-title">
+  <div class="wrap">
+    <div class="sec-head"><h2 id="setup-title">تضيفه في دقيقة.</h2></div>
+    <ol class="st-steps" style="list-style:none;margin:0;padding:0">
+      <li class="glass st-step">
+        <h3>أضف مصدر متصفح</h3>
+        <p><b>OBS:</b> من Sources اضغط <b>+</b> واختر <b lang="en">Browser</b>. <b>Streamlabs:</b> اضغط <b>+</b> واختر <b lang="en">Browser Source</b>.</p>
+      </li>
+      <li class="glass st-step">
+        <h3>الصق الرابط</h3>
+        <ul>
+          <li>في خانة URL: رابط الأوفرلاي حقك.</li>
+          <li>العرض <b>1920</b> والارتفاع <b>1080</b>.</li>
+          <li>فعّل <b lang="en" dir="ltr">Shutdown source when not visible</b> و<b lang="en" dir="ltr">Refresh browser when scene becomes active</b>.</li>
+        </ul>
+      </li>
+      <li class="glass st-step">
+        <h3>خلّه فوق</h3>
+        <p>خلّه فوق اللعبة في قائمة المصادر وبكامل الشاشة. الصفحة شفافة، فما يبان إلا الأوفرلاي، وما فيه أي صوت.</p>
+      </li>
+    </ol>
+  </div>
+</section>
+
+<section class="st-sec" id="video" aria-labelledby="video-title">
+  <div class="wrap">
+    <div class="sec-head">
+      <h2 id="video-title">تبيه ملف فيديو؟</h2>
+      <p>نفس الحركة كملف WebM بخلفية شفافة (<span class="ltr">1920 × 1080</span>، 60 إطار). أضفه في OBS كـ <b lang="en">Media Source</b>، وشيل علامة <b lang="en">Loop</b>، وأظهره وقت ما تبي أو شغّله من اختصار.</p>
+    </div>
+    <p style="margin-bottom:18px"><a class="btn primary" href="../overlay/media/QClips-Streamer-Kit.zip" download><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4v11m0 0l-4.5-4.5M12 15l4.5-4.5M5 19h14"/></svg>كل شيء في ملف واحد <small>ZIP، 16 ميجا: كل الفيديوهات والشارات ودليل الاستخدام</small></a></p>
+    <div class="st-videos">
+      <a class="btn ghost" href="../overlay/media/qclips-overlay-ar-bar.webm" download>شريط عربي</a>
+      <a class="btn ghost" href="../overlay/media/qclips-overlay-ar-card.webm" download>بطاقة عربية</a>
+      <a class="btn ghost" href="../overlay/media/qclips-overlay-en-bar.webm" download lang="en">English bar</a>
+      <a class="btn ghost" href="../overlay/media/qclips-overlay-en-card.webm" download lang="en">English card</a>
+      <a class="btn ghost" href="../overlay/media/qclips-overlay-ar-mini.webm" download>شريط صغير عربي</a>
+      <a class="btn ghost" href="../overlay/media/qclips-overlay-en-mini.webm" download lang="en">English mini</a>
+      <a class="btn ghost" href="../overlay/media/qclips-overlay-ar-badge.png" download>شارة عربية (PNG)</a>
+      <a class="btn ghost" href="../overlay/media/qclips-overlay-en-badge.png" download lang="en">English badge (PNG)</a>
+    </div>
+    <p class="st-size" style="margin-top:14px">فيديو الشريط الصغير مقاسه <span class="ltr">600 × 188</span> وصورة الشارة <span class="ltr">420 × 136</span>: أضفها مثل ما هي وحرّكها لمكانها.</p>
+  </div>
+</section>
+
+<section class="st-sec" aria-labelledby="tips-title">
+  <div class="wrap">
+    <div class="sec-head"><h2 id="tips-title">نصايح</h2></div>
+    <ul class="st-tips">
+      <li><b>مرة كل 10 إلى 20 دقيقة</b> تكفي للشريط الكبير. والشريط الصغير تحت الكام يقدر يطلع أكثر، كل دقيقة إلى 5 دقائق.</li>
+      <li><b>الشارة الدائمة</b> ثابتة في مكانها وبس تغيّر سطرها كل كم ثانية، فما تزعج أبد.</li>
+      <li>خلّه بعيد عن <b>الكام والشات والتنبيهات</b>. إذا الشريط غطّى أشياء اللعبة، اختر البطاقة في الزاوية.</li>
+      <li>تبيه وقت ما تبي؟ اختر <b>بس لما أظهّر المصدر</b> وأظهر المصدر وأخفه، أو اربطه باختصار.</li>
+      <li>الـQR كود في الشريط والبطاقة والشريط الصغير ينمسح من الجوال من بث <span class="ltr">720p</span> وفوق، واللي في الشارة أصغر فأفضل له <span class="ltr">1080p</span>. اذكره في البث بين فترة وفترة.</li>
+    </ul>
+  </div>
+</section>
+
+</main>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <p class="f-brand"><img src="../img/logo.png" alt="" width="24" height="24" loading="lazy"><span><b lang="en">QClips</b> برنامج مجاني لحفظ لقطات الألعاب على ويندوز.</span></p>
+    <ul class="f-links">
+      <li><a href="./">الرئيسية</a></li>
+      <li><a href="https://github.com/F2isalq/QClips-Releases/releases">الإصدارات</a></li>
+      <li><a href="../licenses.html">التراخيص والشكر</a></li>
+      <li><a href="../streamers.html" hreflang="en" lang="en">English</a></li>
+    </ul>
+    <p class="credit"><span>© QClips من <span lang="en" dir="ltr">F2isalq</span></span></p>
+    <p class="credit owners">اللعب اللي في الأوفرلاي وخلف المعاينة من <span lang="en" dir="ltr">VALORANT</span>، مسجّل بـ <span lang="en">QClips</span>، وأسماء اللاعبين مموّهة. و<span lang="en" dir="ltr">VALORANT</span> ملك <span lang="en" dir="ltr">Riot Games</span>، وبرنامج <span lang="en">QClips</span> غير تابع لهم ولا معتمد منهم.</p>
+  </div>
+</footer>
+</body>
+</html>
