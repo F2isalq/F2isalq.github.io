@@ -3,7 +3,8 @@
    can show any moment exactly, which tools/overlay-render.ps1 uses to export the video.
 
    Address options (all optional):
-     lang=en|ar            text language (default en)
+     lang=en|ar|mix        text language (default en); mix alternates: Arabic first, then English, and so on
+                           (each appearance, or for always-on styles every lap / 30 s)
      layout=bar|card|mini|badge
                            bar: lower third; card: a card in a corner (both on a full 1920x1080 source);
                            mini: a small strip for under the webcam (source 600x188);
@@ -39,18 +40,23 @@
     return list.indexOf(v) >= 0 ? v : def;
   }
 
-  var lang = pick("lang", ["en", "ar"], "en");
-  var layout = pick("layout", ["bar", "card", "mini", "badge", "ticker", "side", "notify", "tile", "scene"], "bar");
+  var mix = pick("lang", ["mix", "both"], "") !== "";
+  var lang = mix ? (q.get("cur") === "en" ? "en" : "ar") : pick("lang", ["en", "ar"], "en");
+  var baseLang = mix ? "ar" : lang; // defaults that place things stay put while the language alternates
+  if (mix && !q.has("cur") && q.get("every") === "0") {
+    try { lang = sessionStorage.getItem("qclipsMixNext") === "en" ? "en" : "ar"; } catch (e) { /* no storage */ }
+  }
+  var layout = pick("layout", ["bar", "card", "mini", "badge", "ticker", "side", "notify", "tile", "scene", "circle"], "bar");
   // small ones fill their own small source (placed anywhere in OBS); the rest use a 1920x1080 source
-  var small = ["mini", "badge", "notify", "tile"].indexOf(layout) >= 0;
-  var alwaysOn = ["badge", "tile", "scene"].indexOf(layout) >= 0; // come in once and stay
-  var BOX = { mini: [600, 188], badge: [420, 136], notify: [560, 124], tile: [300, 372] }[layout] || [1920, 1080];
+  var small = ["mini", "badge", "notify", "tile", "circle"].indexOf(layout) >= 0;
+  var alwaysOn = ["badge", "tile", "scene", "circle"].indexOf(layout) >= 0; // come in once and stay
+  var BOX = { mini: [600, 188], badge: [420, 136], notify: [560, 124], tile: [300, 372], circle: [420, 420] }[layout] || [1920, 1080];
   var pos = layout === "bar" || layout === "ticker" ? pick("pos", ["bottom", "top"], "bottom")
-    : layout === "side" ? pick("pos", ["left", "right"], lang === "ar" ? "left" : "right")
-    : pick("pos", ["tl", "tr", "bl", "br"], lang === "ar" ? "bl" : "br");
+    : layout === "side" ? pick("pos", ["left", "right"], baseLang === "ar" ? "left" : "right")
+    : pick("pos", ["tl", "tr", "bl", "br"], baseLang === "ar" ? "bl" : "br");
   var align = pick("align", ["center", "start", "end"], "center");
   var cornerSide = layout === "card" ? (pos.charAt(1) === "l" ? "left" : "right") : layout === "side" ? pos : null;
-  var from = pick("from", ["left", "right"], cornerSide || (lang === "ar" ? "right" : "left"));
+  var from = pick("from", ["left", "right"], cornerSide || (baseLang === "ar" ? "right" : "left"));
   var title = pick("title", ["brb", "soon", "none"], "brb");
   var hold = num("hold", { mini: 10, notify: 7, ticker: 15 }[layout] || 12, 5, 60) * 1000;
   var every = q.get("every") === "0" ? 0 : num("every", 600, 10, 7200) * 1000;
@@ -91,7 +97,8 @@
       ticker: ["Play first. Clip it after.", "Say “clip it” and it’s saved", KEYS + " saves the last minutes",
         "Free · No account · Anti-cheat safe", "Download free at <b class=\"ltr\">qclips.app</b>"],
       note: ["Clip your best plays, free", "QClips for Windows · qclips.app"],
-      title: { brb: "Be right back", soon: "Starting soon" }
+      title: { brb: "Be right back", soon: "Starting soon" },
+      circle: { line: "Play first.<br><span class=\"hi\">Clip it after.</span>", clip: "Saved with one word", app: "Trim it. Share it." }
     },
     ar: {
       badge: "مجاني لويندوز",
@@ -107,7 +114,8 @@
       ticker: ["العب أول، وسجّل بعدين", "قل «سجّل» وتنحفظ اللقطة", KEYS + " يحفظ آخر الدقائق",
         "مجاني · بدون حساب · آمن مع الأنتي-تشيت", "حمّله مجاناً من <b class=\"ltr\">qclips.app</b>"],
       note: ["احفظ أحلى لقطاتك مجاناً", "مجاني لويندوز · <span class=\"ltr\">qclips.app</span>"],
-      title: { brb: "راجع بعد شوي", soon: "البث يبدأ بعد شوي" }
+      title: { brb: "راجع بعد شوي", soon: "البث يبدأ بعد شوي" },
+      circle: { line: "العب أول،<br><span class=\"hi\">وسجّل بعدين.</span>", clip: "انحفظت بكلمة وحدة", app: "قصّها وشاركها" }
     }
   };
 
@@ -151,6 +159,22 @@
     return w.charAt(0) === "*" ? '<span class="w hi">' + w.slice(1) + "</span>" : '<span class="w">' + w + "</span>";
   }).join(" ");
   // tall layouts: the second sentence on its own line
+  /* circle: four slides that take turns forever (brand, gameplay, QR code, the app), with a ring that fills */
+  if (layout === "circle") {
+    var cvid = $("video.s1");
+    var cs = document.createElement("div");
+    cs.className = "cs";
+    cs.innerHTML =
+      '<div class="slide s-brand"><img class="cmark" src="mark.svg" alt=""><img class="clogo" src="' + (theme === "light" ? "logo-light.svg" : "logo.svg") + '" alt="QClips">' +
+        '<div class="cline">' + t.circle.line + '</div><span class="ctag">' + t.badge + '</span></div>' +
+      '<div class="slide s-clip"><div class="cvid"></div><img class="ctoast" src="../img/toast.webp" alt=""><span class="ccap">' + t.circle.clip + '</span></div>' +
+      '<div class="slide s-qr"><div class="cqr"><img src="qr-' + lang + '.svg" alt=""></div><span class="cscan">' + t.scan + '</span><span class="curl">qclips.app</span></div>' +
+      '<div class="slide s-app"><img class="capp" src="../img/editor-simple-800.webp" alt=""><span class="ccap">' + t.circle.app + '</span><span class="curl small">qclips.app</span></div>' +
+      '<svg class="cring" viewBox="0 0 400 400" aria-hidden="true"><defs><linearGradient id="cg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" style="stop-color:var(--a1)"/><stop offset="1" style="stop-color:var(--a2)"/></linearGradient></defs>' +
+        '<circle class="ctrack" cx="200" cy="200" r="196"/><circle class="cprog" cx="200" cy="200" r="196"/></svg>';
+    $(".panel").appendChild(cs);
+    if (cvid) $(".s-clip .cvid", cs).appendChild(cvid);
+  }
   if (layout === "scene" || layout === "side") {
     var first = $$(".headline .w").filter(function (w) { return !w.classList.contains("hi"); }).pop();
     if (first) first.insertAdjacentHTML("afterend", "<br>");
@@ -211,6 +235,7 @@
   var IN_QUAD = "cubic-bezier(.55,0,.75,.25)";
 
   function build() {
+    if (layout === "circle") return buildCircle();
     if (alwaysOn) return buildBadge();
     var frame = $(".frame", ad);
     var r = frame.getBoundingClientRect();
@@ -408,6 +433,33 @@
     ], w2 / 0.09, start);
   }
 
+  /* circle: pop in, then the slides take turns for good (each 6 s, crossfading), the ring filling once per slide */
+  var CSLOT = 6000, CSLIDES = 4, CP = CSLOT * CSLIDES;
+  function buildCircle() {
+    track($(".frame", ad), [[0, { transform: "scale(.6) rotate(-25deg)", opacity: 0 }, BACK], [1000, { transform: "scale(1) rotate(0deg)", opacity: 1 }]]);
+    glowPulse();
+    var slides = $$(".cs .slide", ad), f = 500 / CP;
+    slides.forEach(function (el, i) {
+      var s = i * CSLOT / CP, e = (i + 1) * CSLOT / CP;
+      var on = { transform: "scale(1)", opacity: 1 }, inn = { transform: "scale(1.08)", opacity: 0 }, out = { transform: "scale(.94)", opacity: 0 };
+      // the first slide is shown during the entrance too
+      track(el, i === 0 ? [[0, on]] : [[0, inn]]);
+      loop(el, i === 0
+        ? [[0, on], [e - f, on, "ease-in"], [e, out], [1 - f, inn, "ease-out"], [1, on]]
+        : [[0, inn], [s, inn, "ease-out"], [s + f, on], [e - f, on, "ease-in"], [e, out], [1, out]], CP, IN);
+    });
+    var C = 2 * Math.PI * 196;
+    var prog = $(".cprog", ad);
+    prog.style.strokeDasharray = C;
+    track(prog, [[0, { strokeDashoffset: C }], [IN, { strokeDashoffset: C }]]);
+    loop(prog, [[0, { strokeDashoffset: C }], [1, { strokeDashoffset: 0 }]], CSLOT, IN);
+    // a little life inside each slide
+    loop($(".cmark", ad), [[0, { transform: "translateY(0) rotate(0deg)" }, "ease-in-out"], [.5, { transform: "translateY(-6px) rotate(-4deg)" }, "ease-in-out"], [1, { transform: "translateY(0) rotate(0deg)" }]], 3000, 0);
+    loop($(".capp", ad), [[0, { transform: "scale(1.35) translate(6%, 4%)" }], [.25, { transform: "scale(1.05) translate(0, 0)" }], [1, { transform: "scale(1.05) translate(0, 0)" }]], CP, IN + 3 * CSLOT - 500);
+    loop($(".ctoast", ad), [[0, { transform: "translateY(-30px) scale(.9)", opacity: 0 }], [.06, { transform: "translateY(0) scale(1)", opacity: 1 }, "ease-out"], [.22, { transform: "translateY(0) scale(1)", opacity: 1 }], [.25, { transform: "translateY(-10px) scale(.96)", opacity: 0 }], [1, { transform: "translateY(-30px) scale(.9)", opacity: 0 }]], CP, IN + CSLOT + 400);
+    loop($(".cqr", ad), [[0, { transform: "scale(.85)" }], [.03, { transform: "scale(1.04)" }, "ease-out"], [.05, { transform: "scale(1)" }], [1, { transform: "scale(1)" }]], CP, IN + 2 * CSLOT);
+  }
+
   /* badge, QR tile and break screen: an entrance, then a quiet life of their own */
   function buildBadge() {
     var sgn = from === "left" ? -1 : 1;
@@ -475,8 +527,8 @@
 
   /* The gameplay montage in the screen (bar and card) plays from the start of each cycle. seek() also moves it
      and resolves once that frame is ready, so renders get the right picture. */
-  var video = $(".screen video", ad);
-  var useVideo = video && ["bar", "card", "side", "scene"].indexOf(layout) >= 0 && !noShot;
+  var video = $("video.s1", ad);
+  var useVideo = video && ["bar", "card", "side", "scene", "circle"].indexOf(layout) >= 0 && !noShot;
   // Loaded whole (3 MB) into memory: seeking and looping then work on any server, even one without byte ranges.
   var videoReady = !useVideo ? Promise.resolve() : Promise.race([fetch(video.getAttribute("data-src")),
     new Promise(function (_, no) { if (seekTo === null) setTimeout(function () { no(new Error("slow")); }, 3000); })])
@@ -497,7 +549,7 @@
     anims.forEach(function (a) { a.pause(); a.currentTime = a.loop ? Math.max(0, ms) : Math.min(D, Math.max(0, ms)); });
     if (!useVideo || !video.duration) return Promise.resolve();
     video.pause();
-    var to = (Math.min(D, Math.max(0, ms)) / 1000) % video.duration;
+    var to = ((alwaysOn ? Math.max(0, ms) : Math.min(D, Math.max(0, ms))) / 1000) % video.duration;
     if (Math.abs(video.currentTime - to) < 0.001) return Promise.resolve();
     return new Promise(function (done) {
       var finished = false;
@@ -523,8 +575,23 @@
   }
 
   var timer = 0;
+  /* lang=mix: the page reloads itself in the other language between appearances (when nothing is on screen), or,
+     for the always-on styles, after a lap of the circle / 30 s, which replays the entrance in the new language. */
+  function switchLang(delayMs) {
+    var u = new URLSearchParams(location.search);
+    u.set("cur", lang === "ar" ? "en" : "ar");
+    u.set("delay", String(Math.max(0, Math.round(delayMs) / 1000)));
+    location.replace(location.pathname + "?" + u.toString());
+  }
   function cycle() {
     play();
+    if (mix && seekTo === null) {
+      clearTimeout(timer);
+      if (alwaysOn) timer = setTimeout(function () { switchLang(300); }, layout === "circle" ? IN + CP : 30000);
+      else if (every > 0) timer = setTimeout(function () { switchLang(Math.max(every, D + 1000) - D - 500); }, D + 500);
+      else try { sessionStorage.setItem("qclipsMixNext", lang === "ar" ? "en" : "ar"); } catch (e) { /* no storage */ }
+      return;
+    }
     if (every > 0 && !alwaysOn) timer = setTimeout(cycle, Math.max(every, D + 1000));
   }
   function start() {
@@ -567,5 +634,6 @@
 
   // replay(): show it again now (the streamers page preview uses it)
   window.QClipsOverlay = { duration: D, seek: seek, ready: ready, box: BOX, layout: layout,
+    loop: layout === "circle" ? { start: IN, length: CP } : null,
     replay: function () { clearTimeout(timer); clearTimeout(videoStop); cycle(); } };
 })();

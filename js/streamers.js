@@ -12,9 +12,9 @@
   var note = document.getElementById('st-size-note');
   var base = new URL(form.getAttribute('data-base'), location.href).href;
   // must match overlay.js
-  var BOX = { mini: [600, 188], badge: [420, 136], notify: [560, 124], tile: [300, 372] };
+  var BOX = { mini: [600, 188], badge: [420, 136], notify: [560, 124], tile: [300, 372], circle: [420, 420] };
   var FULL = [1920, 1080];
-  var ALWAYS = { badge: 1, tile: 1, scene: 1 };
+  var ALWAYS = { badge: 1, tile: 1, scene: 1, circle: 1 };
   var HOLD = { mini: '10', notify: '7', ticker: '15' };
   var POS = {
     bar: AR ? [['bottom', 'أسفل الشاشة'], ['top', 'أعلى الشاشة']] : [['bottom', 'Bottom'], ['top', 'Top']],
@@ -24,7 +24,7 @@
     side: AR ? [['left', 'يسار الشاشة'], ['right', 'يمين الشاشة']] : [['right', 'Right'], ['left', 'Left']]
   };
   POS.ticker = POS.bar;
-  function posDefault(l) { return l === 'card' ? (val('lang') === 'ar' ? 'bl' : 'br') : l === 'side' ? (val('lang') === 'ar' ? 'left' : 'right') : 'bottom'; }
+  function posDefault(l) { var ar = val('lang') !== 'en'; return l === 'card' ? (ar ? 'bl' : 'br') : l === 'side' ? (ar ? 'left' : 'right') : 'bottom'; } // mix keeps the Arabic placement
 
   function val(name) { return form.elements[name].value; }
   function field(name) { return form.elements[name].closest('.st-field'); }

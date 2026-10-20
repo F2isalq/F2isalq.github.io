@@ -400,7 +400,7 @@ html[lang="ar"] .qc.notify .n1 { font-size: 20px; }
 .qc.scene .frame::before, .qc.scene .glow, .qc.scene .streak, .qc.scene .timer, .qc.scene .card-url, .qc.scene .lines,
 .qc.scene .screen .s2 { display: none; }
 .qc.scene .panel {
-  height: 100%; border-radius: 0; padding: 90px 110px; column-gap: 90px; row-gap: 40px; align-content: center;
+  height: 100%; border-radius: 0; padding: 90px 110px; column-gap: 90px; row-gap: 76px; align-content: center; align-items: start;
   grid-template-columns: minmax(0, 1fr) 880px; grid-template-areas: "copy shot" "copy cta";
   background: linear-gradient(90deg, rgba(8, 10, 16, .94) 30%, rgba(8, 10, 16, .72)), url("../img/stream-bg-1920.webp") center / cover;
 }
@@ -410,21 +410,22 @@ html.t-light .qc.scene .panel { background: linear-gradient(90deg, rgba(246, 248
 .qc.scene .lights .l1 { width: 900px; height: 600px; left: -200px; top: -250px; }
 .qc.scene .lights .l2 { width: 800px; height: 600px; right: 10%; bottom: -300px; }
 .qc.scene .lights .l3 { width: 600px; height: 400px; right: -150px; top: -150px; }
-.qc.scene .copy { grid-area: copy; }
-.qc.scene .shot { grid-area: shot; perspective: none; }
+.qc.scene .copy { grid-area: copy; align-self: start; } /* its top lines up with the screenshot beside it */
+.qc.scene .shot { grid-area: shot; perspective: none; align-self: start; }
 .qc.scene .cta { grid-area: cta; flex-direction: row; gap: 30px; align-items: center; justify-self: start; }
 .qc.scene .logo { height: 64px; }
 .qc.scene .brand .badge { font-size: 18px; padding: 6px 16px 8px; }
 .qc.scene .title {
-  display: block; margin-top: 54px; font-size: 26px; font-weight: 800; letter-spacing: .22em; text-transform: uppercase;
-  color: var(--a1); will-change: transform, opacity;
+  display: block; margin-top: 34px; font-size: 112px; line-height: 1; font-weight: 900; letter-spacing: .01em; text-transform: uppercase;
+  font-stretch: 112%; color: #fff; text-shadow: 0 0 40px rgba(var(--a2-rgb), .55); will-change: transform, opacity;
 }
-html[lang="ar"] .qc.scene .title { letter-spacing: 0; font-size: 30px; }
-.qc.scene .headline { font-size: 104px; margin-top: 18px; }
-html[lang="ar"] .qc.scene .headline { font-size: 88px; }
-.qc.scene .sub { font-size: 30px; margin-top: 22px; max-width: 760px; }
+html[lang="ar"] .qc.scene .title { letter-spacing: 0; font-size: 100px; line-height: 1.3; font-weight: 800; margin-top: 18px; }
+html.t-light .qc.scene .title { color: #0d0f14; text-shadow: none; }
+.qc.scene .headline { font-size: 60px; margin-top: 24px; }
+html[lang="ar"] .qc.scene .headline { font-size: 50px; margin-top: 10px; }
+.qc.scene .sub { font-size: 27px; margin-top: 18px; max-width: 760px; }
 html[lang="ar"] .qc.scene .sub { font-size: 27px; }
-.qc.scene .feats { height: auto; margin-top: 46px; display: flex; flex-direction: column; gap: 16px; }
+.qc.scene .feats { height: auto; margin-top: 38px; display: flex; flex-direction: column; gap: 16px; }
 .qc.scene .feats li { position: relative; inset: auto; height: 60px; font-size: 25px; align-self: flex-start; padding-inline-end: 24px; }
 .qc.scene .feats .ico { width: 44px; height: 44px; }
 .qc.scene .feats .ico svg { width: 24px; height: 24px; }
@@ -433,3 +434,66 @@ html[lang="ar"] .qc.scene .sub { font-size: 27px; }
 .qc.scene .link { align-items: flex-start; }
 .qc.scene .scan-label { font-size: 18px; }
 .qc.scene .url { font-size: 42px; margin-top: 6px; }
+
+/* circle: always on, round (for example over the VALORANT minimap), four slides taking turns */
+.qc.circle { left: 10px; top: 10px; right: 10px; bottom: 10px; }
+.qc.circle .frame { width: 100%; height: 100%; }
+.qc.circle .frame::before { inset: -3px; border-radius: 50%; }
+.qc.circle .glow { border-radius: 50%; }
+.qc.circle .panel { height: 100%; border-radius: 50%; display: block; box-shadow: 0 16px 40px -14px rgba(0, 0, 0, .85), inset 0 1px 0 rgba(255, 255, 255, .14); }
+.qc.circle .shot, .qc.circle .copy, .qc.circle .cta, .qc.circle .timer, .qc.circle .tick, .qc.circle .streak, .qc.circle .sheen { display: none; }
+html.sq .qc.circle .panel, html.sq .qc.circle .frame::before, html.sq .qc.circle .glow { border-radius: 50%; }
+
+.cs { position: absolute; inset: 0; border-radius: 50%; overflow: hidden; }
+.cs .slide {
+  position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center;
+  text-align: center; gap: 10px; padding: 46px; opacity: 0; will-change: transform, opacity;
+}
+.cs .hi { background: linear-gradient(95deg, var(--a1), var(--a2)); -webkit-background-clip: text; background-clip: text; color: transparent; }
+
+/* brand */
+.cmark { width: 92px; height: auto; filter: drop-shadow(0 0 18px rgba(var(--a2-rgb), .6)); will-change: transform; }
+.clogo { height: 34px; width: auto; margin-top: 2px; }
+.cline { font-size: 31px; line-height: 1.08; font-weight: 820; letter-spacing: -.02em; font-stretch: 96%; margin-top: 4px; }
+html[lang="ar"] .cline { font-size: 27px; line-height: 1.45; letter-spacing: 0; font-weight: 800; }
+.ctag {
+  font-size: 15px; font-weight: 700; padding: 4px 12px 5px; border-radius: 999px; white-space: nowrap;
+  color: #dff3ff; background: rgba(var(--a2-rgb), .2); border: 1px solid rgba(var(--a2-rgb), .5);
+}
+html.t-light .ctag { color: var(--a3); }
+
+/* gameplay */
+.cs .s-clip { padding: 0; justify-content: flex-end; }
+.cvid { position: absolute; inset: 0; }
+.cvid video { width: 100%; height: 100%; object-fit: cover; display: block; }
+.s-clip::after { content: ""; position: absolute; inset: 0; background: radial-gradient(circle at 50% 45%, transparent 48%, rgba(5, 7, 12, .75) 72%); }
+.ctoast { position: absolute; top: 62px; left: 50%; width: 260px; margin-left: -130px; border-radius: 8px; z-index: 1;
+  box-shadow: 0 10px 24px -6px rgba(0, 0, 0, .8), 0 0 0 1px rgba(var(--a2-rgb), .45); opacity: 0; will-change: transform, opacity; }
+.ccap {
+  position: relative; z-index: 1; margin-bottom: 58px; font-size: 19px; font-weight: 750; padding: 6px 16px 8px; border-radius: 999px;
+  background: rgba(8, 10, 16, .82); border: 1px solid rgba(var(--a2-rgb), .55); color: #fff; white-space: nowrap;
+}
+html[lang="ar"] .ccap { font-size: 18px; padding: 3px 16px 7px; }
+
+/* QR code */
+.cqr { width: 196px; height: 196px; background: #fff; border-radius: 18px; padding: 2px; will-change: transform;
+  box-shadow: 0 0 0 4px rgba(var(--a2-rgb), .4), 0 0 30px rgba(var(--a2-rgb), .45); }
+.cqr img { width: 100%; height: 100%; display: block; image-rendering: pixelated; }
+.cscan { margin-top: 6px; font-size: 14px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); white-space: nowrap; }
+html[lang="ar"] .cscan { letter-spacing: 0; font-size: 16px; }
+.curl { font-family: var(--font); font-size: 27px; font-weight: 760; color: var(--a1); direction: ltr; unicode-bidi: isolate; line-height: 1; }
+html.t-light .curl { color: var(--a3); }
+.curl.small { position: relative; z-index: 1; font-size: 20px; margin-top: -48px; margin-bottom: 40px; text-shadow: 0 2px 8px rgba(0, 0, 0, .8); }
+
+/* the app */
+.cs .s-app { padding: 0; justify-content: flex-end; gap: 0; }
+.capp { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: 50% 30%; will-change: transform; }
+.s-app::after { content: ""; position: absolute; inset: 0; background: linear-gradient(180deg, transparent 40%, rgba(5, 7, 12, .85) 85%); }
+.s-app .ccap { margin-bottom: 66px; }
+
+/* the ring that fills once per slide */
+.cring { position: absolute; inset: 0; width: 100%; height: 100%; transform: rotate(-90deg); pointer-events: none; }
+html[dir="rtl"] .cring { transform: rotate(-90deg) scaleY(-1); }
+.cring circle { fill: none; stroke-width: 6; }
+.ctrack { stroke: rgba(255, 255, 255, .10); }
+.cprog { stroke: url(#cg); stroke-linecap: round; filter: drop-shadow(0 0 6px rgba(var(--a2-rgb), .8)); }
