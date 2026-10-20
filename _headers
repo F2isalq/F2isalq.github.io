@@ -1,0 +1,12 @@
+# Cloudflare Pages: the overlay runs for hours inside OBS and gets updated; make browsers check for new files
+# instead of mixing a cached script with a newer page. Asset links also carry ?v=.
+/overlay/*
+  Cache-Control: no-cache
+/streamers*
+  Cache-Control: no-cache
+/ar/streamers*
+  Cache-Control: no-cache
+/css/streamers.css
+  Cache-Control: no-cache
+/js/streamers.js
+  Cache-Control: no-cache
