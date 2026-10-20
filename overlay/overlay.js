@@ -539,7 +539,11 @@
         if (video.readyState >= 2) return done();
         if (seekTo === null) setTimeout(done, 3000); // live: never hold the overlay back for the video
         video.addEventListener("loadeddata", done, { once: true });
-        video.addEventListener("error", done, { once: true });
+        video.addEventListener("error", function onErr() {
+          // Safari cannot play a video from a blob it fetched itself: use the file's address (the host serves ranges)
+          if (video.src.indexOf("blob:") === 0) { video.src = video.getAttribute("data-src"); return; }
+          video.removeEventListener("error", onErr); done();
+        });
         setTimeout(done, 5000);
       });
     });
@@ -563,16 +567,22 @@
       video.currentTime = to;
     });
   }
+  var videoOn = false;
   function play() {
     anims.forEach(function (a) { a.currentTime = 0; a.play(); });
     if (useVideo) {
       clearTimeout(videoStop);
-      video.currentTime = 0;
+      videoOn = true;
+      try { video.currentTime = 0; } catch (e) { /* no source yet */ }
       var p = video.play();
       if (p && p.catch) p.catch(function () {});
-      if (!alwaysOn) videoStop = setTimeout(function () { video.pause(); }, D); // nothing to decode while the overlay is away
+      if (!alwaysOn) videoStop = setTimeout(function () { videoOn = false; video.pause(); }, D); // nothing to decode while the overlay is away
     }
   }
+  // a video that arrives after the overlay is already on screen starts right away
+  if (useVideo) videoReady.then(function () {
+    if (seekTo === null && videoOn && video.paused) { var p = video.play(); if (p && p.catch) p.catch(function () {}); }
+  });
 
   var timer = 0;
   /* lang=mix: the page reloads itself in the other language between appearances (when nothing is on screen), or,
@@ -600,9 +610,12 @@
     timer = setTimeout(cycle, delay);
   }
 
+  // Live, nothing may hold the overlay back for long: some browsers never settle an image decode or a big fetch
+  // (seen in Firefox and WebKit), so each wait has a ceiling. Renders (?t=) still wait for everything.
+  function capped(p, ms) { return seekTo !== null ? p : Promise.race([p, new Promise(function (r) { setTimeout(r, ms); })]); }
   function loaded() {
     var imgs = $$("img", ad).map(function (img) {
-      return img.decode ? img.decode().catch(function () {}) : Promise.resolve();
+      return capped(img.decode ? img.decode().catch(function () {}) : Promise.resolve(), 2500);
     });
     imgs.push(videoReady);
     // Ask for the fonts by name: a font only starts loading once text needs it, so fonts.ready alone can resolve
@@ -615,7 +628,7 @@
       document.fonts.load('600 18px "Noto Kufi Arabic"', "العب أول")
     ] : []).map(function (p) { return p.catch(function () {}); });
     var wait = Promise.all(fonts).then(function () { return document.fonts ? document.fonts.ready : null; });
-    return Promise.all([wait].concat(imgs));
+    return capped(Promise.all([wait].concat(imgs)), 4000);
   }
 
   var ready = loaded().then(function () {
