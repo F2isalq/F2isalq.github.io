@@ -71,3 +71,11 @@
 .st-files h3 { font-size: 1.05rem; margin-bottom: 10px; }
 .st-files ul { margin: 0; padding: 0; list-style: none; display: grid; grid-template-columns: 1fr 1fr; gap: 6px 16px; }
 .st-files small { color: var(--dim); font-size: .75rem; }
+.st-preview { position: relative; }
+.st-replay {
+  position: absolute; z-index: 2; top: 16px; inset-inline-end: 16px; display: inline-flex; align-items: center; gap: 6px;
+  padding: 6px 12px; border-radius: 999px; border: 1px solid var(--edge-hi); background: rgba(13, 15, 20, .72); color: var(--text);
+  font-size: .85rem; font-weight: 700; cursor: pointer; -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px);
+}
+.st-replay:hover { background: rgba(26, 140, 255, .85); }
+.st-replay svg { width: 15px; height: 15px; }

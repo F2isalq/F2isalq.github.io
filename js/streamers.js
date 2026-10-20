@@ -89,17 +89,25 @@
     frame.style.maxWidth = small ? box[0] + 'px' : '';
     clearTimeout(timer);
     timer = setTimeout(function () {
-      frame.style.opacity = '0'; // hide the blank page while the next preview loads
       var extra = { delay: '0.4', bg: '1' };
       if (!ALWAYS[l]) extra.every = String(Number(val('hold')) + 4);
-      // navigate the frame itself: changing src again is ignored by some browsers once it has loaded
-      var next = base + '?' + params(extra);
-      try { if (frame.contentWindow && frame.getAttribute('src')) { frame.contentWindow.location.replace(next); return; } } catch (e) { /* not reachable yet */ }
-      frame.src = next;
+      extra.v = String(Date.now()); // a fresh page every time, never a cached or half-reused one
+      // A new frame for every change: browsers can ignore a second src change on a frame that has loaded.
+      var next = frame.cloneNode(false);
+      next.removeAttribute('src');
+      next.style.opacity = '0';
+      next.addEventListener('load', function () { next.style.opacity = '1'; });
+      next.src = base + '?' + params(extra);
+      frame.parentNode.replaceChild(next, frame);
+      frame = next;
     }, 150);
   }
   frame.style.transition = 'opacity .3s';
-  frame.addEventListener('load', function () { frame.style.opacity = '1'; });
+
+  var replay = document.getElementById('st-replay');
+  if (replay) replay.addEventListener('click', function () {
+    try { frame.contentWindow.QClipsOverlay.replay(); } catch (e) { update(); }
+  });
 
   form.addEventListener('change', function (e) {
     if (e.target.name === 'layout') layoutChanged();

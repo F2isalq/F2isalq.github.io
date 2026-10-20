@@ -139,7 +139,7 @@
   var $$ = function (sel, el) { return Array.prototype.slice.call((el || document).querySelectorAll(sel)); };
 
   var t = TEXT[lang];
-  var stage = $("#stage"), ad = $("#ad");
+  var stage = $("#stage"), ad = $("#qc");
   if (accent && accent !== "1a8cff") setAccent(accent);
   root.classList.add("t-" + theme);
   if (corners === "square") root.classList.add("sq");
@@ -538,7 +538,17 @@
       return img.decode ? img.decode().catch(function () {}) : Promise.resolve();
     });
     imgs.push(videoReady);
-    return Promise.all([document.fonts ? document.fonts.ready : null].concat(imgs));
+    // Ask for the fonts by name: a font only starts loading once text needs it, so fonts.ready alone can resolve
+    // before the Arabic face arrives, and the text then jumps to the real font in the middle of the motion.
+    var fonts = !document.fonts ? [] : [
+      document.fonts.load('800 50px "Archivo"', "QClips Play first"),
+      document.fonts.load('600 20px "Archivo"', "qclips.app")
+    ].concat(lang === "ar" ? [
+      document.fonts.load('800 44px "Noto Kufi Arabic"', "العب أول"),
+      document.fonts.load('600 18px "Noto Kufi Arabic"', "العب أول")
+    ] : []).map(function (p) { return p.catch(function () {}); });
+    var wait = Promise.all(fonts).then(function () { return document.fonts ? document.fonts.ready : null; });
+    return Promise.all([wait].concat(imgs));
   }
 
   var ready = loaded().then(function () {
@@ -555,5 +565,7 @@
     else { clearTimeout(timer); clearTimeout(videoStop); seek(0); }
   });
 
-  window.QClipsOverlay = { duration: D, seek: seek, ready: ready, box: BOX, layout: layout };
+  // replay(): show it again now (the streamers page preview uses it)
+  window.QClipsOverlay = { duration: D, seek: seek, ready: ready, box: BOX, layout: layout,
+    replay: function () { clearTimeout(timer); clearTimeout(videoStop); cycle(); } };
 })();
