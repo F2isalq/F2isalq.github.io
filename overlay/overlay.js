@@ -530,9 +530,14 @@
   var video = $("video.s1", ad);
   var useVideo = video && ["bar", "card", "side", "scene", "circle"].indexOf(layout) >= 0 && !noShot;
   // Loaded whole (3 MB) into memory: seeking and looping then work on any server, even one without byte ranges.
-  var videoReady = !useVideo ? Promise.resolve() : Promise.race([fetch(video.getAttribute("data-src")),
-    new Promise(function (_, no) { if (seekTo === null) setTimeout(function () { no(new Error("slow")); }, 3000); })])
-    .then(function (r) { if (!r.ok) throw new Error(r.status); return r.blob(); })
+  // Safari (WebKit) cannot play a video from a blob, so it gets the file's address straight away.
+  var webkitOnly = /AppleWebKit/.test(navigator.userAgent) && !/Chrome|Chromium|Edg|OPR|Firefox/.test(navigator.userAgent);
+  var fetchCtl = window.AbortController ? new AbortController() : null;
+  var videoReady = !useVideo ? Promise.resolve() : (webkitOnly ? Promise.reject(new Error("webkit")) : Promise.race([
+    // the whole download, body included, has a ceiling; a stalled one is cancelled so the direct load can go ahead
+    fetch(video.getAttribute("data-src"), fetchCtl ? { signal: fetchCtl.signal } : {})
+      .then(function (r) { if (!r.ok) throw new Error(r.status); return r.blob(); }),
+    new Promise(function (_, no) { if (seekTo === null) setTimeout(function () { if (fetchCtl) fetchCtl.abort(); no(new Error("slow")); }, 3500); })]))
     .then(function (b) { video.src = URL.createObjectURL(b); }, function () { video.src = video.getAttribute("data-src"); })
     .then(function () {
       return new Promise(function (done) {
