@@ -40,30 +40,32 @@
   }
 
   var lang = pick("lang", ["en", "ar"], "en");
-  var layout = pick("layout", ["bar", "card", "mini", "badge"], "bar");
-  var small = layout === "mini" || layout === "badge";
-  // full-screen layouts use a 1920x1080 stage; mini and badge a stage the size of the source
-  var BOX = { bar: [1920, 1080], card: [1920, 1080], mini: [600, 188], badge: [420, 136] }[layout];
-  var pos = layout === "bar"
-    ? pick("pos", ["bottom", "top"], "bottom")
+  var layout = pick("layout", ["bar", "card", "mini", "badge", "ticker", "side", "notify", "tile", "scene"], "bar");
+  // small ones fill their own small source (placed anywhere in OBS); the rest use a 1920x1080 source
+  var small = ["mini", "badge", "notify", "tile"].indexOf(layout) >= 0;
+  var alwaysOn = ["badge", "tile", "scene"].indexOf(layout) >= 0; // come in once and stay
+  var BOX = { mini: [600, 188], badge: [420, 136], notify: [560, 124], tile: [300, 372] }[layout] || [1920, 1080];
+  var pos = layout === "bar" || layout === "ticker" ? pick("pos", ["bottom", "top"], "bottom")
+    : layout === "side" ? pick("pos", ["left", "right"], lang === "ar" ? "left" : "right")
     : pick("pos", ["tl", "tr", "bl", "br"], lang === "ar" ? "bl" : "br");
   var align = pick("align", ["center", "start", "end"], "center");
-  var cornerSide = layout === "card" ? (pos.charAt(1) === "l" ? "left" : "right") : null;
+  var cornerSide = layout === "card" ? (pos.charAt(1) === "l" ? "left" : "right") : layout === "side" ? pos : null;
   var from = pick("from", ["left", "right"], cornerSide || (lang === "ar" ? "right" : "left"));
-  var hold = num("hold", layout === "mini" ? 10 : 12, 5, 60) * 1000;
+  var title = pick("title", ["brb", "soon", "none"], "brb");
+  var hold = num("hold", { mini: 10, notify: 7, ticker: 15 }[layout] || 12, 5, 60) * 1000;
   var every = q.get("every") === "0" ? 0 : num("every", 600, 10, 7200) * 1000;
   var delay = num("delay", 2, 0, 600) * 1000;
-  var scale = small ? 1 : num("scale", 1, 0.5, 1.5);
+  var scale = small || layout === "scene" ? 1 : num("scale", 1, 0.5, 1.5);
   var opacity = num("opacity", 1, 0.4, 1);
   var accent = /^[0-9a-f]{6}$/i.test(q.get("accent") || "") ? q.get("accent").toLowerCase() : null;
   var theme = pick("theme", ["dark", "light", "neon"], "dark");
   var corners = pick("corners", ["round", "square"], "round");
   var enter = pick("enter", ["slide", "pop", "fade", "flip"], "slide");
-  var noShot = q.get("shot") === "0" && (layout === "bar" || layout === "card");
+  var noShot = q.get("shot") === "0" && (layout === "bar" || layout === "card" || layout === "side");
   var seekTo = q.has("t") ? num("t", 0, 0, 1e7) : null;
 
-  var IN = small ? 900 : 1100, OUT = small ? 650 : 800;
-  if (layout === "badge") { hold = 0; OUT = 0; IN = 1600; } // the badge only has its entrance, then stays
+  var IN = small || layout === "ticker" ? 900 : 1100, OUT = small || layout === "ticker" ? 650 : 800;
+  if (alwaysOn) { hold = 0; OUT = 0; IN = layout === "scene" ? 2000 : 1600; } // only the entrance, then it stays
   var D = IN + hold + OUT;
   var MID = IN + hold * 0.5;
 
@@ -85,7 +87,11 @@
         ["key", KEYS + " saves the last minutes", KEYS + " to save"],
         ["shield", "Free · No account · Anti-cheat safe", "Free · Anti-cheat safe"]
       ],
-      lines: ["Free game clipping for Windows", "Say “clip it” and it’s saved", KEYS + " saves the moment"]
+      lines: ["Free game clipping for Windows", "Say “clip it” and it’s saved", KEYS + " saves the moment"],
+      ticker: ["Play first. Clip it after.", "Say “clip it” and it’s saved", KEYS + " saves the last minutes",
+        "Free · No account · Anti-cheat safe", "Download free at <b class=\"ltr\">qclips.app</b>"],
+      note: ["Clip your best plays, free", "QClips for Windows · qclips.app"],
+      title: { brb: "Be right back", soon: "Starting soon" }
     },
     ar: {
       badge: "مجاني لويندوز",
@@ -97,7 +103,11 @@
         ["key", KEYS + " يحفظ آخر الدقائق", KEYS + " للحفظ"],
         ["shield", "مجاني · بدون حساب · آمن مع الأنتي-تشيت", "مجاني وآمن مع الأنتي-تشيت"]
       ],
-      lines: ["حفظ لقطات الألعاب مجاناً", "قل «سجّل» وتنحفظ اللقطة", KEYS + " يحفظ اللحظة"]
+      lines: ["حفظ لقطات الألعاب مجاناً", "قل «سجّل» وتنحفظ اللقطة", KEYS + " يحفظ اللحظة"],
+      ticker: ["العب أول، وسجّل بعدين", "قل «سجّل» وتنحفظ اللقطة", KEYS + " يحفظ آخر الدقائق",
+        "مجاني · بدون حساب · آمن مع الأنتي-تشيت", "حمّله مجاناً من <b class=\"ltr\">qclips.app</b>"],
+      note: ["احفظ أحلى لقطاتك مجاناً", "مجاني لويندوز · <span class=\"ltr\">qclips.app</span>"],
+      title: { brb: "راجع بعد شوي", soon: "البث يبدأ بعد شوي" }
     }
   };
 
@@ -140,9 +150,21 @@
   $(".headline").innerHTML = t.headline.map(function (w) {
     return w.charAt(0) === "*" ? '<span class="w hi">' + w.slice(1) + "</span>" : '<span class="w">' + w + "</span>";
   }).join(" ");
+  // tall layouts: the second sentence on its own line
+  if (layout === "scene" || layout === "side") {
+    var first = $$(".headline .w").filter(function (w) { return !w.classList.contains("hi"); }).pop();
+    if (first) first.insertAdjacentHTML("afterend", "<br>");
+  }
   $(".feats").innerHTML = t.feats.map(function (f) {
-    return '<li><span class="ico">' + ICON[f[0]] + "</span><span>" + (layout === "bar" ? f[1] : f[2]) + "</span></li>";
+    return '<li><span class="ico">' + ICON[f[0]] + "</span><span>" + (layout === "bar" || layout === "scene" ? f[1] : f[2]) + "</span></li>";
   }).join("");
+  // ticker: the line twice, so it can scroll without a seam
+  var tickOnce = '<span class="tick-set">' + t.ticker.map(function (x) { return "<span>" + x + "</span><i></i>"; }).join("") + "</span>";
+  $(".tick-track").innerHTML = tickOnce + tickOnce;
+  $(".note .n1").textContent = t.note[0];
+  $(".note .n2").innerHTML = t.note[1];
+  $(".title").textContent = title === "none" ? "" : t.title[title];
+  if (title === "none") $(".title").hidden = true;
   $(".lines").innerHTML = t.lines.map(function (l) { return "<li>" + l + "</li>"; }).join("");
   stage.style.width = BOX[0] + "px";
   stage.style.height = BOX[1] + "px";
@@ -153,8 +175,8 @@
 
   if (scale !== 1) {
     ad.style.transform = "scale(" + scale + ")";
-    var oy = layout === "bar" ? (pos === "top" ? "0" : "100%") : (pos.charAt(0) === "t" ? "0" : "100%");
-    var ox = layout === "bar" ? (align === "start" ? "0" : align === "end" ? "100%" : "50%") : (cornerSide === "left" ? "0" : "100%");
+    var oy = layout === "bar" || layout === "ticker" ? (pos === "top" ? "0" : "100%") : layout === "side" ? "50%" : (pos.charAt(0) === "t" ? "0" : "100%");
+    var ox = layout === "bar" ? (align === "start" ? "0" : align === "end" ? "100%" : "50%") : layout === "ticker" ? "50%" : (cornerSide === "left" ? "0" : "100%");
     ad.style.transformOrigin = ox + " " + oy;
   }
 
@@ -189,7 +211,7 @@
   var IN_QUAD = "cubic-bezier(.55,0,.75,.25)";
 
   function build() {
-    if (layout === "badge") return buildBadge();
+    if (alwaysOn) return buildBadge();
     var frame = $(".frame", ad);
     var r = frame.getBoundingClientRect();
     var k = stageScale * scale;
@@ -198,11 +220,21 @@
     var W = BOX[0], gap = small ? 24 : 80, skew = small ? 5 : 8;
     // distances in the frame's own (unscaled) pixels; the bar and the mini strip leave on the other side
     var dxIn = (from === "left" ? -(right + gap) : (W - left + gap)) * stageScale / k;
-    var dxOut = layout !== "card" ? (from === "left" ? (W - left + gap) : -(right + gap)) * stageScale / k : dxIn;
+    var dxOut = layout !== "card" && layout !== "side" ? (from === "left" ? (W - left + gap) : -(right + gap)) * stageScale / k : dxIn;
     var w = frame.offsetWidth;
 
     var t1 = small ? 850 : 1000;
-    if (enter === "slide") {
+    var vertical = layout === "ticker" || layout === "notify"; // these slide in from the screen edge above or below
+    if (enter === "slide" && vertical) {
+      var top = layout === "notify" || pos === "top";
+      var dy = (top ? -1 : 1) * (frame.offsetHeight + 40);
+      track(frame, [
+        [0, { transform: "translateY(" + dy + "px)", opacity: 1 }, OUT_EXPO],
+        [t1, { transform: "translateY(0)", opacity: 1 }],
+        [IN + hold, { transform: "translateY(0)", opacity: 1 }, IN_QUAD],
+        [D, { transform: "translateY(" + dy + "px)", opacity: 1 }]
+      ]);
+    } else if (enter === "slide") {
       track(frame, [
         [0, { transform: "translateX(" + dxIn + "px) skewX(" + (sgn * skew) + "deg)", opacity: 1 }, BACK],
         [t1, { transform: "translateX(0) skewX(0deg)", opacity: 1 }],
@@ -215,7 +247,12 @@
     glowPulse();
 
     var streak = $(".streak", ad);
-    if (enter !== "slide") streak.style.display = "none";
+    if (enter !== "slide" || vertical || layout === "side") streak.style.display = "none";
+    if (layout === "ticker") tickerLoop(0);
+    if (layout === "notify") {
+      track($(".note", ad), [[350, { transform: "translateY(8px)", opacity: 0 }, OUT_EXPO], [900, { transform: "translateY(0)", opacity: 1 }]]);
+      track($(".mark", ad), [[150, { transform: "scale(.6) rotate(-20deg)", opacity: 0 }, BACK], [750, { transform: "scale(1) rotate(0deg)", opacity: 1 }]]);
+    }
     var sx = from === "left" ? -1 : 1;
     track(streak, [
       [0, { transform: "translateX(" + (sx * 900) + "px) scaleX(.4)", opacity: 0 }, "ease-out"],
@@ -362,6 +399,16 @@
     loop($(".glow", ad), [[0, { opacity: 0.25 }, "ease-in-out"], [0.5, { opacity: 0.95 }, "ease-in-out"], [1, { opacity: 0.25 }]], 2600, 0);
   }
 
+  /* ticker: the line scrolls at an even speed (it is written twice, so one set's width is one lap) */
+  function tickerLoop(start) {
+    var set = $(".tick-set", ad), w2 = set.offsetWidth, rtl = lang === "ar";
+    loop($(".tick-track", ad), [
+      [0, { transform: "translateX(0)" }],
+      [1, { transform: "translateX(" + (rtl ? w2 : -w2) + "px)" }]
+    ], w2 / 0.09, start);
+  }
+
+  /* badge, QR tile and break screen: an entrance, then a quiet life of their own */
   function buildBadge() {
     var sgn = from === "left" ? -1 : 1;
     if (enter === "slide") {
@@ -376,6 +423,30 @@
     track($(".brand", ad), [[250, { transform: "translateY(6px)", opacity: 0 }, OUT_EXPO], [850, { transform: "translateY(0)", opacity: 1 }]]);
     track($(".qr", ad), [[300, { transform: "scale(.7)", opacity: 0 }, BACK], [950, { transform: "scale(1)", opacity: 1 }]]);
     track($(".card-url", ad), [[550, { transform: "translateY(6px)", opacity: 0 }, OUT_EXPO], [1150, { transform: "translateY(0)", opacity: 1 }]]);
+    if (layout === "tile" || layout === "scene") {
+      track($(".link", ad), [[600, { transform: "translateY(8px)", opacity: 0 }, OUT_EXPO], [1200, { transform: "translateY(0)", opacity: 1 }]]);
+      var qh = $(".qr", ad).offsetHeight - 26;
+      loop($(".qr .scan", ad), [
+        [0, { transform: "translateY(0)", opacity: 0 }], [0.01, { transform: "translateY(0)", opacity: 1 }, "ease-in-out"],
+        [0.08, { transform: "translateY(" + qh + "px)", opacity: 1 }], [0.09, { transform: "translateY(" + qh + "px)", opacity: 0 }],
+        [1, { transform: "translateY(" + qh + "px)", opacity: 0 }]
+      ], 12000, IN + 600);
+    }
+    if (layout === "scene") {
+      track($(".title", ad), [[300, { transform: "translateY(14px)", opacity: 0 }, OUT_EXPO], [1000, { transform: "translateY(0)", opacity: 1 }]]);
+      $$(".headline .w", ad).forEach(function (el, i) {
+        track(el, [[500 + i * 100, { transform: "translateY(36px)", opacity: 0 }, OUT_EXPO], [1300 + i * 100, { transform: "translateY(0)", opacity: 1 }]]);
+      });
+      track($(".sub", ad), [[900, { transform: "translateY(12px)", opacity: 0 }, OUT_EXPO], [1600, { transform: "translateY(0)", opacity: 1 }]]);
+      $$(".feats li", ad).forEach(function (el, i) {
+        track(el, [[1100 + i * 150, { transform: "translateX(" + (lang === "ar" ? 24 : -24) + "px)", opacity: 0 }, OUT_EXPO], [1700 + i * 150, { transform: "translateX(0)", opacity: 1 }]]);
+      });
+      track($(".screen", ad), [[200, { transform: "perspective(1600px) rotateY(" + (lang === "ar" ? 24 : -24) + "deg) scale(.85)", opacity: 0 }, OUT_EXPO],
+        [1500, { transform: "perspective(1600px) rotateY(" + (lang === "ar" ? 8 : -8) + "deg) scale(1)", opacity: 1 }]]);
+      [".lights .l1", ".lights .l2", ".lights .l3"].forEach(function (sel, i) {
+        loop($(sel, ad), [[0, { transform: "translate(0,0)" }, "ease-in-out"], [0.5, { transform: "translate(" + [320, -260, -180][i] + "px," + [120, -90, 140][i] + "px)" }, "ease-in-out"], [1, { transform: "translate(0,0)" }]], 22000 + i * 5000, 0);
+      });
+    }
 
     var lines = $$(".lines li", ad), slot = 6000, P = slot * lines.length, fade = 450;
     lines.forEach(function (el, i) {
@@ -405,14 +476,16 @@
   /* The gameplay montage in the screen (bar and card) plays from the start of each cycle. seek() also moves it
      and resolves once that frame is ready, so renders get the right picture. */
   var video = $(".screen video", ad);
-  var useVideo = video && (layout === "bar" || layout === "card");
+  var useVideo = video && ["bar", "card", "side", "scene"].indexOf(layout) >= 0 && !noShot;
   // Loaded whole (3 MB) into memory: seeking and looping then work on any server, even one without byte ranges.
-  var videoReady = !useVideo ? Promise.resolve() : fetch(video.getAttribute("data-src"))
+  var videoReady = !useVideo ? Promise.resolve() : Promise.race([fetch(video.getAttribute("data-src")),
+    new Promise(function (_, no) { if (seekTo === null) setTimeout(function () { no(new Error("slow")); }, 3000); })])
     .then(function (r) { if (!r.ok) throw new Error(r.status); return r.blob(); })
     .then(function (b) { video.src = URL.createObjectURL(b); }, function () { video.src = video.getAttribute("data-src"); })
     .then(function () {
       return new Promise(function (done) {
         if (video.readyState >= 2) return done();
+        if (seekTo === null) setTimeout(done, 3000); // live: never hold the overlay back for the video
         video.addEventListener("loadeddata", done, { once: true });
         video.addEventListener("error", done, { once: true });
         setTimeout(done, 5000);
@@ -445,14 +518,14 @@
       video.currentTime = 0;
       var p = video.play();
       if (p && p.catch) p.catch(function () {});
-      videoStop = setTimeout(function () { video.pause(); }, D); // nothing to decode while the overlay is away
+      if (!alwaysOn) videoStop = setTimeout(function () { video.pause(); }, D); // nothing to decode while the overlay is away
     }
   }
 
   var timer = 0;
   function cycle() {
     play();
-    if (every > 0 && layout !== "badge") timer = setTimeout(cycle, Math.max(every, D + 1000));
+    if (every > 0 && !alwaysOn) timer = setTimeout(cycle, Math.max(every, D + 1000));
   }
   function start() {
     clearTimeout(timer);

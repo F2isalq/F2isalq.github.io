@@ -48,7 +48,7 @@
     <h1>حط <span lang="en">QClips</span> في بثك.</h1>
     <p class="lead">أوفرلاي متحرك يدخل على الشاشة، يعرض البرنامج والرابط وQR كود يمسحه المتابعين بجوالاتهم، وبعدين يطلع. مجاني، بدون تسجيل، وما يحتاج تثبيت: رابط واحد في OBS أو Streamlabs.</p>
     <div class="st-cta">
-      <a class="btn primary" href="../overlay/media/QClips-Streamer-Kit.zip" download><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4v11m0 0l-4.5-4.5M12 15l4.5-4.5M5 19h14"/></svg>حمّل حزمة الستريمرز <small>ZIP، 16 ميجا</small></a>
+      <a class="btn primary" href="../overlay/media/QClips-Streamer-Kit-AR.zip" download><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4v11m0 0l-4.5-4.5M12 15l4.5-4.5M5 19h14"/></svg>حمّل حزمة الستريمرز <small>ZIP، 14 ميجا</small></a>
       <a class="btn ghost" href="#link">سوّ رابط الأوفرلاي حقك</a>
     </div>
   </div>
@@ -57,7 +57,7 @@
 <section class="st-sec" id="link" aria-labelledby="link-title" style="padding-top:0">
   <div class="wrap st-grid">
     <figure class="glass st-preview" style="margin:0">
-      <iframe id="st-frame" title="معاينة الأوفرلاي" loading="lazy"></iframe>
+      <iframe id="st-frame" title="معاينة الأوفرلاي"></iframe>
       <figcaption>معاينة حية فوق لعبة. في بثك تكون الخلفية شفافة.</figcaption>
     </figure>
 
@@ -70,7 +70,7 @@
         </div>
         <div class="st-field">
           <label for="f-layout">الشكل</label>
-          <select id="f-layout" name="layout"><option value="bar" selected>شريط سفلي</option><option value="card">بطاقة في الزاوية</option><option value="mini">شريط صغير (تحت الكام)</option><option value="badge">شارة دائمة (صغيرة وهادية)</option></select>
+          <select id="f-layout" name="layout"><option value="bar" selected>شريط سفلي</option><option value="card">بطاقة في الزاوية</option><option value="mini">شريط صغير (تحت الكام)</option><option value="badge">شارة دائمة (صغيرة وهادية)</option><option value="ticker">شريط أخبار (نص متحرك)</option><option value="side">لوحة جانبية (طويلة)</option><option value="notify">إشعار (صغير ينبثق)</option><option value="tile">مربع QR (دائم)</option><option value="scene">شاشة استراحة (كامل الشاشة)</option></select>
         </div>
         <div class="st-field">
           <label for="f-pos">المكان</label>
@@ -97,11 +97,17 @@
         <div class="st-field">
           <label for="f-hold">يبقى</label>
           <select id="f-hold" name="hold">
+            <option value="5">5 ثواني</option>
+            <option value="7">7 ثواني</option>
             <option value="10">10 ثواني</option>
             <option value="12" selected>12 ثانية</option>
             <option value="15">15 ثانية</option>
             <option value="20">20 ثانية</option>
           </select>
+        </div>
+        <div class="st-field">
+          <label for="f-title">عنوان الاستراحة</label>
+          <select id="f-title" name="title"><option value="brb" selected>راجع بعد شوي</option><option value="soon">البث يبدأ بعد شوي</option><option value="none">بدون عنوان</option></select>
         </div>
         <div class="st-field">
           <label for="f-accent">اللون</label>
@@ -167,18 +173,12 @@
       <h2 id="video-title">تبيه ملف فيديو؟</h2>
       <p>نفس الحركة كملف WebM بخلفية شفافة (<span class="ltr">1920 × 1080</span>، 60 إطار). أضفه في OBS كـ <b lang="en">Media Source</b>، وشيل علامة <b lang="en">Loop</b>، وأظهره وقت ما تبي أو شغّله من اختصار.</p>
     </div>
-    <p style="margin-bottom:18px"><a class="btn primary" href="../overlay/media/QClips-Streamer-Kit.zip" download><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4v11m0 0l-4.5-4.5M12 15l4.5-4.5M5 19h14"/></svg>كل شيء في ملف واحد <small>ZIP، 16 ميجا: كل الفيديوهات والشارات ودليل الاستخدام</small></a></p>
-    <div class="st-videos">
-      <a class="btn ghost" href="../overlay/media/qclips-overlay-ar-bar.webm" download>شريط عربي</a>
-      <a class="btn ghost" href="../overlay/media/qclips-overlay-ar-card.webm" download>بطاقة عربية</a>
-      <a class="btn ghost" href="../overlay/media/qclips-overlay-en-bar.webm" download lang="en">English bar</a>
-      <a class="btn ghost" href="../overlay/media/qclips-overlay-en-card.webm" download lang="en">English card</a>
-      <a class="btn ghost" href="../overlay/media/qclips-overlay-ar-mini.webm" download>شريط صغير عربي</a>
-      <a class="btn ghost" href="../overlay/media/qclips-overlay-en-mini.webm" download lang="en">English mini</a>
-      <a class="btn ghost" href="../overlay/media/qclips-overlay-ar-badge.png" download>شارة عربية (PNG)</a>
-      <a class="btn ghost" href="../overlay/media/qclips-overlay-en-badge.png" download lang="en">English badge (PNG)</a>
+    <p style="margin-bottom:18px"><a class="btn primary" href="../overlay/media/QClips-Streamer-Kit-AR.zip" download><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4v11m0 0l-4.5-4.5M12 15l4.5-4.5M5 19h14"/></svg>كل شيء في ملف واحد <small>ZIP، 14 ميجا: كل الأشكال كفيديو أو صورة، ودليل الاستخدام</small></a> <a class="btn ghost" href="../overlay/media/QClips-Streamer-Kit-EN.zip" download lang="en">English kit <small>ZIP, 14 MB</small></a></p>
+    <div class="st-filecols">
+      <div class="glass st-files"><h3>عربي</h3><ul><li><a href="../overlay/media/qclips-overlay-ar-bar.webm" download>شريط سفلي</a> <small>WEBM</small></li><li><a href="../overlay/media/qclips-overlay-ar-card.webm" download>بطاقة في الزاوية</a> <small>WEBM</small></li><li><a href="../overlay/media/qclips-overlay-ar-mini.webm" download>شريط صغير</a> <small>WEBM</small></li><li><a href="../overlay/media/qclips-overlay-ar-ticker.webm" download>شريط أخبار</a> <small>WEBM</small></li><li><a href="../overlay/media/qclips-overlay-ar-side.webm" download>لوحة جانبية</a> <small>WEBM</small></li><li><a href="../overlay/media/qclips-overlay-ar-notify.webm" download>إشعار</a> <small>WEBM</small></li><li><a href="../overlay/media/qclips-overlay-ar-badge.png" download>شارة دائمة</a> <small>PNG</small></li><li><a href="../overlay/media/qclips-overlay-ar-tile.png" download>مربع QR</a> <small>PNG</small></li><li><a href="../overlay/media/qclips-overlay-ar-scene.png" download>شاشة استراحة</a> <small>PNG</small></li></ul></div>
+      <div class="glass st-files" lang="en"><h3>English</h3><ul><li><a href="../overlay/media/qclips-overlay-en-bar.webm" download>شريط سفلي</a> <small>WEBM</small></li><li><a href="../overlay/media/qclips-overlay-en-card.webm" download>بطاقة في الزاوية</a> <small>WEBM</small></li><li><a href="../overlay/media/qclips-overlay-en-mini.webm" download>شريط صغير</a> <small>WEBM</small></li><li><a href="../overlay/media/qclips-overlay-en-ticker.webm" download>شريط أخبار</a> <small>WEBM</small></li><li><a href="../overlay/media/qclips-overlay-en-side.webm" download>لوحة جانبية</a> <small>WEBM</small></li><li><a href="../overlay/media/qclips-overlay-en-notify.webm" download>إشعار</a> <small>WEBM</small></li><li><a href="../overlay/media/qclips-overlay-en-badge.png" download>شارة دائمة</a> <small>PNG</small></li><li><a href="../overlay/media/qclips-overlay-en-tile.png" download>مربع QR</a> <small>PNG</small></li><li><a href="../overlay/media/qclips-overlay-en-scene.png" download>شاشة استراحة</a> <small>PNG</small></li></ul></div>
     </div>
-    <p class="st-size" style="margin-top:14px">فيديو الشريط الصغير مقاسه <span class="ltr">600 × 188</span> وصورة الشارة <span class="ltr">420 × 136</span>: أضفها مثل ما هي وحرّكها لمكانها.</p>
+    <p class="st-size" style="margin-top:14px">الفيديوهات الصغيرة والصور بمقاسها الحقيقي (مثلاً الشريط الصغير <span class="ltr">600 × 188</span>): أضفها مثل ما هي وحرّكها لمكانها. والباقي <span class="ltr">1920 × 1080</span>.</p>
   </div>
 </section>
 
@@ -189,6 +189,8 @@
       <li><b>مرة كل 10 إلى 20 دقيقة</b> تكفي للشريط الكبير. والشريط الصغير تحت الكام يقدر يطلع أكثر، كل دقيقة إلى 5 دقائق.</li>
       <li><b>الشارة الدائمة</b> ثابتة في مكانها وبس تغيّر سطرها كل كم ثانية، فما تزعج أبد.</li>
       <li>خلّه على ذوقك: اختر <b>اللون والطابع (داكن، فاتح أو نيون) والزوايا وطريقة الدخول والحجم</b> من فوق، والمعاينة تتغيّر على طول.</li>
+      <li>حط <b>شاشة الاستراحة</b> في مشهد لحالها وانتقل له لما تقوم من البث.</li>
+      <li>حط <b>شاشة الاستراحة</b> في مشهد لحالها وانتقل له لما تقوم من البث.</li>
       <li>خلّه بعيد عن <b>الكام والشات والتنبيهات</b>. إذا الشريط غطّى أشياء اللعبة، اختر البطاقة في الزاوية.</li>
       <li>تبيه وقت ما تبي؟ اختر <b>بس لما أظهّر المصدر</b> وأظهر المصدر وأخفه، أو اربطه باختصار.</li>
       <li>الـQR كود في الشريط والبطاقة والشريط الصغير ينمسح من الجوال من بث <span class="ltr">720p</span> وفوق، واللي في الشارة أصغر فأفضل له <span class="ltr">1080p</span>. اذكره في البث بين فترة وفترة.</li>

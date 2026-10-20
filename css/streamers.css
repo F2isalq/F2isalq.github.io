@@ -65,3 +65,9 @@
 .st-cta { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 28px; }
 .st-field select option { background-color: #1a1d26; color: #edf1fb; }
 .st-field select option:checked { background-color: #1a8cff; color: #fff; }
+.st-filecols { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+@media (max-width: 700px) { .st-filecols { grid-template-columns: 1fr; } }
+.st-files { padding: 18px 22px; }
+.st-files h3 { font-size: 1.05rem; margin-bottom: 10px; }
+.st-files ul { margin: 0; padding: 0; list-style: none; display: grid; grid-template-columns: 1fr 1fr; gap: 6px 16px; }
+.st-files small { color: var(--dim); font-size: .75rem; }

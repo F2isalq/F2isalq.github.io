@@ -303,3 +303,133 @@ html.t-neon .glow { position: absolute; inset: -2px; border-radius: calc(var(--r
 .ad.bar.noshot .panel { width: 960px; grid-template-columns: 1fr 236px; }
 .ad.bar.noshot .shot, .ad.card.noshot .shot { display: none; }
 .ad.card.noshot .panel { grid-template-areas: "cta copy"; }
+
+/* ---------- the newer styles ---------- */
+.mark, .title, .note, .tick { display: none; }
+
+/* ticker: a thin news-style line along the bottom or top, the text scrolling */
+.ad.ticker { left: 24px; right: 24px; }
+.ad.ticker.pos-bottom { bottom: 24px; }
+.ad.ticker.pos-top { top: 24px; }
+.ad.ticker .frame { width: 100%; }
+.ad.ticker .frame::before { border-radius: calc(min(var(--r), 20px) + 2px); }
+.ad.ticker .panel { height: 76px; padding: 0 12px 0 18px; grid-template-columns: auto 1fr auto; column-gap: 18px; border-radius: min(var(--r), 20px); }
+html[dir="rtl"] .ad.ticker .panel { padding: 0 18px 0 12px; }
+.ad.ticker .copy { order: 1; }
+.ad.ticker .tick { order: 2; }
+.ad.ticker .cta { order: 3; }
+.ad.ticker .shot, .ad.ticker .headline, .ad.ticker .sub, .ad.ticker .feats, .ad.ticker .lines, .ad.ticker .card-url,
+.ad.ticker .qr, .ad.ticker .scan-label, .ad.ticker .streak { display: none; }
+.ad.ticker .logo { height: 34px; }
+.ad.ticker .brand .badge { font-size: 13px; padding: 3px 10px 4px; }
+.ad.ticker .tick {
+  display: block; position: relative; overflow: hidden; height: 100%;
+  -webkit-mask-image: linear-gradient(90deg, transparent, #000 5%, #000 95%, transparent);
+  mask-image: linear-gradient(90deg, transparent, #000 5%, #000 95%, transparent);
+}
+.tick-track { position: absolute; top: 0; bottom: 0; inset-inline-start: 0; display: flex; align-items: center; white-space: nowrap; will-change: transform; }
+.tick-set { display: inline-flex; align-items: center; }
+.tick-set span { font-size: 23px; font-weight: 650; padding: 0 24px; }
+html[lang="ar"] .tick-set span { font-size: 21px; }
+.tick-set b { color: var(--a1); }
+.tick-set i { width: 8px; height: 8px; border-radius: 50%; background: var(--a2); box-shadow: 0 0 10px rgba(var(--a2-rgb), .8); flex: none; }
+.ad.ticker .link .url {
+  margin: 0; padding: 7px 18px 9px; border-radius: 999px; font-size: 21px; color: #fff;
+  background: linear-gradient(180deg, var(--a1), var(--a2)); box-shadow: 0 6px 18px -6px rgba(var(--a2-rgb), .9);
+}
+html.sq .ad.ticker .link .url { border-radius: 6px; }
+.ad.ticker .timer { left: 18px; right: 18px; height: 2px; }
+
+/* side: a tall panel at the left or right edge */
+.ad.side { top: 0; bottom: 0; align-items: center; }
+.ad.side.pos-right { right: 40px; }
+.ad.side.pos-left { left: 40px; }
+.ad.side .frame { width: 440px; }
+.ad.side .panel { display: flex; flex-direction: column; align-items: stretch; gap: 22px; padding: 28px 26px 30px; }
+.ad.side .copy { order: 1; }
+.ad.side .shot { order: 2; }
+.ad.side .cta { order: 3; flex-direction: row; gap: 18px; align-items: center; }
+.ad.side .sub, .ad.side .card-url, .ad.side .lines { display: none; }
+.ad.side .logo { height: 38px; }
+.ad.side .headline { font-size: 42px; margin-top: 14px; }
+html[lang="ar"] .ad.side .headline { font-size: 36px; margin-top: 6px; }
+.ad.side .feats { margin-top: 16px; height: 42px; }
+.ad.side .feats li { height: 42px; font-size: 18px; }
+.ad.side .qr { width: 196px; height: 196px; flex: none; }
+.ad.side .link { align-items: flex-start; }
+.ad.side .url { font-size: 21px; }
+.ad.side .timer { left: 26px; right: 26px; }
+.ad.side.noshot .shot { display: none; }
+
+/* notify: a small notification, like the in-game one QClips shows */
+.ad.notify { left: 10px; top: 10px; right: 10px; bottom: 10px; }
+.ad.notify .frame { width: 100%; height: 100%; }
+.ad.notify .frame::before { border-radius: calc(min(var(--r), 18px) + 2px); }
+.ad.notify .panel { height: 100%; padding: 12px 22px 12px 12px; grid-template-columns: 1fr; border-radius: min(var(--r), 18px); box-shadow: 0 10px 24px -10px rgba(0, 0, 0, .8), inset 0 1px 0 rgba(255, 255, 255, .14); }
+html[dir="rtl"] .ad.notify .panel { padding: 12px 12px 12px 22px; }
+.ad.notify .shot, .ad.notify .cta, .ad.notify .headline, .ad.notify .sub, .ad.notify .feats, .ad.notify .lines,
+.ad.notify .card-url, .ad.notify .logo, .ad.notify .brand .badge, .ad.notify .streak { display: none; }
+.ad.notify .copy { display: flex; align-items: center; gap: 16px; height: 100%; }
+.ad.notify .mark {
+  display: block; width: 80px; height: 80px; padding: 14px; border-radius: min(var(--r), 16px); flex: none;
+  background: #1e222b; box-shadow: inset 0 0 0 1px rgba(255, 255, 255, .08); will-change: transform, opacity;
+}
+html.t-light .ad.notify .mark { background: rgba(13, 15, 20, .06); }
+.ad.notify .note { display: flex; flex-direction: column; gap: 4px; min-width: 0; will-change: transform, opacity; }
+.ad.notify .n1 { font-size: 22px; font-weight: 750; white-space: nowrap; }
+html[lang="ar"] .ad.notify .n1 { font-size: 20px; }
+.ad.notify .n2 { font-size: 16px; color: var(--muted); white-space: nowrap; }
+.ad.notify .timer { left: 14px; right: 14px; height: 2px; }
+
+/* tile: a small QR code card, always on */
+.ad.tile { left: 10px; top: 10px; right: 10px; bottom: 10px; }
+.ad.tile .frame { width: 100%; height: 100%; }
+.ad.tile .frame::before { border-radius: calc(min(var(--r), 22px) + 2px); }
+.ad.tile .panel { height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 14px; padding: 16px; border-radius: min(var(--r), 22px); }
+.ad.tile .shot, .ad.tile .headline, .ad.tile .sub, .ad.tile .feats, .ad.tile .lines, .ad.tile .card-url,
+.ad.tile .brand .badge, .ad.tile .timer, .ad.tile .streak { display: none; }
+.ad.tile .brand { justify-content: center; }
+.ad.tile .logo { height: 30px; }
+.ad.tile .cta { gap: 10px; }
+.ad.tile .qr { width: 220px; height: 220px; border-radius: min(var(--r-qr), 16px); }
+.ad.tile .url { font-size: 22px; }
+
+/* scene: a full-screen break scene ("Be right back" / "Starting soon") */
+.ad.scene { inset: 0; }
+.ad.scene .frame { width: 100%; height: 100%; }
+.ad.scene .frame::before, .ad.scene .glow, .ad.scene .streak, .ad.scene .timer, .ad.scene .card-url, .ad.scene .lines,
+.ad.scene .screen .s2 { display: none; }
+.ad.scene .panel {
+  height: 100%; border-radius: 0; padding: 90px 110px; column-gap: 90px; row-gap: 40px; align-content: center;
+  grid-template-columns: minmax(0, 1fr) 880px; grid-template-areas: "copy shot" "copy cta";
+  background: linear-gradient(90deg, rgba(8, 10, 16, .94) 30%, rgba(8, 10, 16, .72)), url("../img/stream-bg-1920.webp") center / cover;
+}
+html[dir="rtl"] .ad.scene .panel { background: linear-gradient(270deg, rgba(8, 10, 16, .94) 30%, rgba(8, 10, 16, .72)), url("../img/stream-bg-1920.webp") center / cover; }
+html.t-light .ad.scene .panel { background: linear-gradient(90deg, rgba(246, 248, 252, .96) 30%, rgba(246, 248, 252, .82)), url("../img/stream-bg-1920.webp") center / cover; }
+.ad.scene .lights i { filter: blur(90px); opacity: .5; }
+.ad.scene .lights .l1 { width: 900px; height: 600px; left: -200px; top: -250px; }
+.ad.scene .lights .l2 { width: 800px; height: 600px; right: 10%; bottom: -300px; }
+.ad.scene .lights .l3 { width: 600px; height: 400px; right: -150px; top: -150px; }
+.ad.scene .copy { grid-area: copy; }
+.ad.scene .shot { grid-area: shot; perspective: none; }
+.ad.scene .cta { grid-area: cta; flex-direction: row; gap: 30px; align-items: center; justify-self: start; }
+.ad.scene .logo { height: 64px; }
+.ad.scene .brand .badge { font-size: 18px; padding: 6px 16px 8px; }
+.ad.scene .title {
+  display: block; margin-top: 54px; font-size: 26px; font-weight: 800; letter-spacing: .22em; text-transform: uppercase;
+  color: var(--a1); will-change: transform, opacity;
+}
+html[lang="ar"] .ad.scene .title { letter-spacing: 0; font-size: 30px; }
+.ad.scene .headline { font-size: 104px; margin-top: 18px; }
+html[lang="ar"] .ad.scene .headline { font-size: 88px; }
+.ad.scene .sub { font-size: 30px; margin-top: 22px; max-width: 760px; }
+html[lang="ar"] .ad.scene .sub { font-size: 27px; }
+.ad.scene .feats { height: auto; margin-top: 46px; display: flex; flex-direction: column; gap: 16px; }
+.ad.scene .feats li { position: relative; inset: auto; height: 60px; font-size: 25px; align-self: flex-start; padding-inline-end: 24px; }
+.ad.scene .feats .ico { width: 44px; height: 44px; }
+.ad.scene .feats .ico svg { width: 24px; height: 24px; }
+.ad.scene .screen { border-radius: max(var(--r-in), 6px); box-shadow: 0 40px 90px -30px rgba(0, 0, 0, .9), 0 0 0 8px rgba(255, 255, 255, .04), 0 0 80px -10px rgba(var(--a2-rgb), .5); }
+.ad.scene .qr { width: 250px; height: 250px; }
+.ad.scene .link { align-items: flex-start; }
+.ad.scene .scan-label { font-size: 18px; }
+.ad.scene .url { font-size: 42px; margin-top: 6px; }

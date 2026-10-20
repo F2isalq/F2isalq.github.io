@@ -12,17 +12,24 @@
   var note = document.getElementById('st-size-note');
   var base = new URL(form.getAttribute('data-base'), location.href).href;
   // must match overlay.js
-  var BOX = { bar: [1920, 1080], card: [1920, 1080], mini: [600, 188], badge: [420, 136] };
+  var BOX = { mini: [600, 188], badge: [420, 136], notify: [560, 124], tile: [300, 372] };
+  var FULL = [1920, 1080];
+  var ALWAYS = { badge: 1, tile: 1, scene: 1 };
+  var HOLD = { mini: '10', notify: '7', ticker: '15' };
   var POS = {
     bar: AR ? [['bottom', 'أسفل الشاشة'], ['top', 'أعلى الشاشة']] : [['bottom', 'Bottom'], ['top', 'Top']],
     card: AR
       ? [['br', 'أسفل اليمين'], ['bl', 'أسفل اليسار'], ['tr', 'أعلى اليمين'], ['tl', 'أعلى اليسار']]
-      : [['br', 'Bottom right'], ['bl', 'Bottom left'], ['tr', 'Top right'], ['tl', 'Top left']]
+      : [['br', 'Bottom right'], ['bl', 'Bottom left'], ['tr', 'Top right'], ['tl', 'Top left']],
+    side: AR ? [['left', 'يسار الشاشة'], ['right', 'يمين الشاشة']] : [['right', 'Right'], ['left', 'Left']]
   };
+  POS.ticker = POS.bar;
+  function posDefault(l) { return l === 'card' ? (val('lang') === 'ar' ? 'bl' : 'br') : l === 'side' ? (val('lang') === 'ar' ? 'left' : 'right') : 'bottom'; }
 
   function val(name) { return form.elements[name].value; }
   function field(name) { return form.elements[name].closest('.st-field'); }
-  function isSmall() { return val('layout') === 'mini' || val('layout') === 'badge'; }
+  function isSmall() { return !!BOX[val('layout')]; }
+  function show(name, on) { field(name).hidden = !on; }
 
   function fillPos() {
     var sel = form.elements.pos, keep = sel.value, list = POS[val('layout')];
@@ -31,19 +38,21 @@
     sel.innerHTML = '';
     list.forEach(function (p) { sel.add(new Option(p[1], p[0])); });
     var ok = list.some(function (p) { return p[0] === keep; });
-    sel.value = ok ? keep : (val('layout') === 'card' && val('lang') === 'ar' ? 'bl' : list[0][0]);
+    sel.value = ok ? keep : posDefault(val('layout'));
   }
 
   var lastLayout = val('layout');
   function layoutChanged() {
     var l = val('layout'), every = form.elements.every, hold = form.elements.hold;
-    // the mini strip is meant to come often, the big ones rarely
-    if (l === 'mini' && lastLayout !== 'mini' && Number(every.value) >= 600) every.value = '120';
-    if (l !== 'mini' && lastLayout === 'mini' && every.value !== '0' && Number(every.value) < 600) every.value = '600';
-    if (l === 'mini' && hold.value === '12') hold.value = '10';
-    if (l !== 'mini' && lastLayout === 'mini' && hold.value === '10') hold.value = '12';
-    field('every').hidden = field('hold').hidden = l === 'badge';
-    field('scale').hidden = field('shot').hidden = l === 'mini' || l === 'badge';
+    // the small ones are meant to come often, the big ones rarely; each has its own usual time on screen
+    var often = { mini: '120', notify: '300' };
+    if (every.value !== '0') every.value = often[l] || '600';
+    hold.value = HOLD[l] || '12';
+    show('every', !ALWAYS[l]); show('hold', !ALWAYS[l]);
+    show('scale', ['bar', 'card', 'ticker', 'side'].indexOf(l) >= 0);
+    show('shot', ['bar', 'card', 'side'].indexOf(l) >= 0);
+    show('from', ['bar', 'card', 'mini', 'badge'].indexOf(l) >= 0);
+    show('title', l === 'scene');
     lastLayout = l;
   }
 
@@ -51,28 +60,27 @@
     var l = val('layout'), q = new URLSearchParams();
     q.set('lang', val('lang'));
     if (l !== 'bar') q.set('layout', l);
-    if (POS[l] && val('pos') !== (l === 'bar' ? 'bottom' : (val('lang') === 'ar' ? 'bl' : 'br'))) q.set('pos', val('pos'));
-    if (val('from')) q.set('from', val('from'));
-    if (l !== 'badge') {
+    if (POS[l] && val('pos') !== posDefault(l)) q.set('pos', val('pos'));
+    if (val('from') && !field('from').hidden) q.set('from', val('from'));
+    if (!ALWAYS[l]) {
       if (val('every') !== '600') q.set('every', val('every'));
-      if (val('hold') !== (l === 'mini' ? '10' : '12')) q.set('hold', val('hold'));
+      if (val('hold') !== (HOLD[l] || '12')) q.set('hold', val('hold'));
     }
+    if (l === 'scene' && val('title') !== 'brb') q.set('title', val('title'));
     // look: only what differs from the defaults
     if (val('accent')) q.set('accent', val('accent'));
     if (val('theme') !== 'dark') q.set('theme', val('theme'));
     if (val('corners') !== 'round') q.set('corners', val('corners'));
     if (val('enter') !== 'slide') q.set('enter', val('enter'));
-    if (l === 'bar' || l === 'card') {
-      if (val('scale') !== '1') q.set('scale', val('scale'));
-      if (val('shot') === '0') q.set('shot', '0');
-    }
+    if (!field('scale').hidden && val('scale') !== '1') q.set('scale', val('scale'));
+    if (!field('shot').hidden && val('shot') === '0') q.set('shot', '0');
     for (var k in extra) q.set(k, extra[k]);
     return q.toString();
   }
 
   var timer = 0;
   function update() {
-    var l = val('layout'), box = BOX[l], small = isSmall();
+    var l = val('layout'), box = BOX[l] || FULL, small = isSmall();
     out.value = base + '?' + params({});
     size.textContent = box[0] + ' × ' + box[1];
     note.textContent = note.getAttribute(small ? 'data-small' : 'data-full');
@@ -83,8 +91,11 @@
     timer = setTimeout(function () {
       frame.style.opacity = '0'; // hide the blank page while the next preview loads
       var extra = { delay: '0.4', bg: '1' };
-      if (l !== 'badge') extra.every = String(Number(val('hold')) + 4);
-      frame.src = base + '?' + params(extra);
+      if (!ALWAYS[l]) extra.every = String(Number(val('hold')) + 4);
+      // navigate the frame itself: changing src again is ignored by some browsers once it has loaded
+      var next = base + '?' + params(extra);
+      try { if (frame.contentWindow && frame.getAttribute('src')) { frame.contentWindow.location.replace(next); return; } } catch (e) { /* not reachable yet */ }
+      frame.src = next;
     }, 150);
   }
   frame.style.transition = 'opacity .3s';
