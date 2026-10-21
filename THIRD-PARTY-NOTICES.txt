@@ -2,16 +2,22 @@ QClips - third-party software
 ============================
 
 FFmpeg (ffmpeg\QClips Engine.exe = ffmpeg.exe, ffmpeg\QClips Probe.exe = ffprobe.exe, and the FFmpeg DLLs)
-  QClips runs FFmpeg as a separate program, built from the FFmpeg source with two small patches and only the parts
+  QClips runs FFmpeg as a separate program, built from the FFmpeg source with four small patches and only the parts
   QClips uses. Because it includes x264, this FFmpeg build is licensed under the GNU General Public License
   version 2 or later; the license text is in ffmpeg\LICENSE.txt, and ffmpeg\README.txt lists the exact source
   archive, its SHA-256, the library versions and the configure line of the bundled build, and contains the patches
   in full. The source of this build is that archive plus those patches.
-  The patches (both to the scale_d3d11 filter):
+  The patches (three to the scale_d3d11 filter, one to the gfxcapture filter):
     0001-scale_d3d11-single-textures.patch: the filter makes its output pictures as single textures, as FFmpeg 8.0
       did; FFmpeg 8.1 makes them as one texture array, which some graphics drivers refuse.
     0002-scale_d3d11-bt709-limited-output.patch: the filter converts RGB pictures to BT.709 limited-range YUV
       instead of leaving the conversion to the graphics driver.
+    0003-scale_d3d11-hdr-to-sdr-and-hdr10.patch: on monitors with Windows HDR on, the filter converts the HDR
+      picture on the graphics card, tone mapped to ordinary BT.709 video or as HDR10 (BT.2020 PQ), and makes
+      full-range RGB pictures for screenshots.
+    0004-gfxcapture-dup-frames-and-pool-size.patch: Windows Graphics Capture (the gfxcapture filter) sends the last
+      picture again while the screen doesn't change, so the video goes on over a still screen, and its frame pool
+      size can be set.
   FFmpeg source code: https://ffmpeg.org/releases/ffmpeg-8.1.3.tar.xz
     (SHA-256 7138d28c96d9d3e3af4ee3d8cad72741f8ffb40da90c1112235dea3ecd3178a3), https://github.com/FFmpeg/FFmpeg
   Built with MSYS2 MinGW-w64 (https://www.msys2.org) and these libraries, linked into the FFmpeg DLLs:
@@ -40,6 +46,8 @@ Windows App SDK, Win2D, CommunityToolkit.Mvvm - MIT License (Microsoft)
 .NET runtime, Microsoft.Diagnostics.Runtime (ClrMD) - MIT License (Microsoft) - https://github.com/dotnet
 Velopack (installs and updates) - MIT License - https://github.com/velopack/velopack
 Markdig (release notes) - BSD 2-Clause License - https://github.com/xoofx/markdig
+Simple Icons (the X, TikTok, Instagram, YouTube and Discord logos next to their names) - CC0 1.0 - https://simpleicons.org
+  The logos are trademarks of their owners, shown only to name their platforms.
 
 Voice commands
   sherpa-onnx (sherpa-onnx.dll, sherpa-onnx-c-api.dll) - Apache License 2.0 - https://github.com/k2-fsa/sherpa-onnx
@@ -51,3 +59,21 @@ Voice commands
   Moonshine base Arabic - Moonshine AI Community License (moonshine-base-ar\LICENSE.txt and NOTICE.txt next to the model):
     "This Moonshine AI Model is licensed under the Moonshine AI Community License, Copyright (c) Moonshine AI Ltd. All Rights Reserved"
     Powered by Moonshine AI.
+
+Captions
+  Downloaded from the editor's Captions panel into %LOCALAPPDATA%\QClips.Data\Models\captions (the release captions-v1
+  of https://github.com/F2isalq/QClips-Releases), not installed with QClips. Each folder holds its license and notice.
+  whisper.cpp 1.9.5 and ggml 0.27.0 (captions\vulkan and captions\cpu: QClips Captions.exe = whisper-cli,
+    QClips Captions VAD.exe = vad-speech-segments, and their DLLs) - MIT License, Copyright (c) 2023-2026 The ggml
+    authors - https://github.com/ggml-org/whisper.cpp, https://github.com/ggml-org/ggml
+    As built by MSYS2 (https://packages.msys2.org): mingw-w64-x86_64-whisper.cpp 1~1.9.5.r2.g0c7be6963-1,
+    mingw-w64-x86_64-ggml 0.27.0-1, with the GCC 16.2.0 runtime libraries (libstdc++, libgcc, libgomp: GPL version 3
+    with the GCC Runtime Library Exception, https://gcc.gnu.org) and mingw-w64 winpthreads 14.0.0 (MIT/BSD).
+  Silero VAD (ggml-silero-v6.2.0.bin) - MIT License - https://github.com/snakers4/silero-vad, in the ggml format of
+    https://huggingface.co/ggml-org/whisper-vad (MIT License).
+  Arabic model (captions\ar): whisper-large-v3-turbo-arabic-dialectal-v2 - Apache License 2.0 -
+    https://huggingface.co/oddadmix/whisper-large-v3-turbo-arabic-dialectal-v2 (revision b12b09bc), a fine-tune of
+    Whisper large-v3-turbo (MIT License, Copyright (c) 2022 OpenAI). Converted to the ggml format and quantized (q5_0)
+    for QClips; nothing else changed (captions\ar\NOTICE.txt).
+  English model (captions\en): Whisper large-v3-turbo, q5_0 - MIT License, Copyright (c) 2022 OpenAI - as converted by
+    the whisper.cpp project (https://huggingface.co/ggerganov/whisper.cpp, MIT License), unchanged.

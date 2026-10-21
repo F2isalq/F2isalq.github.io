@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>QClips: play first, clip it after. Free game clipping for Windows</title>
-<meta name="description" content="QClips keeps the last minutes of your game on your PC. Press Alt+F10 or say “clip it” and the moment is saved, in Arabic or English. Trim it and size it for Discord. Free, no account, no telemetry.">
+<meta name="description" content="QClips keeps the last minutes of your game on your PC. Press Alt+F10 or say “clip it” and the moment is saved, in Arabic or English. Trim it, add captions and share it to Discord, TikTok, YouTube, Instagram or X. Free, no account, no telemetry.">
 <meta name="theme-color" content="#0d0f14">
 <meta name="color-scheme" content="dark">
 <link rel="icon" href="favicon.ico" sizes="any">
@@ -51,7 +51,7 @@
     <div class="hero-grid">
       <div class="hero-copy">
         <h1 id="hero-title"><span class="l">Play first.</span> <span class="l">Clip it after.</span></h1>
-        <p class="lead">QClips keeps the last minutes of your game on your PC. When something happens, press <span class="keys"><kbd>Alt</kbd>+<kbd>F10</kbd></span> or just say “clip it”, and the moment is saved. Trim it, then send it to Discord.</p>
+        <p class="lead">QClips keeps the last minutes of your game on your PC. When something happens, press <span class="keys"><kbd>Alt</kbd>+<kbd>F10</kbd></span> or just say “clip it”, and the moment is saved. Trim it, add captions, then share it.</p>
         <div class="cta">
           <a class="btn primary" href="https://github.com/F2isalq/QClips-Releases/releases/latest/download/QClips-Setup.exe">
             <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M10 3v10m0 0l-4-4m4 4l4-4M4 16h12" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"/></svg>
@@ -82,8 +82,8 @@
     <ul class="facts" aria-label="QClips in numbers">
       <li class="stat" data-reveal style="--i:0"><b><span class="num" data-count="5">5</span><small>MB</small></b><span>The installer. It fetches the rest while it installs.</span></li>
       <li class="stat" data-reveal style="--i:1"><b><span class="num" data-count="12">12</span><small>ms</small></b><span>Sound to picture, about that close in our tests at 60 and 120 FPS.</span></li>
-      <li class="stat" data-reveal style="--i:2"><b><span class="num" data-count="2">2</span><small>languages</small></b><span>Voice commands in Arabic and English, recognized on your PC.</span></li>
-      <li class="stat" data-reveal style="--i:3"><b><span class="num" data-count="3">3</span><small>sizes</small></b><span>Discord presets: 10, 25 and 50 MB, encoded so the file fits.</span></li>
+      <li class="stat" data-reveal style="--i:2"><b><span class="num" data-count="2">2</span><small>languages</small></b><span>Arabic and English: the whole app, voice commands and captions.</span></li>
+      <li class="stat" data-reveal style="--i:3"><b><span class="num" data-count="4">4</span><small>presets</small></b><span>Original, High, Discord 20 MB and Discord 50 MB, encoded so the file fits.</span></li>
     </ul>
   </div>
 </section>
@@ -122,13 +122,13 @@
       <article class="step" id="editor" aria-labelledby="editor-title">
         <p class="step-num"><i>3</i>Editor</p>
         <h2 id="editor-title">Trim it to the moment. Size it for Discord.</h2>
-        <p>Trim, split, change the speed (keeping the pitch), freeze a frame, add titles, effects, filters and transitions. Presets for Discord’s 10, 25 and 50 MB limits encode in two passes so the file fits.</p>
+        <p>Trim, split, change the speed (keeping the pitch), freeze a frame, add titles, captions, effects, filters and transitions. The Discord 20 MB and Discord 50 MB presets encode in two passes so the file fits.</p>
         <ul class="ticks">
-          <li><b>Simple mode.</b> Your library, text, effects, filters and transitions next to one timeline.</li>
-          <li><b>Advanced mode.</b> Tracks, keyframes and masks. Animate position, scale, rotation, opacity and volume.</li>
-          <li><b>Titles in Arabic too.</b> Titles join and read Arabic correctly, in the preview and in the exported file.</li>
+          <li><b>One editor.</b> Your library, text, effects, filters, transitions and captions next to one timeline, with tracks and keyframes when you want them.</li>
+          <li><b>Captions, written for you.</b> Arabic (Gulf and Saudi first, also Egyptian, Levantine and Iraqi) or English, timed word by word, made on your PC.</li>
+          <li><b>Auto Cut.</b> Removes the silent parts of a clip; one Undo brings them back.</li>
         </ul>
-        <div class="shot-sm screen"><picture><source type="image/avif" srcset="img/editor-simple-800.avif 793w, img/editor-simple-1600.avif 1586w" sizes="92vw"><img src="img/editor-simple-800.webp" srcset="img/editor-simple-800.webp 793w, img/editor-simple-1600.webp 1586w" sizes="92vw" width="1586" height="993" loading="lazy" decoding="async" alt="The QClips editor in Simple mode: a “CLUTCH” title over a VALORANT clip at Sova’s Hunter’s Fury, a lower third, and a timeline with a cut, a crossfade and the audio tracks."></picture></div>
+        <div class="shot-sm screen"><picture><source type="image/avif" srcset="img/editor-simple-800.avif 793w, img/editor-simple-1600.avif 1586w" sizes="92vw"><img src="img/editor-simple-800.webp" srcset="img/editor-simple-800.webp 793w, img/editor-simple-1600.webp 1586w" sizes="92vw" width="1586" height="993" loading="lazy" decoding="async" alt="The QClips editor: a “CLUTCH” title over a VALORANT clip at Sova’s Hunter’s Fury, a lower third, and a timeline with a cut, a crossfade and the audio tracks."></picture></div>
       </article>
 
       <article class="step" id="audio" aria-labelledby="audio-title">
@@ -140,7 +140,7 @@
           <li><b>No echo in Mixed.</b> QClips warns when a program would be heard twice and keeps it out of the mix. A limiter keeps loud moments from crackling.</li>
           <li><b>Without touching the game.</b> Per-app audio never opens the game’s process.</li>
         </ul>
-        <div class="shot-sm screen"><picture><source type="image/avif" srcset="img/editor-advanced-800.avif 793w, img/editor-advanced-1600.avif 1586w" sizes="92vw"><img src="img/editor-advanced-800.webp" srcset="img/editor-advanced-800.webp 793w, img/editor-advanced-1600.webp 1586w" sizes="92vw" width="1586" height="993" loading="lazy" decoding="async" alt="The editor in Advanced mode with keyframes on the video and the Mixed, Game, Discord and Mic tracks on the timeline."></picture></div>
+        <div class="shot-sm screen"><picture><source type="image/avif" srcset="img/editor-advanced-800.avif 793w, img/editor-advanced-1600.avif 1586w" sizes="92vw"><img src="img/editor-advanced-800.webp" srcset="img/editor-advanced-800.webp 793w, img/editor-advanced-1600.webp 1586w" sizes="92vw" width="1586" height="993" loading="lazy" decoding="async" alt="The editor with keyframes on the video and the Mixed, Game, Discord and Mic tracks on the timeline."></picture></div>
       </article>
 
       <article class="step" id="lite" aria-labelledby="lite-title">
@@ -162,8 +162,8 @@
           <div class="frames">
             <img src="img/settings-voice-1600.webp" srcset="img/settings-voice-800.webp 793w, img/settings-voice-1600.webp 1586w" sizes="(max-width: 1240px) 90vw, 1100px" width="1586" height="993" alt="" decoding="async" class="on" style="--z:1.42;--o:50% 22%" data-cap="Settings, Voice commands: your phrases, their lengths and Start test.">
             <img src="img/altz-open-1920.webp" srcset="img/altz-open-960.webp 960w, img/altz-open-1920.webp 1920w" sizes="(max-width: 1240px) 90vw, 1100px" width="1920" height="1080" alt="" decoding="async" loading="lazy" class="right" style="--z:1.45;--o:100% 25%" data-cap="The Alt+Z panel over a game, on the edge of its screen.">
-            <img src="img/editor-simple-1600.webp" srcset="img/editor-simple-800.webp 793w, img/editor-simple-1600.webp 1586w" sizes="(max-width: 1240px) 90vw, 1100px" width="1586" height="993" alt="" decoding="async" loading="lazy" data-cap="The editor, Simple mode: a title over the ultimate.">
-            <img src="img/editor-advanced-1600.webp" srcset="img/editor-advanced-800.webp 793w, img/editor-advanced-1600.webp 1586w" sizes="(max-width: 1240px) 90vw, 1100px" width="1586" height="993" alt="" decoding="async" loading="lazy" style="--z:1.6;--o:0 100%" data-cap="Advanced mode: keyframes, and every sound on its own track.">
+            <img src="img/editor-simple-1600.webp" srcset="img/editor-simple-800.webp 793w, img/editor-simple-1600.webp 1586w" sizes="(max-width: 1240px) 90vw, 1100px" width="1586" height="993" alt="" decoding="async" loading="lazy" data-cap="The editor: a title over the ultimate.">
+            <img src="img/editor-advanced-1600.webp" srcset="img/editor-advanced-800.webp 793w, img/editor-advanced-1600.webp 1586w" sizes="(max-width: 1240px) 90vw, 1100px" width="1586" height="993" alt="" decoding="async" loading="lazy" style="--z:1.6;--o:0 100%" data-cap="Keyframes, and every sound on its own track.">
             <img style="--z:1.12;--o:0 0" src="img/lite-1600.webp" srcset="img/lite-800.webp 593w, img/lite-1600.webp 1186w" sizes="(max-width: 1240px) 90vw, 1100px" width="1186" height="793" alt="" decoding="async" loading="lazy" data-cap="QClips Lite: only the recorder and its settings.">
           </div>
         </div>
@@ -204,28 +204,28 @@
   <div class="wrap">
     <div class="sec-head" data-reveal>
       <h2 id="editing-title">The editor, screen by screen.</h2>
-      <p>Start simple: pick a piece, add a title, choose a look. Switch to Advanced for tracks and keyframes; the edit comes with you. Then render it at the size Discord takes.</p>
+      <p>Pick a piece, add a title or captions, choose a look. Tracks and keyframes are on the same timeline. Then render it at the size Discord takes, or share it straight from QClips.</p>
     </div>
     <div class="glass reel" id="reel" data-reveal>
       <div class="reel-frames">
-        <figure class="on" id="rf1" role="tabpanel" aria-labelledby="rt1" data-cap="Simple mode: a big title over the ultimate, a cut with a crossfade and a cinematic look.">
-          <picture><source type="image/avif" srcset="img/editor-simple-800.avif 793w, img/editor-simple-1600.avif 1586w" sizes="(max-width: 1240px) 94vw, 1180px"><img src="img/editor-simple-800.webp" srcset="img/editor-simple-800.webp 793w, img/editor-simple-1600.webp 1586w" sizes="(max-width: 1240px) 94vw, 1180px" width="1586" height="993" loading="lazy" decoding="async" alt="The editor in Simple mode with a “CLUTCH” title over a VALORANT clip and its timeline."></picture>
+        <figure class="on" id="rf1" role="tabpanel" aria-labelledby="rt1" data-cap="A big title over the ultimate, a cut with a crossfade and a cinematic look.">
+          <picture><source type="image/avif" srcset="img/editor-simple-800.avif 793w, img/editor-simple-1600.avif 1586w" sizes="(max-width: 1240px) 94vw, 1180px"><img src="img/editor-simple-800.webp" srcset="img/editor-simple-800.webp 793w, img/editor-simple-1600.webp 1586w" sizes="(max-width: 1240px) 94vw, 1180px" width="1586" height="993" loading="lazy" decoding="async" alt="The editor with a “CLUTCH” title over a VALORANT clip and its timeline."></picture>
         </figure>
         <figure id="rf2" role="tabpanel" aria-labelledby="rt2" data-cap="The Text panel: titles, lower thirds, kill feeds, subtitles and more, ready to drop on the clip.">
-          <picture><source type="image/avif" srcset="img/editor-text-800.avif 793w, img/editor-text-1600.avif 1586w" sizes="(max-width: 1240px) 94vw, 1180px"><img src="img/editor-text-800.webp" srcset="img/editor-text-800.webp 793w, img/editor-text-1600.webp 1586w" sizes="(max-width: 1240px) 94vw, 1180px" width="1586" height="993" loading="lazy" decoding="async" alt="The Simple editor’s Text panel with its title styles."></picture>
+          <picture><source type="image/avif" srcset="img/editor-text-800.avif 793w, img/editor-text-1600.avif 1586w" sizes="(max-width: 1240px) 94vw, 1180px"><img src="img/editor-text-800.webp" srcset="img/editor-text-800.webp 793w, img/editor-text-1600.webp 1586w" sizes="(max-width: 1240px) 94vw, 1180px" width="1586" height="993" loading="lazy" decoding="async" alt="The editor’s Text panel with its title styles."></picture>
         </figure>
-        <figure id="rf3" role="tabpanel" aria-labelledby="rt3" data-cap="Advanced mode: keyframes for zoom and fade on the video, a text track and every audio track.">
-          <picture><source type="image/avif" srcset="img/editor-advanced-800.avif 793w, img/editor-advanced-1600.avif 1586w" sizes="(max-width: 1240px) 94vw, 1180px"><img src="img/editor-advanced-800.webp" srcset="img/editor-advanced-800.webp 793w, img/editor-advanced-1600.webp 1586w" sizes="(max-width: 1240px) 94vw, 1180px" width="1586" height="993" loading="lazy" decoding="async" alt="The editor in Advanced mode with keyframes and the Text, Video, Mixed, Game, Discord and Mic tracks."></picture>
+        <figure id="rf3" role="tabpanel" aria-labelledby="rt3" data-cap="Tracks: keyframes for zoom and fade on the video, a text track and every audio track.">
+          <picture><source type="image/avif" srcset="img/editor-advanced-800.avif 793w, img/editor-advanced-1600.avif 1586w" sizes="(max-width: 1240px) 94vw, 1180px"><img src="img/editor-advanced-800.webp" srcset="img/editor-advanced-800.webp 793w, img/editor-advanced-1600.webp 1586w" sizes="(max-width: 1240px) 94vw, 1180px" width="1586" height="993" loading="lazy" decoding="async" alt="The editor with keyframes and the Text, Video, Mixed, Game, Discord and Mic tracks."></picture>
         </figure>
-        <figure id="rf4" role="tabpanel" aria-labelledby="rt4" data-cap="Render video: Original, High, 1080p60 and Discord 10, 25 and 50 MB.">
-          <picture><source type="image/avif" srcset="img/render-800.avif 793w, img/render-1600.avif 1586w" sizes="(max-width: 1240px) 94vw, 1180px"><img src="img/render-800.webp" srcset="img/render-800.webp 793w, img/render-1600.webp 1586w" sizes="(max-width: 1240px) 94vw, 1180px" width="1586" height="993" loading="lazy" decoding="async" alt="The Render video dialog with the Discord 10 MB preset selected."></picture>
+        <figure id="rf4" role="tabpanel" aria-labelledby="rt4" data-cap="Render video: Original, High, Discord 20 MB and Discord 50 MB.">
+          <picture><source type="image/avif" srcset="img/render-800.avif 793w, img/render-1600.avif 1586w" sizes="(max-width: 1240px) 94vw, 1180px"><img src="img/render-800.webp" srcset="img/render-800.webp 793w, img/render-1600.webp 1586w" sizes="(max-width: 1240px) 94vw, 1180px" width="1586" height="993" loading="lazy" decoding="async" alt="The Render video dialog and its presets."></picture>
         </figure>
       </div>
       <div class="reel-bar">
         <div class="reel-tabs" role="tablist" aria-label="Editor screens">
-          <button role="tab" type="button" id="rt1" aria-controls="rf1" aria-selected="true">Simple<i></i></button>
+          <button role="tab" type="button" id="rt1" aria-controls="rf1" aria-selected="true">Editor<i></i></button>
           <button role="tab" type="button" id="rt2" aria-controls="rf2" aria-selected="false" tabindex="-1">Text<i></i></button>
-          <button role="tab" type="button" id="rt3" aria-controls="rf3" aria-selected="false" tabindex="-1">Advanced<i></i></button>
+          <button role="tab" type="button" id="rt3" aria-controls="rf3" aria-selected="false" tabindex="-1">Tracks<i></i></button>
           <button role="tab" type="button" id="rt4" aria-controls="rf4" aria-selected="false" tabindex="-1">Render<i></i></button>
         </div>
         <button class="btn ghost sm reel-pause" id="reelPause" type="button" aria-pressed="false">
@@ -233,7 +233,7 @@
           <svg class="ic-play" viewBox="0 0 16 16" aria-hidden="true" style="display:none"><path d="M5 3.2v9.6L12.5 8z" fill="currentColor"/></svg>
           <span>Pause</span></button>
       </div>
-      <p class="reel-cap" id="reelCap" aria-hidden="true">Simple mode: a big title over the ultimate, a cut with a crossfade and a cinematic look.</p>
+      <p class="reel-cap" id="reelCap" aria-hidden="true">A big title over the ultimate, a cut with a crossfade and a cinematic look.</p>
     </div>
   </div>
 </section>
@@ -266,6 +266,37 @@
         <p>A small notice on the edge of the screen when a clip is saved, by key or by voice. Keep it out of your clips if you like.</p>
         <div class="screen"><picture><source type="image/avif" srcset="img/toast-scene-480.avif 320w, img/toast-scene-960.avif 640w" sizes="(max-width: 1060px) 90vw, 680px"><img src="img/toast-scene-480.webp" srcset="img/toast-scene-480.webp 320w, img/toast-scene-960.webp 640w" sizes="(max-width: 1060px) 90vw, 680px" width="640" height="400" loading="lazy" decoding="async" alt="The “Saved last 30s” notification on the right edge of the screen over a game."></picture></div>
       </article>
+    </div>
+  </div>
+</section>
+
+<!-- New in 2.1 -->
+<section class="sec" id="new" aria-labelledby="new-title">
+  <div class="wrap">
+    <div class="sec-head" data-reveal>
+      <h2 id="new-title">New in 2.1.</h2>
+      <p>Captions, sharing, better screenshots and QClips in Arabic. <a href="https://github.com/F2isalq/QClips-Releases/releases/latest">Everything that’s new</a></p>
+    </div>
+    <div class="cols2">
+      <div class="glass panel" data-reveal style="--i:0">
+        <h3>Edit and share</h3>
+        <ul class="ticks">
+          <li><b>Captions and subtitles.</b> The editor writes them for the whole clip, word by word, in Arabic or English, on your PC. Edit any line, pick a style, burn them in or save an .srt.</li>
+          <li><b>Auto Cut.</b> One button removes the silent parts; you choose how much to keep around speech.</li>
+          <li><b>Share from inside QClips.</b> TikTok, YouTube Shorts, Instagram Reels and X: trim, frame it vertically, add a title. You press the site’s own Post button; QClips never posts for you.</li>
+          <li><b>Simpler render presets.</b> Original, High, Discord 20 MB and Discord 50 MB.</li>
+        </ul>
+      </div>
+      <div class="glass panel" data-reveal style="--i:1">
+        <h3>Around the app</h3>
+        <ul class="ticks">
+          <li><b>Screenshots.</b> One monitor, all of them, the window in front or a region, straight to your clipboard.</li>
+          <li><b>Copy text from the screen.</b> Select an area and its text is copied, in English, Arabic and your other Windows languages.</li>
+          <li><b>HDR monitors.</b> Clips look right everywhere, or record HDR10 if you want it.</li>
+          <li><b>QClips in Arabic.</b> Every page, menu and the Alt+Z panel, right to left, and the installer too.</li>
+          <li><b>Settings in pages</b>, the way Windows 11 does it, with search. Pause and resume a recording into the same file.</li>
+        </ul>
+      </div>
     </div>
   </div>
 </section>
@@ -320,7 +351,7 @@
       </div>
       <div class="glass panel" data-reveal style="--i:1">
         <h3>Safe with anti-cheat</h3>
-        <p>QClips records the screen the way Windows’ own tools do (Desktop Duplication) and the sound through Windows’ audio system. It never interacts with the game.</p>
+        <p>QClips records the screen the way Windows’ own tools do (Windows Graphics Capture) and the sound through Windows’ audio system. It never interacts with the game.</p>
         <ul class="ticks">
           <li><b>No injection.</b> Nothing is loaded into the game, and it is never hooked.</li>
           <li><b>Hands off the process.</b> QClips never opens or reads the game’s process, even for per-app audio.</li>
@@ -351,7 +382,7 @@
       <div class="glass dl-card" data-reveal style="--i:1">
         <span class="badge" style="background:rgba(255,255,255,.08);border-color:var(--edge)">Offline</span>
         <span class="fn">QClips-Setup-Offline.exe</span>
-        <span class="size"><small>about</small>88<small>MB</small></span>
+        <span class="size"><small>about</small>85<small>MB</small></span>
         <p>Everything inside, for a PC without a good connection.</p>
         <a class="btn ghost" href="https://github.com/F2isalq/QClips-Releases/releases/latest/download/QClips-Setup-Offline.exe">Download offline installer</a>
       </div>
@@ -388,7 +419,7 @@
       <details>
         <summary>Does QClips collect any data?</summary>
         <div class="a">
-          <p>No. QClips sends no usage data, analytics or crash reports. It only goes online to check for updates and, if you turn on voice commands, to download the voice model once.</p>
+          <p>No. QClips sends no usage data, analytics or crash reports. It only goes online to check for updates, to download the voice or captions models once if you use them, and when you share a clip to a site yourself.</p>
         </div>
       </details>
       <details>
@@ -400,7 +431,14 @@
       <details>
         <summary>Can it get me banned in games with anti-cheat?</summary>
         <div class="a">
-          <p>QClips doesn’t interact with games at all: no injection, no hooks, it never opens the game’s process and it needs no administrator rights. It captures the screen and sound through Windows, like the built-in Windows tools.</p>
+          <p>QClips doesn’t interact with games at all: no injection, no hooks, it never opens the game’s process and it needs no administrator rights. It records the screen with Windows Graphics Capture, the way Windows’ own tools do, and the sound through Windows’ audio system.</p>
+        </div>
+      </details>
+      <details id="hidden-games">
+        <summary>Why did my VALORANT clips show the desktop?</summary>
+        <div class="a">
+          <p>Many screen recorders, and QClips before 2.1, capture the screen with Desktop Duplication, all the time. After a while of that, VALORANT’s anti-cheat hides the game’s window from every screen capture until the PC restarts, so clips show what is behind the game, usually the desktop.</p>
+          <p>QClips 2.1 records with Windows Graphics Capture instead, so this no longer happens. If it already happened before you updated, restart your PC once.</p>
         </div>
       </details>
       <details>
@@ -412,7 +450,7 @@
       <details>
         <summary>Is QClips available in Arabic?</summary>
         <div class="a">
-          <p>Voice commands understand Arabic and English, and titles in the editor join and read Arabic correctly. <a href="ar/" hreflang="ar">This site is in Arabic too.</a></p>
+          <p>Yes. The whole app, the Alt+Z panel and the installer are in Arabic, right to left. QClips follows your Windows display language; to choose yourself, go to Settings, General, Language. Voice commands and captions understand Arabic and English. <a href="ar/" hreflang="ar">This site is in Arabic too.</a></p>
         </div>
       </details>
       <details>
