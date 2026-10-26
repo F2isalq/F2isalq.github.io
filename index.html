@@ -19,7 +19,11 @@
 <meta property="og:image" content="img/og.jpg">
 <link rel="preload" href="fonts/archivo.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="css/site.css">
+<link rel="stylesheet" href="css/cine.css">
 <script src="js/site.js" defer></script>
+<script src="js/vendor/gsap.min.js" defer></script>
+<script src="js/vendor/ScrollTrigger.min.js" defer></script>
+<script src="js/cine.js" defer></script>
 </head>
 <body>
 <a class="skip" href="#main">Skip to content</a>
@@ -29,10 +33,10 @@
   <div class="wrap">
     <a class="brand" href="./" aria-label="QClips home"><img src="img/logo.png" alt="" width="28" height="28">QClips</a>
     <nav class="nav" id="nav" aria-label="Main">
-      <a href="#voice">Voice</a>
+      <a href="#say">Voice</a>
       <a href="#overlay">Alt+Z</a>
       <a href="#editor">Editor</a>
-      <a href="#audio">Sound</a>
+      <a href="#safe">Safety</a>
       <a href="#faq">FAQ</a>
     </nav>
     <a class="lang" href="ar/" hreflang="ar" lang="ar">العربية</a>
@@ -47,10 +51,17 @@
 
 <!-- Hero: the real app, layered in depth -->
 <section class="hero" aria-labelledby="hero-title">
+  <div class="hero-film" aria-hidden="true">
+    <video id="heroFilm" muted loop playsinline preload="none" poster="overlay/clip-poster.webp" width="854" height="480"><source src="overlay/clip.mp4" type="video/mp4"></video>
+  </div>
+  <button class="film-toggle" id="filmToggle" type="button" aria-pressed="false" data-pause="Pause the background video" data-play="Play the background video" aria-label="Pause the background video">
+    <svg class="ic-pause" viewBox="0 0 16 16" aria-hidden="true"><path d="M5 3.5v9M11 3.5v9" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg>
+    <svg class="ic-play" viewBox="0 0 16 16" aria-hidden="true"><path d="M5 3.2v9.6L12.5 8z" fill="currentColor"/></svg>
+  </button>
   <div class="wrap">
     <div class="hero-grid">
       <div class="hero-copy">
-        <h1 id="hero-title"><span class="l">Play first.</span> <span class="l">Clip it after.</span></h1>
+        <h1 id="hero-title"><span class="l"><span class="m">Play first.</span></span> <span class="l"><span class="m">Clip it after.</span></span></h1>
         <p class="lead">QClips keeps the last minutes of your game on your PC. When something happens, press <span class="keys"><kbd>Alt</kbd>+<kbd>F10</kbd></span> or just say “clip it”, and the moment is saved. Trim it, add captions, then share it.</p>
         <div class="cta">
           <a class="btn primary" href="https://github.com/F2isalq/QClips-Releases/releases/latest/download/QClips-Setup.exe">
@@ -88,86 +99,63 @@
   </div>
 </section>
 
-<!-- The tour: one glass screen that changes as you read -->
-<section class="tour" aria-label="What QClips does">
-  <div class="wrap tour-grid">
-    <div class="steps">
-
-      <article class="step" id="voice" aria-labelledby="voice-title">
-        <p class="step-num"><i>1</i>Voice</p>
-        <h2 id="voice-title">Say “clip it”.</h2>
-        <p>Hands busy? Say the phrase and QClips saves the replay. It catches it mid-sentence, like “nice, clip it”, and it understands Arabic as well as English.</p>
-        <ul class="ticks">
-          <li><b>Recognized on your PC.</b> What the microphone hears never leaves your computer, and it works offline.</li>
-          <li><b>Your phrases, your lengths.</b> Give each phrase its own length: 15 or 30 seconds, 1 to 2 minutes, or the whole replay.</li>
-          <li><b>Test it first.</b> Start test shows what it heard and which phrase matched. The sensitivity slider sets how clear a phrase must be.</li>
-          <li><b>Nothing to download.</b> The voice models come with QClips, in English and Arabic, and work from the first start. The Arabic model is Powered by Moonshine AI.</li>
-        </ul>
-        <div class="shot-sm screen"><picture><source type="image/avif" srcset="img/settings-voice-800.avif 793w, img/settings-voice-1600.avif 1586w" sizes="92vw"><img src="img/settings-voice-800.webp" srcset="img/settings-voice-800.webp 793w, img/settings-voice-1600.webp 1586w" sizes="92vw" width="1586" height="993" loading="lazy" decoding="async" alt="QClips Settings, Voice commands: the phrases “clip it” and “clip that” with their lengths, the microphone, sensitivity and a Start test button."></picture></div>
-      </article>
-
-      <article class="step" id="overlay" aria-labelledby="overlay-title">
-        <p class="step-num"><i>2</i>In the game</p>
-        <h2 id="overlay-title">Or press <span class="keys"><kbd>Alt</kbd>+<kbd>Z</kbd></span> without leaving the game.</h2>
-        <p>A panel slides in from the edge of your main screen. Save the replay or just its end, start a recording, check your audio and open your latest clips.</p>
-        <ul class="ticks">
-          <li><b>Quick trim in the panel.</b> Drag the two ends and save a trimmed copy without opening the editor.</li>
-          <li><b>Save just the end.</b> The last 30 seconds, 1 minute or 2 minutes of the replay.</li>
-          <li><b>Your call what shows.</b> Choose whether the panel, the “Clip saved” notice and the performance line appear in your clips and streams.</li>
-          <li><b>Hotkeys for everything.</b> By default Alt+F10 saves the replay, Alt+F9 starts a recording and Alt+M switches the mic.</li>
-        </ul>
-        <div class="shot-sm screen"><picture><source type="image/avif" srcset="img/altz-open-960.avif 960w, img/altz-open-1920.avif 1920w" sizes="92vw"><img src="img/altz-open-960.webp" srcset="img/altz-open-960.webp 960w, img/altz-open-1920.webp 1920w" sizes="92vw" width="1920" height="1080" loading="lazy" decoding="async" alt="The Alt+Z panel open on the right edge of the screen over Call of Duty: Modern Warfare III Zombies, with Instant replay, Recording, Audio tracks and Recent clips."></picture></div>
-      </article>
-
-      <article class="step" id="editor" aria-labelledby="editor-title">
-        <p class="step-num"><i>3</i>Editor</p>
-        <h2 id="editor-title">Trim it to the moment. Size it for Discord.</h2>
-        <p>Trim, split, change the speed (keeping the pitch), freeze a frame, add titles, captions, effects, filters and transitions. The Discord 20 MB and Discord 50 MB presets encode in two passes so the file fits.</p>
-        <ul class="ticks">
-          <li><b>One editor.</b> Your library, text, effects, filters, transitions and captions next to one timeline, with tracks and keyframes when you want them.</li>
-          <li><b>Captions, written for you.</b> Arabic (Gulf and Saudi first, also Egyptian, Levantine and Iraqi) or English, timed word by word, made on your PC.</li>
-          <li><b>Auto Cut.</b> Removes the silent parts of a clip; one Undo brings them back.</li>
-        </ul>
-        <div class="shot-sm screen"><picture><source type="image/avif" srcset="img/editor-simple-800.avif 793w, img/editor-simple-1600.avif 1586w" sizes="92vw"><img src="img/editor-simple-800.webp" srcset="img/editor-simple-800.webp 793w, img/editor-simple-1600.webp 1586w" sizes="92vw" width="1586" height="993" loading="lazy" decoding="async" alt="The QClips editor: a “CLUTCH” title over a VALORANT clip at Sova’s Hunter’s Fury, a lower third, and a timeline with a cut, a crossfade and the audio tracks."></picture></div>
-      </article>
-
-      <article class="step" id="audio" aria-labelledby="audio-title">
-        <p class="step-num"><i>4</i>Sound</p>
-        <h2 id="audio-title">Every sound on its own track.</h2>
-        <p>Game, voice chat, microphone and any device each get their own track, plus a Mixed track for sharing. Friend too loud? Turn them down later in the editor.</p>
-        <ul class="ticks">
-          <li><b>Per-app sound.</b> Put one program on its own track (Discord, Spotify, a browser), the current game, or everything except QClips.</li>
-          <li><b>No echo in Mixed.</b> QClips warns when a program would be heard twice and keeps it out of the mix. A limiter keeps loud moments from crackling.</li>
-          <li><b>Without touching the game.</b> Per-app audio never opens the game’s process.</li>
-        </ul>
-        <div class="shot-sm screen"><picture><source type="image/avif" srcset="img/editor-advanced-800.avif 793w, img/editor-advanced-1600.avif 1586w" sizes="92vw"><img src="img/editor-advanced-800.webp" srcset="img/editor-advanced-800.webp 793w, img/editor-advanced-1600.webp 1586w" sizes="92vw" width="1586" height="993" loading="lazy" decoding="async" alt="The editor with keyframes on the video and the Mixed, Game, Discord and Mic tracks on the timeline."></picture></div>
-      </article>
-
-      <article class="step" id="lite" aria-labelledby="lite-title">
-        <p class="step-num"><i>5</i>Lite</p>
-        <h2 id="lite-title">Just the recorder, if that’s all you want.</h2>
-        <p>QClips Lite runs only the recorder: replay, recording and hotkeys, with a small settings window in the tray. Nothing shows over your games: the save sound tells you a clip was saved. Switch back any time; your clips and settings stay.</p>
-        <ul class="ticks">
-          <li><b>Stays out of your frames.</b> Recording runs on your graphics card’s encoder (NVIDIA NVENC, AMD AMF or Intel Quick Sync), so the game keeps the CPU.</li>
-          <li><b>Saving never waits.</b> Hotkeys and voice work even while the editor is busy.</li>
-          <li><b>Small updates.</b> Only what changed is downloaded, often under a megabyte, and never while you record.</li>
-        </ul>
-        <div class="shot-sm screen"><picture><source type="image/avif" srcset="img/lite-800.avif 593w, img/lite-1600.avif 1186w" sizes="92vw"><img src="img/lite-800.webp" srcset="img/lite-800.webp 593w, img/lite-1600.webp 1186w" sizes="92vw" width="1186" height="793" loading="lazy" decoding="async" alt="QClips Lite: the recorder’s settings window with Instant replay, Recording and the video settings."></picture></div>
-      </article>
-    </div>
-
-    <div class="stage" id="stage" aria-hidden="true">
-      <div class="stage-in">
-        <div class="screen">
-          <div class="frames">
-            <img src="img/settings-voice-1600.webp" srcset="img/settings-voice-800.webp 793w, img/settings-voice-1600.webp 1586w" sizes="(max-width: 1240px) 90vw, 1100px" width="1586" height="993" alt="" decoding="async" class="on" style="--z:1.42;--o:50% 22%" data-cap="Settings, Voice commands: your phrases, their lengths and Start test.">
-            <img src="img/altz-open-1920.webp" srcset="img/altz-open-960.webp 960w, img/altz-open-1920.webp 1920w" sizes="(max-width: 1240px) 90vw, 1100px" width="1920" height="1080" alt="" decoding="async" loading="lazy" class="right" style="--z:1.45;--o:100% 25%" data-cap="The Alt+Z panel over a game, on the edge of its screen.">
-            <img src="img/editor-simple-1600.webp" srcset="img/editor-simple-800.webp 793w, img/editor-simple-1600.webp 1586w" sizes="(max-width: 1240px) 90vw, 1100px" width="1586" height="993" alt="" decoding="async" loading="lazy" data-cap="The editor: a title over the ultimate.">
-            <img src="img/editor-advanced-1600.webp" srcset="img/editor-advanced-800.webp 793w, img/editor-advanced-1600.webp 1586w" sizes="(max-width: 1240px) 90vw, 1100px" width="1586" height="993" alt="" decoding="async" loading="lazy" style="--z:1.6;--o:0 100%" data-cap="Keyframes, and every sound on its own track.">
-            <img style="--z:1.12;--o:0 0" src="img/lite-1600.webp" srcset="img/lite-800.webp 593w, img/lite-1600.webp 1186w" sizes="(max-width: 1240px) 90vw, 1100px" width="1186" height="793" alt="" decoding="async" loading="lazy" data-cap="QClips Lite: only the recorder and its settings.">
+<!-- Say it, save it: the phrase is heard on the PC and the clip is saved (pinned, scroll plays it) -->
+<section class="say" id="say" aria-labelledby="say-title">
+  <div class="say-pin">
+    <div class="wrap say-grid">
+      <div class="say-copy">
+        <h2 id="say-title"><span class="l"><span class="m">Just say it.</span></span> <span class="l"><span class="m">It’s saved.</span></span></h2>
+        <p>Hands busy? Say the phrase, even mid-sentence, in Arabic or English. QClips hears it on your PC and saves the replay.</p>
+      </div>
+      <div class="say-stage" aria-hidden="true">
+        <div class="screen say-lib"><picture><source type="image/avif" srcset="img/library-800.avif 793w, img/library-1600.avif 1586w" sizes="(max-width: 900px) 80vw, 560px"><img src="img/library-800.webp" srcset="img/library-800.webp 793w, img/library-1600.webp 1586w" sizes="(max-width: 900px) 80vw, 560px" width="1586" height="780" loading="lazy" decoding="async" alt=""></picture></div>
+        <div class="screen say-screen">
+          <div class="say-frame">
+            <video id="sayFilm" muted loop playsinline preload="none" poster="overlay/clip-poster.webp" width="854" height="480"><source src="overlay/clip.mp4" type="video/mp4"></video>
+            <div class="say-toast"><img src="img/toast.webp" width="344" height="84" alt=""></div>
+            <div class="say-mic">
+              <canvas class="say-wave" id="sayWave" width="640" height="96"></canvas>
+              <p class="say-words"><span>“nice,</span> <span class="hot">clip</span> <span class="hot">that”</span></p>
+              <p class="say-heard">Heard on your PC · Saved last 30 s</p>
+            </div>
           </div>
         </div>
-        <p class="stage-cap"><span class="dots"><i class="on"></i><i></i><i></i><i></i><i></i></span><span id="stageCap">Settings, Voice commands: your phrases, their lengths and Start test.</span></p>
+      </div>
+    </div>
+  </div>
+  <div class="wrap">
+    <ul class="say-facts">
+      <li data-reveal style="--i:0"><b>Recognized on your PC.</b> What the microphone hears never leaves your computer, and it works offline.</li>
+      <li data-reveal style="--i:1"><b>Your phrases, your lengths.</b> 15 or 30 seconds, 1 to 2 minutes, or the whole replay.</li>
+      <li data-reveal style="--i:2"><b>Test it first.</b> Start test shows what it heard and which phrase matched.</li>
+      <li data-reveal style="--i:3"><b>Nothing to download.</b> English and Arabic models come with QClips. The Arabic model is Powered by Moonshine AI.</li>
+    </ul>
+  </div>
+</section>
+
+<!-- Alt+Z: as you scroll, the real panel slides in over the game and shows what it does -->
+<section class="azs" id="overlay" aria-labelledby="overlay-title">
+  <div class="azs-pin">
+    <div class="wrap azs-grid">
+      <div class="azs-copy">
+        <h2 id="overlay-title"><span class="l"><span class="m">Press <span class="keys"><kbd>Alt</kbd>+<kbd>Z</kbd></span>.</span></span> <span class="l"><span class="m">Stay in the game.</span></span></h2>
+        <p>A panel slides in from the edge of your main screen, over the game. No alt-tab.</p>
+        <ul class="azs-points">
+          <li><b>Save the replay, or just its end.</b> The last 30 seconds, 1 minute or 2 minutes.</li>
+          <li><b>Quick trim.</b> Drag the two ends and save a trimmed copy without opening the editor.</li>
+          <li><b>Your call what shows.</b> Keep the panel, the “Clip saved” notice and the performance line out of your clips and streams.</li>
+          <li><b>A key for everything.</b> Alt+F10 saves the replay, Alt+F9 records, Alt+M switches the mic.</li>
+        </ul>
+      </div>
+      <div class="azs-stage" aria-hidden="true">
+        <div class="screen azs-screen">
+          <div class="azs-frame">
+            <img class="azs-game" src="img/altz-scene-960.webp" srcset="img/altz-scene-960.webp 960w, img/altz-scene-1920.webp 1920w" sizes="(max-width: 900px) 92vw, 680px" width="1920" height="1080" loading="lazy" decoding="async" alt="">
+            <img class="azs-player" src="img/altz-player-1x.webp" srcset="img/altz-player-1x.webp 1x, img/altz-player-2x.webp 2x" width="1609" height="1080" loading="lazy" decoding="async" alt="">
+            <img class="azs-panel" src="img/altz-panel-1x.webp" srcset="img/altz-panel-1x.webp 1x, img/altz-panel-2x.webp 2x" width="419" height="1080" loading="lazy" decoding="async" alt="">
+            <img class="azs-toast" src="img/toast.webp" width="344" height="84" loading="lazy" decoding="async" alt="">
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -199,41 +187,34 @@
   </div>
 </section>
 
-<!-- The editor, screen by screen -->
-<section class="sec" id="editing" aria-labelledby="editing-title">
-  <div class="wrap">
-    <div class="sec-head" data-reveal>
-      <h2 id="editing-title">The editor, screen by screen.</h2>
-      <p>Pick a piece, add a title or captions, choose a look. Tracks and keyframes are on the same timeline. Then render it at the size Discord takes, or share it straight from QClips.</p>
-    </div>
-    <div class="glass reel" id="reel" data-reveal>
-      <div class="reel-frames">
-        <figure class="on" id="rf1" role="tabpanel" aria-labelledby="rt1" data-cap="A big title over the ultimate, a cut with a crossfade and a cinematic look.">
-          <picture><source type="image/avif" srcset="img/editor-simple-800.avif 793w, img/editor-simple-1600.avif 1586w" sizes="(max-width: 1240px) 94vw, 1180px"><img src="img/editor-simple-800.webp" srcset="img/editor-simple-800.webp 793w, img/editor-simple-1600.webp 1586w" sizes="(max-width: 1240px) 94vw, 1180px" width="1586" height="993" loading="lazy" decoding="async" alt="The editor with a “CLUTCH” title over a VALORANT clip and its timeline."></picture>
-        </figure>
-        <figure id="rf2" role="tabpanel" aria-labelledby="rt2" data-cap="The Text panel: titles, lower thirds, kill feeds, subtitles and more, ready to drop on the clip.">
-          <picture><source type="image/avif" srcset="img/editor-text-800.avif 793w, img/editor-text-1600.avif 1586w" sizes="(max-width: 1240px) 94vw, 1180px"><img src="img/editor-text-800.webp" srcset="img/editor-text-800.webp 793w, img/editor-text-1600.webp 1586w" sizes="(max-width: 1240px) 94vw, 1180px" width="1586" height="993" loading="lazy" decoding="async" alt="The editor’s Text panel with its title styles."></picture>
-        </figure>
-        <figure id="rf3" role="tabpanel" aria-labelledby="rt3" data-cap="Tracks: keyframes for zoom and fade on the video, a text track and every audio track.">
-          <picture><source type="image/avif" srcset="img/editor-advanced-800.avif 793w, img/editor-advanced-1600.avif 1586w" sizes="(max-width: 1240px) 94vw, 1180px"><img src="img/editor-advanced-800.webp" srcset="img/editor-advanced-800.webp 793w, img/editor-advanced-1600.webp 1586w" sizes="(max-width: 1240px) 94vw, 1180px" width="1586" height="993" loading="lazy" decoding="async" alt="The editor with keyframes and the Text, Video, Mixed, Game, Discord and Mic tracks."></picture>
-        </figure>
-        <figure id="rf4" role="tabpanel" aria-labelledby="rt4" data-cap="Render video: Original, High, Discord 20 MB and Discord 50 MB.">
-          <picture><source type="image/avif" srcset="img/render-800.avif 793w, img/render-1600.avif 1586w" sizes="(max-width: 1240px) 94vw, 1180px"><img src="img/render-800.webp" srcset="img/render-800.webp 793w, img/render-1600.webp 1586w" sizes="(max-width: 1240px) 94vw, 1180px" width="1586" height="993" loading="lazy" decoding="async" alt="The Render video dialog and its presets."></picture>
-        </figure>
+<!-- The editor: scroll walks through the real editor, one part at a time -->
+<section class="eds" id="editor" aria-labelledby="editor-title">
+  <div class="eds-pin">
+    <div class="wrap eds-grid">
+      <div class="eds-copy">
+        <h2 id="editor-title"><span class="l"><span class="m">Cut the moment.</span></span> <span class="l"><span class="m">Send it anywhere.</span></span></h2>
+        <ol class="eds-steps">
+          <li class="on"><b>One editor.</b> Trim, split, change the speed (keeping the pitch), freeze a frame, add effects, filters and transitions on one timeline.
+            <span class="eds-img"><img src="img/editor-simple-800.webp" srcset="img/editor-simple-800.webp 793w, img/editor-simple-1600.webp 1586w" sizes="92vw" width="1586" height="993" loading="lazy" decoding="async" alt="The QClips editor: a “CLUTCH” title over a VALORANT clip at Sova’s Hunter’s Fury, a lower third, and a timeline with a cut, a crossfade and the audio tracks."></span></li>
+          <li><b>Titles and captions.</b> Pick a title style, or let QClips write the captions word by word, in Arabic (Gulf and Saudi first, also Egyptian, Levantine and Iraqi) or English, on your PC. Auto Cut removes the silent parts.
+            <span class="eds-img"><img src="img/editor-text-800.webp" srcset="img/editor-text-800.webp 793w, img/editor-text-1600.webp 1586w" sizes="92vw" width="1586" height="993" loading="lazy" decoding="async" alt="The editor’s Text panel: titles, lower thirds, kill feeds and subtitles, ready to drop on the clip."></span></li>
+          <li id="audio"><b>Every sound on its own track.</b> Game, voice chat, mic and any device, plus a Mixed track for sharing. Friend too loud? Turn them down. Per-app sound never touches the game.
+            <span class="eds-img"><img src="img/editor-advanced-800.webp" srcset="img/editor-advanced-800.webp 793w, img/editor-advanced-1600.webp 1586w" sizes="92vw" width="1586" height="993" loading="lazy" decoding="async" alt="The editor with keyframes on the video and the Text, Video, Mixed, Game, Discord and Mic tracks."></span></li>
+          <li><b>Sized for Discord.</b> Original, High, Discord 20 MB and 50 MB, encoded in two passes so the file fits. Or share it to TikTok, YouTube Shorts, Instagram Reels or X; you press their Post button.
+            <span class="eds-img"><img src="img/render-800.webp" srcset="img/render-800.webp 793w, img/render-1600.webp 1586w" sizes="92vw" width="1586" height="993" loading="lazy" decoding="async" alt="The Render video dialog with the Original, High, Discord 20 MB and Discord 50 MB presets."></span></li>
+        </ol>
       </div>
-      <div class="reel-bar">
-        <div class="reel-tabs" role="tablist" aria-label="Editor screens">
-          <button role="tab" type="button" id="rt1" aria-controls="rf1" aria-selected="true">Editor<i></i></button>
-          <button role="tab" type="button" id="rt2" aria-controls="rf2" aria-selected="false" tabindex="-1">Text<i></i></button>
-          <button role="tab" type="button" id="rt3" aria-controls="rf3" aria-selected="false" tabindex="-1">Tracks<i></i></button>
-          <button role="tab" type="button" id="rt4" aria-controls="rf4" aria-selected="false" tabindex="-1">Render<i></i></button>
+      <div class="eds-stage" aria-hidden="true">
+        <div class="screen eds-screen">
+          <div class="eds-frames">
+            <img class="on" src="img/editor-simple-1600.webp" srcset="img/editor-simple-800.webp 793w, img/editor-simple-1600.webp 1586w" sizes="(max-width: 1240px) 56vw, 700px" width="1586" height="993" loading="lazy" decoding="async" alt="">
+            <img src="img/editor-text-1600.webp" srcset="img/editor-text-800.webp 793w, img/editor-text-1600.webp 1586w" sizes="(max-width: 1240px) 56vw, 700px" width="1586" height="993" loading="lazy" decoding="async" alt="">
+            <img src="img/editor-advanced-1600.webp" srcset="img/editor-advanced-800.webp 793w, img/editor-advanced-1600.webp 1586w" sizes="(max-width: 1240px) 56vw, 700px" width="1586" height="993" loading="lazy" decoding="async" alt="">
+            <img src="img/render-1600.webp" srcset="img/render-800.webp 793w, img/render-1600.webp 1586w" sizes="(max-width: 1240px) 56vw, 700px" width="1586" height="993" loading="lazy" decoding="async" alt="">
+          </div>
         </div>
-        <button class="btn ghost sm reel-pause" id="reelPause" type="button" aria-pressed="false">
-          <svg class="ic-pause" viewBox="0 0 16 16" aria-hidden="true"><path d="M5 3.5v9M11 3.5v9" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg>
-          <svg class="ic-play" viewBox="0 0 16 16" aria-hidden="true" style="display:none"><path d="M5 3.2v9.6L12.5 8z" fill="currentColor"/></svg>
-          <span>Pause</span></button>
+        <div class="eds-rail"><i class="on"></i><i></i><i></i><i></i></div>
       </div>
-      <p class="reel-cap" id="reelCap" aria-hidden="true">A big title over the ultimate, a cut with a crossfade and a cinematic look.</p>
     </div>
   </div>
 </section>
@@ -270,44 +251,47 @@
   </div>
 </section>
 
-<!-- New in 2.1 -->
-<section class="sec" id="new" aria-labelledby="new-title">
+<!-- Light, private, safe: what QClips never does to your game or your PC -->
+<section class="sec safe" id="safe" aria-labelledby="safe-title">
   <div class="wrap">
     <div class="sec-head" data-reveal>
-      <h2 id="new-title">New in 2.1.</h2>
-      <p>Captions, sharing, better screenshots and QClips in Arabic. <a href="https://github.com/F2isalq/QClips-Releases/releases/latest">Everything that’s new</a></p>
-      <p><b>New in 2.1.1:</b> smoother page changes, faster saves, voice commands included with nothing to download, and the Alt+Z panel and notifications always on your main monitor.</p>
+      <h2 id="safe-title"><span class="l"><span class="m">Light on your PC.</span></span> <span class="l"><span class="m">Hands off your game.</span></span></h2>
     </div>
-    <div class="cols2">
-      <div class="glass panel" data-reveal style="--i:0">
-        <h3>Edit and share</h3>
-        <ul class="ticks">
-          <li><b>Captions and subtitles.</b> The editor writes them for the whole clip, word by word, in Arabic or English, on your PC. Edit any line, pick a style, burn them in or save an .srt.</li>
-          <li><b>Auto Cut.</b> One button removes the silent parts; you choose how much to keep around speech.</li>
-          <li><b>Share from inside QClips.</b> TikTok, YouTube Shorts, Instagram Reels and X: trim, frame it vertically, add a title. You press the site’s own Post button; QClips never posts for you.</li>
-          <li><b>Simpler render presets.</b> Original, High, Discord 20 MB and Discord 50 MB.</li>
-        </ul>
+    <div class="safe-grid">
+      <div class="glass panel safe-lite" data-reveal style="--i:0">
+        <h3>Or just the recorder</h3>
+        <p>QClips Lite runs only the recorder: replay, recording and hotkeys, with a small settings window in the tray. Nothing shows over your games; the save sound tells you a clip was saved. Switch back any time.</p>
+        <div class="screen"><picture><source type="image/avif" srcset="img/lite-800.avif 593w, img/lite-1600.avif 1186w" sizes="(max-width: 900px) 90vw, 560px"><img src="img/lite-800.webp" srcset="img/lite-800.webp 593w, img/lite-1600.webp 1186w" sizes="(max-width: 900px) 90vw, 560px" width="1186" height="793" loading="lazy" decoding="async" alt="QClips Lite: the recorder’s settings window with Instant replay, Recording and the video settings."></picture></div>
       </div>
       <div class="glass panel" data-reveal style="--i:1">
-        <h3>Around the app</h3>
+        <h3>Light</h3>
         <ul class="ticks">
-          <li><b>Screenshots.</b> One monitor, all of them, the window in front or a region, straight to your clipboard.</li>
-          <li><b>Copy text from the screen.</b> Select an area and its text is copied, in English, Arabic and your other Windows languages.</li>
-          <li><b>HDR monitors.</b> Clips look right everywhere, or record HDR10 if you want it.</li>
-          <li><b>QClips in Arabic.</b> Every page, menu and the Alt+Z panel, right to left, and the installer too.</li>
-          <li><b>Settings in pages</b>, the way Windows 11 does it, with search. Pause and resume a recording into the same file.</li>
+          <li><b>Your graphics card does the work.</b> NVIDIA NVENC, AMD AMF or Intel Quick Sync, in H.264, HEVC or AV1, so the game keeps the CPU. No GPU encoder? It records with the CPU.</li>
+          <li><b>Saving never waits.</b> Hotkeys and voice work even while the editor is busy.</li>
+          <li><b>Small updates.</b> Only what changed is downloaded, often under a megabyte, and never while you record.</li>
+        </ul>
+      </div>
+      <div class="glass panel" data-reveal style="--i:2">
+        <h3>Safe with anti-cheat</h3>
+        <ul class="ticks">
+          <li><b>Windows Graphics Capture.</b> The screen is recorded the way Windows’ own tools do it, and the sound through Windows’ audio system.</li>
+          <li><b>No injection, no hooks.</b> Nothing is loaded into the game, and there are no keyboard or mouse hooks.</li>
+          <li><b>Hands off the process, no admin.</b> QClips never opens or reads the game’s process, and it runs without administrator rights.</li>
+        </ul>
+      </div>
+      <div class="glass panel" data-reveal style="--i:3">
+        <h3>Private</h3>
+        <ul class="ticks">
+          <li><b>No account, no ads.</b> Free, with nothing to sign up for.</li>
+          <li><b>No telemetry.</b> No usage data, analytics or crash reports. Your clips stay on your PC until you share them.</li>
+          <li><b>Voice on your PC.</b> What the microphone hears never leaves your computer.</li>
         </ul>
       </div>
     </div>
-  </div>
-</section>
 
-<!-- Sync, light, safe -->
-<section class="sec" id="sync" aria-labelledby="sync-title">
-  <div class="wrap">
-    <div class="glass sync" data-reveal>
+    <div class="glass sync" id="sync" data-reveal>
       <div class="sec-head">
-        <h2 id="sync-title">In sync wherever you play it.</h2>
+        <h2 id="sync-title"><span class="l"><span class="m">In sync wherever</span></span> <span class="l"><span class="m">you play it.</span></span></h2>
         <p>QClips reads the exact moment each piece of sound was captured instead of guessing a delay. In our tests sound and picture stayed within about 12 ms at 60 and 120 FPS, in Windows’ own player, in Discord and across every track.</p>
       </div>
       <div class="cmp" id="cmp" style="--pos:50%">
@@ -340,26 +324,41 @@
       </div>
       <p class="cap">Drag the handle. The flash in the picture and the bang in the sound should line up.</p>
     </div>
+  </div>
+</section>
 
-    <div class="cols2" style="margin-top:18px">
-      <div class="glass panel" data-reveal style="--i:0">
-        <h3>Light on your PC</h3>
-        <p>Recording runs on your graphics card’s encoder (NVIDIA NVENC, AMD AMF or Intel Quick Sync, in H.264, HEVC or AV1), so the game keeps the CPU. No GPU encoder? QClips records with the CPU instead.</p>
-        <ul class="ticks">
-          <li><b>Small updates.</b> Only what changed is downloaded, often under a megabyte, and never while you record.</li>
-          <li><b>Saving never waits.</b> Hotkeys and voice work even while the editor is busy.</li>
-        </ul>
-      </div>
-      <div class="glass panel" data-reveal style="--i:1">
-        <h3>Safe with anti-cheat</h3>
-        <p>QClips records the screen the way Windows’ own tools do (Windows Graphics Capture) and the sound through Windows’ audio system. It never interacts with the game.</p>
-        <ul class="ticks">
-          <li><b>No injection.</b> Nothing is loaded into the game, and it is never hooked.</li>
-          <li><b>Hands off the process.</b> QClips never opens or reads the game’s process, even for per-app audio.</li>
-          <li><b>No input hooks, no admin.</b> No keyboard or mouse hooks, and it installs and runs without administrator rights.</li>
-        </ul>
-      </div>
+<!-- New in 2.1 -->
+<section class="sec" id="new" aria-labelledby="new-title">
+  <div class="wrap">
+    <div class="sec-head" data-reveal>
+      <h2 id="new-title">New in 2.1.</h2>
+      <p>Captions, sharing, better screenshots and QClips in Arabic. In 2.1.1: smoother page changes, faster saves, voice commands included, and the Alt+Z panel always on your main monitor.</p>
     </div>
+    <details class="glass more" data-reveal>
+      <summary>Everything new in 2.1</summary>
+      <div class="cols2">
+        <div>
+          <h3>Edit and share</h3>
+          <ul class="ticks">
+            <li><b>Captions and subtitles.</b> The editor writes them for the whole clip, word by word, in Arabic or English, on your PC. Edit any line, pick a style, burn them in or save an .srt.</li>
+            <li><b>Auto Cut.</b> One button removes the silent parts; you choose how much to keep around speech.</li>
+            <li><b>Share from inside QClips.</b> TikTok, YouTube Shorts, Instagram Reels and X: trim, frame it vertically, add a title. You press the site’s own Post button; QClips never posts for you.</li>
+            <li><b>Simpler render presets.</b> Original, High, Discord 20 MB and Discord 50 MB.</li>
+          </ul>
+        </div>
+        <div>
+          <h3>Around the app</h3>
+          <ul class="ticks">
+            <li><b>Screenshots.</b> One monitor, all of them, the window in front or a region, straight to your clipboard.</li>
+            <li><b>Copy text from the screen.</b> Select an area and its text is copied, in English, Arabic and your other Windows languages.</li>
+            <li><b>HDR monitors.</b> Clips look right everywhere, or record HDR10 if you want it.</li>
+            <li><b>QClips in Arabic.</b> Every page, menu and the Alt+Z panel, right to left, and the installer too.</li>
+            <li><b>Settings in pages</b>, the way Windows 11 does it, with search. Pause and resume a recording into the same file.</li>
+          </ul>
+        </div>
+      </div>
+      <p class="more-link"><a href="https://github.com/F2isalq/QClips-Releases/releases/latest">Full release notes</a></p>
+    </details>
   </div>
 </section>
 

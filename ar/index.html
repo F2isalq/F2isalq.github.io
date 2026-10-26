@@ -20,7 +20,11 @@
 <link rel="preload" href="../fonts/noto-kufi-arabic.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="../fonts/archivo.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="../css/site.css">
+<link rel="stylesheet" href="../css/cine.css">
 <script src="../js/site.js" defer></script>
+<script src="../js/vendor/gsap.min.js" defer></script>
+<script src="../js/vendor/ScrollTrigger.min.js" defer></script>
+<script src="../js/cine.js" defer></script>
 </head>
 <body>
 <a class="skip" href="#main">انتقل إلى المحتوى</a>
@@ -30,10 +34,10 @@
   <div class="wrap">
     <a class="brand" href="./" aria-label="الصفحة الرئيسية لـ QClips"><img src="../img/logo.png" alt="" width="28" height="28"><span lang="en">QClips</span></a>
     <nav class="nav" id="nav" aria-label="القائمة الرئيسية">
-      <a href="#voice">الأوامر الصوتية</a>
+      <a href="#say">الأوامر الصوتية</a>
       <a href="#overlay"><span class="ltr">Alt+Z</span></a>
       <a href="#editor">المحرر</a>
-      <a href="#audio">الصوت</a>
+      <a href="#safe">الأمان</a>
       <a href="#faq">الأسئلة</a>
     </nav>
     <a class="lang" href="../" hreflang="en" lang="en">English</a>
@@ -48,10 +52,17 @@
 
 <!-- Hero: the real app, layered in depth -->
 <section class="hero" aria-labelledby="hero-title">
+  <div class="hero-film" aria-hidden="true">
+    <video id="heroFilm" muted loop playsinline preload="none" poster="../overlay/clip-poster.webp" width="854" height="480"><source src="../overlay/clip.mp4" type="video/mp4"></video>
+  </div>
+  <button class="film-toggle" id="filmToggle" type="button" aria-pressed="false" data-pause="أوقف فيديو الخلفية" data-play="شغّل فيديو الخلفية" aria-label="أوقف فيديو الخلفية">
+    <svg class="ic-pause" viewBox="0 0 16 16" aria-hidden="true"><path d="M5 3.5v9M11 3.5v9" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg>
+    <svg class="ic-play" viewBox="0 0 16 16" aria-hidden="true"><path d="M5 3.2v9.6L12.5 8z" fill="currentColor"/></svg>
+  </button>
   <div class="wrap">
     <div class="hero-grid">
       <div class="hero-copy">
-        <h1 id="hero-title"><span class="l">العب أول،</span> <span class="l">وسجّل بعدين.</span></h1>
+        <h1 id="hero-title"><span class="l"><span class="m">العب أول،</span></span> <span class="l"><span class="m">وسجّل بعدين.</span></span></h1>
         <p class="lead">QClips يحتفظ دائماً بآخر دقائق من لعبك على جهازك. إذا صار شيء يستاهل، اضغط <span class="keys"><kbd>Alt</kbd>+<kbd>F10</kbd></span> أو قل «سجّل» بس، وتنحفظ اللقطة. قصّها، وأضف لها ترجمة، وشاركها.</p>
         <div class="cta">
           <a class="btn primary" href="https://github.com/F2isalq/QClips-Releases/releases/latest/download/QClips-Setup.exe">
@@ -89,86 +100,63 @@
   </div>
 </section>
 
-<!-- The tour: one glass screen that changes as you read -->
-<section class="tour" aria-label="وش يسوي QClips">
-  <div class="wrap tour-grid">
-    <div class="steps">
-
-      <article class="step" id="voice" aria-labelledby="voice-title">
-        <p class="step-num"><i>1</i>الصوت</p>
-        <h2 id="voice-title">قل «سجّل».</h2>
-        <p>يداك مشغولتان؟ قل الجملة وQClips يحفظ الإعادة. يلتقطها حتى وسط الكلام، مثل «حلوة، سجّل اللقطة»، ويفهم العربي والإنجليزي.</p>
-        <ul class="ticks">
-          <li><b>على جهازك.</b> ما يسمعه المايك يُتعرّف عليه على جهازك ولا يخرج منه أبداً، ويشتغل بدون إنترنت.</li>
-          <li><b>جملك أنت، وطولها أنت تحدده.</b> لكل جملة طولها: 15 أو 30 ثانية، أو من دقيقة إلى دقيقتين، أو الإعادة كاملة.</li>
-          <li><b>جرّبها أول.</b> زر التجربة يعرض ما سمعه وأي جملة تطابقت، وشريط الحساسية يحدد مدى وضوح الجملة المطلوب.</li>
-          <li><b>بدون أي تحميل.</b> نماذج الصوت العربي والإنجليزي تجي مع <span lang="en">QClips</span> وتشتغل من أول تشغيل. النموذج العربي <span lang="en" dir="ltr">Powered by Moonshine AI</span>.</li>
-        </ul>
-        <div class="shot-sm screen"><picture><source type="image/avif" srcset="../img/settings-voice-800.avif 793w, ../img/settings-voice-1600.avif 1586w" sizes="92vw"><img src="../img/settings-voice-800.webp" srcset="../img/settings-voice-800.webp 793w, ../img/settings-voice-1600.webp 1586w" sizes="92vw" width="1586" height="993" loading="lazy" decoding="async" alt="إعدادات QClips، قسم الأوامر الصوتية: الجملتان «clip it» و«clip that» وطول كل منهما، والمايك، والحساسية، وزر التجربة."></picture></div>
-      </article>
-
-      <article class="step" id="overlay" aria-labelledby="overlay-title">
-        <p class="step-num"><i>2</i>داخل اللعبة</p>
-        <h2 id="overlay-title">أو اضغط <span class="keys"><kbd>Alt</kbd>+<kbd>Z</kbd></span> وأنت داخل اللعبة.</h2>
-        <p>لوحة تنزلق من طرف شاشتك الرئيسية: احفظ الإعادة أو آخرها فقط، ابدأ تسجيلاً، راقب الصوت، وافتح آخر مقاطعك.</p>
-        <ul class="ticks">
-          <li><b>قصّ سريع من اللوحة.</b> اسحب الطرفين واحفظ نسخة مقصوصة بدون ما تفتح المحرر.</li>
-          <li><b>احفظ آخر جزء فقط.</b> آخر 30 ثانية أو دقيقة أو دقيقتين من الإعادة.</li>
-          <li><b>القرار لك وش يظهر.</b> اختر إذا تظهر اللوحة وإشعار «تم الحفظ» وسطر الأداء في مقاطعك وبثّك أو لا.</li>
-          <li><b>اختصار لكل شيء.</b> افتراضياً <span class="ltr">Alt+F10</span> يحفظ الإعادة، و<span class="ltr">Alt+F9</span> يبدأ التسجيل، و<span class="ltr">Alt+M</span> للمايك.</li>
-        </ul>
-        <div class="shot-sm screen"><picture><source type="image/avif" srcset="../img/altz-open-960.avif 960w, ../img/altz-open-1920.avif 1920w" sizes="92vw"><img src="../img/altz-open-960.webp" srcset="../img/altz-open-960.webp 960w, ../img/altz-open-1920.webp 1920w" sizes="92vw" width="1920" height="1080" loading="lazy" decoding="async" alt="لوحة Alt+Z مفتوحة على الطرف الأيمن من الشاشة فوق طور الزومبي في Modern Warfare III، فيها الإعادة الفورية والتسجيل وتراكات الصوت وآخر المقاطع."></picture></div>
-      </article>
-
-      <article class="step" id="editor" aria-labelledby="editor-title">
-        <p class="step-num"><i>3</i>المحرر</p>
-        <h2 id="editor-title">قصّها على اللحظة، وجهّزها لديسكورد.</h2>
-        <p>قصّ وقسّم وغيّر السرعة (مع الحفاظ على طبقة الصوت)، وثبّت لقطة، وأضف عناوين وترجمة وتأثيرات وفلاتر وانتقالات. وإعدادات ديسكورد 20 ميقا و50 ميقا تصدّر بمرحلتين عشان يطلع الملف ضمن الحد.</p>
-        <ul class="ticks">
-          <li><b>محرر واحد.</b> المكتبة والنصوص والتأثيرات والفلاتر والانتقالات والترجمة بجانب خط زمني واحد، مع التراكات والإطارات المفتاحية إذا احتجتها.</li>
-          <li><b>ترجمة تنكتب لك.</b> بالعربي (الخليجي والسعودي أولاً، والمصري والشامي والعراقي بعد) أو بالإنجليزي، مضبوطة كلمة بكلمة، وتنصنع على جهازك.</li>
-          <li><b>القص التلقائي.</b> يشيل الأجزاء الساكتة من المقطع، وتراجع واحد يرجّعها كلها.</li>
-        </ul>
-        <div class="shot-sm screen"><picture><source type="image/avif" srcset="../img/editor-simple-800.avif 793w, ../img/editor-simple-1600.avif 1586w" sizes="92vw"><img src="../img/editor-simple-800.webp" srcset="../img/editor-simple-800.webp 793w, ../img/editor-simple-1600.webp 1586w" sizes="92vw" width="1586" height="993" loading="lazy" decoding="async" alt="محرر QClips: عنوان «CLUTCH» فوق مقطع من VALORANT لحظة الألتميت، وشريط اسم، وخط زمني فيه قصّ وانتقال تلاشٍ وتراكات الصوت."></picture></div>
-      </article>
-
-      <article class="step" id="audio" aria-labelledby="audio-title">
-        <p class="step-num"><i>4</i>الصوت</p>
-        <h2 id="audio-title">كل صوت على تراك لحاله.</h2>
-        <p>اللعبة والدردشة الصوتية والمايك وأي جهاز صوت، كل واحد بتراك خاص، مع تراك <span lang="en" dir="ltr">Mixed</span> للمشاركة. صوت خويك عالي؟ اخفضه بعدين من المحرر.</p>
-        <ul class="ticks">
-          <li><b>صوت كل برنامج.</b> خلّ برنامجاً واحداً على تراك لحاله (ديسكورد، سبوتيفاي، المتصفح)، أو اللعبة الحالية، أو كل شيء ما عدا QClips.</li>
-          <li><b>بدون صدى في <span lang="en" dir="ltr">Mixed</span>.</b> ينبّهك QClips إذا كان صوت برنامج بيتكرر مرتين ويبعده عن الدمج، ومحدّد الصوت يمنع التشويش في اللحظات العالية.</li>
-          <li><b>بدون لمس اللعبة.</b> تسجيل صوت البرامج ما يفتح عملية اللعبة أبداً.</li>
-        </ul>
-        <div class="shot-sm screen"><picture><source type="image/avif" srcset="../img/editor-advanced-800.avif 793w, ../img/editor-advanced-1600.avif 1586w" sizes="92vw"><img src="../img/editor-advanced-800.webp" srcset="../img/editor-advanced-800.webp 793w, ../img/editor-advanced-1600.webp 1586w" sizes="92vw" width="1586" height="993" loading="lazy" decoding="async" alt="المحرر وفيه إطارات مفتاحية على الفيديو، وتراكات Game وDiscord وMic على الخط الزمني."></picture></div>
-      </article>
-
-      <article class="step" id="lite" aria-labelledby="lite-title">
-        <p class="step-num"><i>5</i><span lang="en">Lite</span></p>
-        <h2 id="lite-title">المسجّل فقط، إذا هذا كل اللي تبيه.</h2>
-        <p><span lang="en">QClips Lite</span> يشغّل المسجّل فقط: الإعادة والتسجيل والاختصارات، مع نافذة إعدادات صغيرة من الـ tray. وما يظهر شي فوق لعبتك: صوت الحفظ يعلمك إن المقطع انحفظ. وترجع للنسخة الكاملة متى ما تبي، ومقاطعك وإعداداتك تبقى.</p>
-        <ul class="ticks">
-          <li><b>ما يأكل من إطاراتك.</b> التسجيل على مرمّز كرت الشاشة (<span class="ltr">NVIDIA NVENC</span> أو <span class="ltr">AMD AMF</span> أو <span class="ltr">Intel Quick Sync</span>)، فيبقى المعالج للعبة.</li>
-          <li><b>الحفظ ما ينتظر.</b> الاختصارات والأوامر الصوتية تشتغل حتى لو المحرر مشغول.</li>
-          <li><b>تحديثات صغيرة.</b> ينزل اللي تغيّر فقط، وغالباً أقل من ميقا، وما يتثبّت التحديث وأنت تسجّل.</li>
-        </ul>
-        <div class="shot-sm screen"><picture><source type="image/avif" srcset="../img/lite-800.avif 593w, ../img/lite-1600.avif 1186w" sizes="92vw"><img src="../img/lite-800.webp" srcset="../img/lite-800.webp 593w, ../img/lite-1600.webp 1186w" sizes="92vw" width="1186" height="793" loading="lazy" decoding="async" alt="QClips Lite: نافذة إعدادات المسجّل فيها الإعادة الفورية والتسجيل وإعدادات الفيديو."></picture></div>
-      </article>
-    </div>
-
-    <div class="stage" id="stage" aria-hidden="true">
-      <div class="stage-in">
-        <div class="screen">
-          <div class="frames">
-            <img src="../img/settings-voice-1600.webp" srcset="../img/settings-voice-800.webp 793w, ../img/settings-voice-1600.webp 1586w" sizes="(max-width: 1240px) 90vw, 1100px" width="1586" height="993" alt="" decoding="async" class="on" style="--z:1.42;--o:50% 22%" data-cap="الإعدادات، الأوامر الصوتية: جملك وطول كل وحدة وزر التجربة.">
-            <img src="../img/altz-open-1920.webp" srcset="../img/altz-open-960.webp 960w, ../img/altz-open-1920.webp 1920w" sizes="(max-width: 1240px) 90vw, 1100px" width="1920" height="1080" alt="" decoding="async" loading="lazy" class="right" style="--z:1.45;--o:100% 25%" data-cap="لوحة Alt+Z فوق اللعبة، على طرف شاشتها.">
-            <img src="../img/editor-simple-1600.webp" srcset="../img/editor-simple-800.webp 793w, ../img/editor-simple-1600.webp 1586w" sizes="(max-width: 1240px) 90vw, 1100px" width="1586" height="993" alt="" decoding="async" loading="lazy" data-cap="المحرر: عنوان فوق لحظة الألتميت.">
-            <img src="../img/editor-advanced-1600.webp" srcset="../img/editor-advanced-800.webp 793w, ../img/editor-advanced-1600.webp 1586w" sizes="(max-width: 1240px) 90vw, 1100px" width="1586" height="993" alt="" decoding="async" loading="lazy" style="--z:1.6;--o:0 100%" data-cap="إطارات مفتاحية، وكل صوت على تراك لحاله.">
-            <img style="--z:1.12;--o:0 0" src="../img/lite-1600.webp" srcset="../img/lite-800.webp 593w, ../img/lite-1600.webp 1186w" sizes="(max-width: 1240px) 90vw, 1100px" width="1186" height="793" alt="" decoding="async" loading="lazy" data-cap="QClips Lite: المسجّل وإعداداته فقط.">
+<!-- Say it, save it: the phrase is heard on the PC and the clip is saved (pinned, scroll plays it) -->
+<section class="say" id="say" aria-labelledby="say-title">
+  <div class="say-pin">
+    <div class="wrap say-grid">
+      <div class="say-copy">
+        <h2 id="say-title"><span class="l"><span class="m">قلها بس.</span></span> <span class="l"><span class="m">وانحفظت.</span></span></h2>
+        <p>يداك مشغولتان؟ قل الجملة، حتى وسط الكلام، بالعربي أو الإنجليزي. <span lang="en">QClips</span> يسمعها على جهازك ويحفظ الإعادة.</p>
+      </div>
+      <div class="say-stage" aria-hidden="true">
+        <div class="screen say-lib"><picture><source type="image/avif" srcset="../img/library-800.avif 793w, ../img/library-1600.avif 1586w" sizes="(max-width: 900px) 80vw, 560px"><img src="../img/library-800.webp" srcset="../img/library-800.webp 793w, ../img/library-1600.webp 1586w" sizes="(max-width: 900px) 80vw, 560px" width="1586" height="780" loading="lazy" decoding="async" alt=""></picture></div>
+        <div class="screen say-screen">
+          <div class="say-frame">
+            <video id="sayFilm" muted loop playsinline preload="none" poster="../overlay/clip-poster.webp" width="854" height="480"><source src="../overlay/clip.mp4" type="video/mp4"></video>
+            <div class="say-toast"><img src="../img/toast.webp" width="344" height="84" alt=""></div>
+            <div class="say-mic" dir="rtl">
+              <canvas class="say-wave" id="sayWave" width="640" height="96"></canvas>
+              <p class="say-words"><span>«حلوة،</span> <span class="hot">سجّل</span> <span class="hot">اللقطة»</span></p>
+              <p class="say-heard">انسمعت على جهازك · انحفظت آخر 30 ثانية</p>
+            </div>
           </div>
         </div>
-        <p class="stage-cap"><span class="dots"><i class="on"></i><i></i><i></i><i></i><i></i></span><span id="stageCap">الإعدادات، الأوامر الصوتية: جملك وطول كل وحدة وزر التجربة.</span></p>
+      </div>
+    </div>
+  </div>
+  <div class="wrap">
+    <ul class="say-facts">
+      <li data-reveal style="--i:0"><b>على جهازك.</b> ما يسمعه المايك يُتعرّف عليه على جهازك ولا يخرج منه أبداً، ويشتغل بدون إنترنت.</li>
+      <li data-reveal style="--i:1"><b>جملك أنت، وطولها أنت تحدده.</b> 15 أو 30 ثانية، أو من دقيقة إلى دقيقتين، أو الإعادة كاملة.</li>
+      <li data-reveal style="--i:2"><b>جرّبها أول.</b> زر التجربة يعرض ما سمعه وأي جملة تطابقت.</li>
+      <li data-reveal style="--i:3"><b>بدون أي تحميل.</b> نماذج العربي والإنجليزي تجي مع <span lang="en">QClips</span>. النموذج العربي <span lang="en" dir="ltr">Powered by Moonshine AI</span>.</li>
+    </ul>
+  </div>
+</section>
+
+<!-- Alt+Z: as you scroll, the real panel slides in over the game and shows what it does -->
+<section class="azs" id="overlay" aria-labelledby="overlay-title">
+  <div class="azs-pin">
+    <div class="wrap azs-grid">
+      <div class="azs-copy">
+        <h2 id="overlay-title"><span class="l"><span class="m">اضغط <span class="keys"><kbd>Alt</kbd>+<kbd>Z</kbd></span>.</span></span> <span class="l"><span class="m">وأنت في اللعبة.</span></span></h2>
+        <p>لوحة تنزلق من طرف شاشتك الرئيسية، فوق اللعبة. بدون ما تطلع منها.</p>
+        <ul class="azs-points">
+          <li><b>احفظ الإعادة، أو آخرها فقط.</b> آخر 30 ثانية أو دقيقة أو دقيقتين.</li>
+          <li><b>قصّ سريع.</b> اسحب الطرفين واحفظ نسخة مقصوصة بدون ما تفتح المحرر.</li>
+          <li><b>القرار لك وش يظهر.</b> خلّ اللوحة وإشعار «تم الحفظ» وسطر الأداء بعيد عن مقاطعك وبثّك.</li>
+          <li><b>اختصار لكل شيء.</b> <span class="ltr">Alt+F10</span> يحفظ الإعادة، و<span class="ltr">Alt+F9</span> يسجّل، و<span class="ltr">Alt+M</span> للمايك.</li>
+        </ul>
+      </div>
+      <div class="azs-stage" aria-hidden="true">
+        <div class="screen azs-screen">
+          <div class="azs-frame">
+            <img class="azs-game" src="../img/altz-scene-960.webp" srcset="../img/altz-scene-960.webp 960w, ../img/altz-scene-1920.webp 1920w" sizes="(max-width: 900px) 92vw, 680px" width="1920" height="1080" loading="lazy" decoding="async" alt="">
+            <img class="azs-player" src="../img/altz-player-1x.webp" srcset="../img/altz-player-1x.webp 1x, ../img/altz-player-2x.webp 2x" width="1609" height="1080" loading="lazy" decoding="async" alt="">
+            <img class="azs-panel" src="../img/altz-panel-1x.webp" srcset="../img/altz-panel-1x.webp 1x, ../img/altz-panel-2x.webp 2x" width="419" height="1080" loading="lazy" decoding="async" alt="">
+            <img class="azs-toast" src="../img/toast.webp" width="344" height="84" loading="lazy" decoding="async" alt="">
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -200,41 +188,34 @@
   </div>
 </section>
 
-<!-- The editor, screen by screen -->
-<section class="sec" id="editing" aria-labelledby="editing-title">
-  <div class="wrap">
-    <div class="sec-head" data-reveal>
-      <h2 id="editing-title">المحرر، شاشة شاشة.</h2>
-      <p>اختر جزء، أضف عنوان أو ترجمة، اختر شكل. والتراكات والإطارات المفتاحية على نفس الخط الزمني. وبعدها صدّره بالحجم اللي يقبله ديسكورد، أو شاركه من QClips مباشرة.</p>
-    </div>
-    <div class="glass reel" id="reel" data-reveal>
-      <div class="reel-frames">
-        <figure class="on" id="rf1" role="tabpanel" aria-labelledby="rt1" data-cap="عنوان كبير فوق لحظة الألتميت، وقصّ مع انتقال تلاشٍ، وشكل سينمائي.">
-          <picture><source type="image/avif" srcset="../img/editor-simple-800.avif 793w, ../img/editor-simple-1600.avif 1586w" sizes="(max-width: 1240px) 94vw, 1180px"><img src="../img/editor-simple-800.webp" srcset="../img/editor-simple-800.webp 793w, ../img/editor-simple-1600.webp 1586w" sizes="(max-width: 1240px) 94vw, 1180px" width="1586" height="993" loading="lazy" decoding="async" alt="المحرر وعنوان «CLUTCH» فوق مقطع من VALORANT وخطه الزمني."></picture>
-        </figure>
-        <figure id="rf2" role="tabpanel" aria-labelledby="rt2" data-cap="لوحة النص: عناوين وأشرطة أسماء وقوائم إقصاء وترجمات وغيرها، جاهزة تحطها على المقطع.">
-          <picture><source type="image/avif" srcset="../img/editor-text-800.avif 793w, ../img/editor-text-1600.avif 1586w" sizes="(max-width: 1240px) 94vw, 1180px"><img src="../img/editor-text-800.webp" srcset="../img/editor-text-800.webp 793w, ../img/editor-text-1600.webp 1586w" sizes="(max-width: 1240px) 94vw, 1180px" width="1586" height="993" loading="lazy" decoding="async" alt="لوحة النص في المحرر مع أنماط العناوين."></picture>
-        </figure>
-        <figure id="rf3" role="tabpanel" aria-labelledby="rt3" data-cap="التراكات: إطارات مفتاحية للتكبير والتلاشي على الفيديو، وتراك نص، وكل تراكات الصوت.">
-          <picture><source type="image/avif" srcset="../img/editor-advanced-800.avif 793w, ../img/editor-advanced-1600.avif 1586w" sizes="(max-width: 1240px) 94vw, 1180px"><img src="../img/editor-advanced-800.webp" srcset="../img/editor-advanced-800.webp 793w, ../img/editor-advanced-1600.webp 1586w" sizes="(max-width: 1240px) 94vw, 1180px" width="1586" height="993" loading="lazy" decoding="async" alt="المحرر مع إطارات مفتاحية وتراكات النص والفيديو وGame وDiscord وMic."></picture>
-        </figure>
-        <figure id="rf4" role="tabpanel" aria-labelledby="rt4" data-cap="تصدير الفيديو: Original وHigh وديسكورد 20 ميقا وديسكورد 50 ميقا.">
-          <picture><source type="image/avif" srcset="../img/render-800.avif 793w, ../img/render-1600.avif 1586w" sizes="(max-width: 1240px) 94vw, 1180px"><img src="../img/render-800.webp" srcset="../img/render-800.webp 793w, ../img/render-1600.webp 1586w" sizes="(max-width: 1240px) 94vw, 1180px" width="1586" height="993" loading="lazy" decoding="async" alt="نافذة تصدير الفيديو وإعداداتها."></picture>
-        </figure>
+<!-- The editor: scroll walks through the real editor, one part at a time -->
+<section class="eds" id="editor" aria-labelledby="editor-title">
+  <div class="eds-pin">
+    <div class="wrap eds-grid">
+      <div class="eds-copy">
+        <h2 id="editor-title"><span class="l"><span class="m">قصّ اللحظة.</span></span> <span class="l"><span class="m">وشاركها وين ما تبي.</span></span></h2>
+        <ol class="eds-steps">
+          <li class="on"><b>محرر واحد.</b> قصّ وقسّم وغيّر السرعة (مع الحفاظ على طبقة الصوت)، وثبّت لقطة، وأضف تأثيرات وفلاتر وانتقالات على خط زمني واحد.
+            <span class="eds-img"><img src="../img/editor-simple-800.webp" srcset="../img/editor-simple-800.webp 793w, ../img/editor-simple-1600.webp 1586w" sizes="92vw" width="1586" height="993" loading="lazy" decoding="async" alt="محرر QClips: عنوان «CLUTCH» فوق مقطع من VALORANT لحظة الألتميت، وشريط اسم، وخط زمني فيه قصّ وانتقال تلاشٍ وتراكات الصوت."></span></li>
+          <li><b>عناوين وترجمة.</b> اختر شكل العنوان، أو خلّ <span lang="en">QClips</span> يكتب الترجمة كلمة بكلمة، بالعربي (الخليجي والسعودي أولاً، والمصري والشامي والعراقي بعد) أو بالإنجليزي، على جهازك. والقص التلقائي يشيل الأجزاء الساكتة.
+            <span class="eds-img"><img src="../img/editor-text-800.webp" srcset="../img/editor-text-800.webp 793w, ../img/editor-text-1600.webp 1586w" sizes="92vw" width="1586" height="993" loading="lazy" decoding="async" alt="لوحة النص في المحرر: عناوين وأشرطة أسماء وقوائم إقصاء وترجمات، جاهزة تحطها على المقطع."></span></li>
+          <li id="audio"><b>كل صوت على تراك لحاله.</b> اللعبة والدردشة الصوتية والمايك وأي جهاز صوت، مع تراك <span lang="en" dir="ltr">Mixed</span> للمشاركة. صوت خويك عالي؟ اخفضه. وصوت البرامج ما يلمس اللعبة أبداً.
+            <span class="eds-img"><img src="../img/editor-advanced-800.webp" srcset="../img/editor-advanced-800.webp 793w, ../img/editor-advanced-1600.webp 1586w" sizes="92vw" width="1586" height="993" loading="lazy" decoding="async" alt="المحرر مع إطارات مفتاحية وتراكات النص والفيديو وMixed وGame وDiscord وMic."></span></li>
+          <li><b>جاهز لديسكورد.</b> <span lang="en">Original</span> و<span lang="en">High</span> وديسكورد 20 ميقا و50 ميقا، تصدير بمرحلتين عشان يطلع الملف ضمن الحد. أو شاركه على تيك توك ويوتيوب شورتس وريلز إنستقرام و<span lang="en">X</span>، وأنت اللي تضغط زر النشر.
+            <span class="eds-img"><img src="../img/render-800.webp" srcset="../img/render-800.webp 793w, ../img/render-1600.webp 1586w" sizes="92vw" width="1586" height="993" loading="lazy" decoding="async" alt="نافذة تصدير الفيديو وإعداداتها: Original وHigh وديسكورد 20 ميقا وديسكورد 50 ميقا."></span></li>
+        </ol>
       </div>
-      <div class="reel-bar">
-        <div class="reel-tabs" role="tablist" aria-label="شاشات المحرر">
-          <button role="tab" type="button" id="rt1" aria-controls="rf1" aria-selected="true">المحرر<i></i></button>
-          <button role="tab" type="button" id="rt2" aria-controls="rf2" aria-selected="false" tabindex="-1">النص<i></i></button>
-          <button role="tab" type="button" id="rt3" aria-controls="rf3" aria-selected="false" tabindex="-1">التراكات<i></i></button>
-          <button role="tab" type="button" id="rt4" aria-controls="rf4" aria-selected="false" tabindex="-1">التصدير<i></i></button>
+      <div class="eds-stage" aria-hidden="true">
+        <div class="screen eds-screen">
+          <div class="eds-frames">
+            <img class="on" src="../img/editor-simple-1600.webp" srcset="../img/editor-simple-800.webp 793w, ../img/editor-simple-1600.webp 1586w" sizes="(max-width: 1240px) 56vw, 700px" width="1586" height="993" loading="lazy" decoding="async" alt="">
+            <img src="../img/editor-text-1600.webp" srcset="../img/editor-text-800.webp 793w, ../img/editor-text-1600.webp 1586w" sizes="(max-width: 1240px) 56vw, 700px" width="1586" height="993" loading="lazy" decoding="async" alt="">
+            <img src="../img/editor-advanced-1600.webp" srcset="../img/editor-advanced-800.webp 793w, ../img/editor-advanced-1600.webp 1586w" sizes="(max-width: 1240px) 56vw, 700px" width="1586" height="993" loading="lazy" decoding="async" alt="">
+            <img src="../img/render-1600.webp" srcset="../img/render-800.webp 793w, ../img/render-1600.webp 1586w" sizes="(max-width: 1240px) 56vw, 700px" width="1586" height="993" loading="lazy" decoding="async" alt="">
+          </div>
         </div>
-        <button class="btn ghost sm reel-pause" id="reelPause" type="button" aria-pressed="false">
-          <svg class="ic-pause" viewBox="0 0 16 16" aria-hidden="true"><path d="M5 3.5v9M11 3.5v9" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg>
-          <svg class="ic-play" viewBox="0 0 16 16" aria-hidden="true" style="display:none"><path d="M5 3.2v9.6L12.5 8z" fill="currentColor"/></svg>
-          <span>إيقاف مؤقت</span></button>
+        <div class="eds-rail"><i class="on"></i><i></i><i></i><i></i></div>
       </div>
-      <p class="reel-cap" id="reelCap" aria-hidden="true">عنوان كبير فوق لحظة الألتميت، وقصّ مع انتقال تلاشٍ، وشكل سينمائي.</p>
     </div>
   </div>
 </section>
@@ -271,44 +252,47 @@
   </div>
 </section>
 
-<!-- New in 2.1 -->
-<section class="sec" id="new" aria-labelledby="new-title">
+<!-- Light, private, safe: what QClips never does to your game or your PC -->
+<section class="sec safe" id="safe" aria-labelledby="safe-title">
   <div class="wrap">
     <div class="sec-head" data-reveal>
-      <h2 id="new-title">الجديد في 2.1.</h2>
-      <p>ترجمة، ومشاركة، ولقطات شاشة أفضل، و<span lang="en">QClips</span> بالعربي. <a href="https://github.com/F2isalq/QClips-Releases/releases/latest">كل الجديد</a></p>
-      <p><b>الجديد في 2.1.1:</b> تنقّل أسلس بين الصفحات، وحفظ أسرع للمقاطع، والأوامر الصوتية مضمّنة بدون تحميل، ولوحة <span lang="en" dir="ltr">Alt+Z</span> والإشعارات دايماً على شاشتك الرئيسية.</p>
+      <h2 id="safe-title"><span class="l"><span class="m">خفيف على جهازك.</span></span> <span class="l"><span class="m">وبعيد عن لعبتك.</span></span></h2>
     </div>
-    <div class="cols2">
-      <div class="glass panel" data-reveal style="--i:0">
-        <h3>عدّل وشارك</h3>
-        <ul class="ticks">
-          <li><b>ترجمة نصية.</b> المحرر يكتبها للمقطع كله، كلمة بكلمة، بالعربي أو الإنجليزي، على جهازك. عدّل أي سطر، اختر النمط، واطبعها على الفيديو أو احفظها ملف <span class="ltr">.srt</span>.</li>
-          <li><b>القص التلقائي.</b> زر واحد يشيل الأجزاء الساكتة، وأنت تحدد كم يبقي حول الكلام.</li>
-          <li><b>شارك من داخل <span lang="en">QClips</span>.</b> تيك توك ويوتيوب شورتس وريلز إنستقرام و<span lang="en">X</span>: قصّ، واختر الإطار العمودي، وأضف عنوان. وأنت اللي تضغط زر النشر في الموقع نفسه، و<span lang="en">QClips</span> ما ينشر عنك أبداً.</li>
-          <li><b>إعدادات تصدير أبسط.</b> <span lang="en">Original</span> و<span lang="en">High</span> وديسكورد 20 ميقا وديسكورد 50 ميقا.</li>
-        </ul>
+    <div class="safe-grid">
+      <div class="glass panel safe-lite" data-reveal style="--i:0">
+        <h3>أو المسجّل فقط</h3>
+        <p><span lang="en">QClips Lite</span> يشغّل المسجّل فقط: الإعادة والتسجيل والاختصارات، مع نافذة إعدادات صغيرة من الـ tray. وما يظهر شي فوق لعبتك: صوت الحفظ يعلمك إن المقطع انحفظ. وترجع للنسخة الكاملة متى ما تبي، ومقاطعك وإعداداتك تبقى.</p>
+        <div class="screen"><picture><source type="image/avif" srcset="../img/lite-800.avif 593w, ../img/lite-1600.avif 1186w" sizes="(max-width: 900px) 90vw, 560px"><img src="../img/lite-800.webp" srcset="../img/lite-800.webp 593w, ../img/lite-1600.webp 1186w" sizes="(max-width: 900px) 90vw, 560px" width="1186" height="793" loading="lazy" decoding="async" alt="QClips Lite: نافذة إعدادات المسجّل فيها الإعادة الفورية والتسجيل وإعدادات الفيديو."></picture></div>
       </div>
       <div class="glass panel" data-reveal style="--i:1">
-        <h3>وفي باقي البرنامج</h3>
+        <h3>خفيف</h3>
         <ul class="ticks">
-          <li><b>لقطات الشاشة.</b> شاشة وحدة أو كلها، أو النافذة اللي قدامك، أو جزء تحدده، وتروح للحافظة مباشرة.</li>
-          <li><b>انسخ النص من الشاشة.</b> حدد جزء والنص اللي فيه ينسخ، بالعربي والإنجليزي ولغات ويندوز الثانية عندك.</li>
-          <li><b>شاشات <span class="ltr">HDR</span>.</b> المقاطع تطلع صح في كل مكان، أو سجّل <span class="ltr">HDR10</span> إذا تبيه.</li>
-          <li><b><span lang="en">QClips</span> بالعربي.</b> كل الصفحات والقوائم ولوحة <span class="ltr">Alt+Z</span>، من اليمين لليسار، والمثبّت بعد.</li>
-          <li><b>الإعدادات صفحات</b> مثل ويندوز 11، مع بحث. وتقدر توقف التسجيل مؤقتاً وتكمله في نفس الملف.</li>
+          <li><b>كرت الشاشة يشتغل عنك.</b> مرمّز <span class="ltr">NVIDIA NVENC</span> أو <span class="ltr">AMD AMF</span> أو <span class="ltr">Intel Quick Sync</span>، بصيغة <span class="ltr">H.264</span> أو <span class="ltr">HEVC</span> أو <span class="ltr">AV1</span>، فيبقى المعالج للعبة. وإذا ما عندك مرمّز، يسجّل بالمعالج.</li>
+          <li><b>الحفظ ما ينتظر.</b> الاختصارات والأوامر الصوتية تشتغل حتى لو المحرر مشغول.</li>
+          <li><b>تحديثات صغيرة.</b> ينزل اللي تغيّر فقط، وغالباً أقل من ميقا، وما يتثبّت التحديث وأنت تسجّل.</li>
+        </ul>
+      </div>
+      <div class="glass panel" data-reveal style="--i:2">
+        <h3>آمن مع أنظمة مكافحة الغش</h3>
+        <ul class="ticks">
+          <li><b><span class="ltr">Windows Graphics Capture</span>.</b> يسجّل الشاشة بنفس طريقة أدوات ويندوز، والصوت عن طريق نظام الصوت في ويندوز.</li>
+          <li><b>بدون حقن وبدون hooks.</b> ما يُحمَّل شيء داخل اللعبة، ولا hooks للكيبورد أو الماوس.</li>
+          <li><b>بعيد عن عملية اللعبة، وبدون صلاحيات مدير.</b> ما يفتح عملية اللعبة ولا يقرأها، ويشتغل بدون صلاحيات المدير.</li>
+        </ul>
+      </div>
+      <div class="glass panel" data-reveal style="--i:3">
+        <h3>خصوصيتك</h3>
+        <ul class="ticks">
+          <li><b>بدون حساب وبدون إعلانات.</b> مجاني، وما فيه شيء تسجّل فيه.</li>
+          <li><b>بدون جمع بيانات.</b> لا بيانات استخدام ولا تحليلات ولا تقارير أعطال. ومقاطعك تبقى على جهازك لين تشاركها.</li>
+          <li><b>الصوت على جهازك.</b> اللي يسمعه المايك ما يطلع من جهازك أبداً.</li>
         </ul>
       </div>
     </div>
-  </div>
-</section>
 
-<!-- Sync, light, safe -->
-<section class="sec" id="sync" aria-labelledby="sync-title">
-  <div class="wrap">
-    <div class="glass sync" data-reveal>
+    <div class="glass sync" id="sync" data-reveal>
       <div class="sec-head">
-        <h2 id="sync-title">متزامن في أي مكان تشغّله فيه.</h2>
+        <h2 id="sync-title"><span class="l"><span class="m">متزامن في أي مكان</span></span> <span class="l"><span class="m">تشغّله فيه.</span></span></h2>
         <p>يقرأ QClips اللحظة الدقيقة اللي التُقط فيها كل جزء من الصوت بدل ما يقدّر التأخير تقديراً. وفي اختباراتنا بقي الفرق بين الصوت والصورة في حدود 12 جزءاً من الألف من الثانية تقريباً على 60 و120 إطاراً بالثانية، في مشغّل ويندوز نفسه وفي ديسكورد وعبر كل التراكات.</p>
       </div>
       <div class="cmp" id="cmp" style="--pos:50%">
@@ -341,26 +325,41 @@
       </div>
       <p class="cap">اسحب المقبض. الوميض في الصورة والضربة في الصوت لازم يجون مع بعض. (الخط الزمني من اليسار لليمين مثل مشغّلات الفيديو.)</p>
     </div>
+  </div>
+</section>
 
-    <div class="cols2" style="margin-top:18px">
-      <div class="glass panel" data-reveal style="--i:0">
-        <h3>خفيف على جهازك</h3>
-        <p>التسجيل يتم على مرمّز كرت الشاشة (<span class="ltr">NVIDIA NVENC</span> أو <span class="ltr">AMD AMF</span> أو <span class="ltr">Intel Quick Sync</span>، بصيغة <span class="ltr">H.264</span> أو <span class="ltr">HEVC</span> أو <span class="ltr">AV1</span>)، فيبقى المعالج للعبة. وإذا ما عندك مرمّز في كرت الشاشة، يسجّل QClips بالمعالج.</p>
-        <ul class="ticks">
-          <li><b>تحديثات صغيرة.</b> ينزل اللي تغيّر فقط، وغالباً أقل من ميقا، وما يتثبّت التحديث وأنت تسجّل.</li>
-          <li><b>الحفظ ما ينتظر.</b> الاختصارات والأوامر الصوتية تشتغل حتى لو المحرر مشغول.</li>
-        </ul>
-      </div>
-      <div class="glass panel" data-reveal style="--i:1">
-        <h3>آمن مع أنظمة مكافحة الغش</h3>
-        <p>يسجّل QClips الشاشة بنفس طريقة أدوات ويندوز (<span class="ltr">Windows Graphics Capture</span>)، والصوت عن طريق نظام الصوت في ويندوز. وما يتعامل مع اللعبة أبداً.</p>
-        <ul class="ticks">
-          <li><b>بدون حقن.</b> ما يُحمَّل شيء داخل اللعبة، وما يتم ربط أي hook فيها.</li>
-          <li><b>بعيد عن عملية اللعبة.</b> QClips ما يفتح عملية اللعبة ولا يقرأها، حتى عند تسجيل صوت البرامج.</li>
-          <li><b>بدون hooks وبدون صلاحيات مدير.</b> لا hooks للكيبورد أو الماوس، ويتثبّت ويشتغل بدون صلاحيات المدير.</li>
-        </ul>
-      </div>
+<!-- New in 2.1 -->
+<section class="sec" id="new" aria-labelledby="new-title">
+  <div class="wrap">
+    <div class="sec-head" data-reveal>
+      <h2 id="new-title">الجديد في 2.1.</h2>
+      <p>ترجمة، ومشاركة، ولقطات شاشة أفضل، و<span lang="en">QClips</span> بالعربي. وفي 2.1.1: تنقّل أسلس، وحفظ أسرع، والأوامر الصوتية مضمّنة، ولوحة <span lang="en" dir="ltr">Alt+Z</span> دايماً على شاشتك الرئيسية.</p>
     </div>
+    <details class="glass more" data-reveal>
+      <summary>كل الجديد في 2.1</summary>
+      <div class="cols2">
+        <div>
+          <h3>عدّل وشارك</h3>
+          <ul class="ticks">
+            <li><b>ترجمة نصية.</b> المحرر يكتبها للمقطع كله، كلمة بكلمة، بالعربي أو الإنجليزي، على جهازك. عدّل أي سطر، اختر النمط، واطبعها على الفيديو أو احفظها ملف <span class="ltr">.srt</span>.</li>
+            <li><b>القص التلقائي.</b> زر واحد يشيل الأجزاء الساكتة، وأنت تحدد كم يبقي حول الكلام.</li>
+            <li><b>شارك من داخل <span lang="en">QClips</span>.</b> تيك توك ويوتيوب شورتس وريلز إنستقرام و<span lang="en">X</span>: قصّ، واختر الإطار العمودي، وأضف عنوان. وأنت اللي تضغط زر النشر في الموقع نفسه، و<span lang="en">QClips</span> ما ينشر عنك أبداً.</li>
+            <li><b>إعدادات تصدير أبسط.</b> <span lang="en">Original</span> و<span lang="en">High</span> وديسكورد 20 ميقا وديسكورد 50 ميقا.</li>
+          </ul>
+        </div>
+        <div>
+          <h3>وفي باقي البرنامج</h3>
+          <ul class="ticks">
+            <li><b>لقطات الشاشة.</b> شاشة وحدة أو كلها، أو النافذة اللي قدامك، أو جزء تحدده، وتروح للحافظة مباشرة.</li>
+            <li><b>انسخ النص من الشاشة.</b> حدد جزء والنص اللي فيه ينسخ، بالعربي والإنجليزي ولغات ويندوز الثانية عندك.</li>
+            <li><b>شاشات <span class="ltr">HDR</span>.</b> المقاطع تطلع صح في كل مكان، أو سجّل <span class="ltr">HDR10</span> إذا تبيه.</li>
+            <li><b><span lang="en">QClips</span> بالعربي.</b> كل الصفحات والقوائم ولوحة <span class="ltr">Alt+Z</span>، من اليمين لليسار، والمثبّت بعد.</li>
+            <li><b>الإعدادات صفحات</b> مثل ويندوز 11، مع بحث. وتقدر توقف التسجيل مؤقتاً وتكمله في نفس الملف.</li>
+          </ul>
+        </div>
+      </div>
+      <p class="more-link"><a href="https://github.com/F2isalq/QClips-Releases/releases/latest">ملاحظات الإصدار كاملة</a></p>
+    </details>
   </div>
 </section>
 
