@@ -67,7 +67,7 @@
           <a class="btn primary" href="https://github.com/F2isalq/QClips-Releases/releases/latest/download/QClips-Setup.exe">
             <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M10 3v10m0 0l-4-4m4 4l4-4M4 16h12" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"/></svg>
             Download for Windows <small>5 MB</small></a>
-          <a class="btn ghost" href="#download">Offline installer and requirements</a>
+          <a class="cta-link" href="#download">Offline installer and requirements</a>
         </div>
         <p class="fine">Free for Windows 10 (2004 or later) and 11, 64-bit. No account, no ads, no telemetry.</p>
       </div>
@@ -128,45 +128,25 @@
       <li data-reveal style="--i:0"><b>Recognized on your PC.</b> What the microphone hears never leaves your computer, and it works offline.</li>
       <li data-reveal style="--i:1"><b>Your phrases, your lengths.</b> 15 or 30 seconds, 1 to 2 minutes, or the whole replay.</li>
       <li data-reveal style="--i:2"><b>Test it first.</b> Start test shows what it heard and which phrase matched.</li>
-      <li data-reveal style="--i:3"><b>Nothing to download.</b> English and Arabic models come with QClips. The Arabic model is Powered by Moonshine AI.</li>
+      <li data-reveal style="--i:3"><b>Nothing to download.</b> English and Arabic models come with QClips, from either installer. The Arabic model is Powered by Moonshine AI.</li>
     </ul>
+    <div class="mid-cta" data-reveal><a class="btn primary" href="https://github.com/F2isalq/QClips-Releases/releases/latest/download/QClips-Setup.exe"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M10 3v10m0 0l-4-4m4 4l4-4M4 16h12" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"/></svg> Download for Windows <small>5 MB</small></a><span>Free, no account. Voice commands included.</span></div>
   </div>
 </section>
 
-<!-- Alt+Z: as you scroll, the real panel slides in over the game and shows what it does -->
-<section class="azs" id="overlay" aria-labelledby="overlay-title">
-  <div class="azs-pin">
-    <div class="wrap azs-grid">
-      <div class="azs-copy">
-        <h2 id="overlay-title"><span class="l"><span class="m">Press <span class="keys"><kbd>Alt</kbd>+<kbd>Z</kbd></span>.</span></span> <span class="l"><span class="m">Stay in the game.</span></span></h2>
+<!-- Alt+Z: the headline and points beside the real panel over a real game, which you can play with -->
+<section class="sec azs" id="overlay" aria-labelledby="overlay-title">
+  <div class="wrap try-grid">
+    <div class="azs-copy" data-reveal>
+      <h2 id="overlay-title"><span class="l"><span class="m"><span class="keys"><kbd>Alt</kbd>+<kbd>Z</kbd></span> opens the panel.</span></span> <span class="l"><span class="m">Stay in the game.</span></span></h2>
         <p>A panel slides in from the edge of your main screen, over the game. No alt-tab.</p>
         <ul class="azs-points">
           <li><b>Save the replay, or just its end.</b> The last 30 seconds, 1 minute or 2 minutes.</li>
           <li><b>Quick trim.</b> Drag the two ends and save a trimmed copy without opening the editor.</li>
           <li><b>Your call what shows.</b> Keep the panel, the “Clip saved” notice and the performance line out of your clips and streams.</li>
-          <li><b>A key for everything.</b> Alt+F10 saves the replay, Alt+F9 records, Alt+M switches the mic.</li>
+          <li><b>A key for everything.</b> Alt+F10 saves the replay, Alt+F9 records, Alt+M switches the mic. Change any of them in Settings or in the panel.</li>
         </ul>
-      </div>
-      <div class="azs-stage" aria-hidden="true">
-        <div class="screen azs-screen">
-          <div class="azs-frame">
-            <img class="azs-game" src="img/altz-scene-960.webp" srcset="img/altz-scene-960.webp 960w, img/altz-scene-1920.webp 1920w" sizes="(max-width: 900px) 92vw, 680px" width="1920" height="1080" loading="lazy" decoding="async" alt="">
-            <img class="azs-player" src="img/altz-player-1x.webp" srcset="img/altz-player-1x.webp 1x, img/altz-player-2x.webp 2x" width="1609" height="1080" loading="lazy" decoding="async" alt="">
-            <img class="azs-panel" src="img/altz-panel-1x.webp" srcset="img/altz-panel-1x.webp 1x, img/altz-panel-2x.webp 2x" width="419" height="1080" loading="lazy" decoding="async" alt="">
-            <img class="azs-toast" src="img/toast.webp" width="344" height="84" loading="lazy" decoding="async" alt="">
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- Alt+Z, for real: the captured panel over the captured game -->
-<section class="sec" id="try" aria-labelledby="try-title">
-  <div class="wrap">
-    <div class="sec-head" data-reveal>
-      <h2 id="try-title">Try the panel.</h2>
-      <p>These are pictures of the real Alt+Z panel and notification, taken from QClips running over a game. Open the panel, save a clip, or open the newest clip for a quick trim.</p>
+      <p class="try-hint">Try it: open the panel, save a clip, or open the newest clip for a quick trim. These are pictures of the real panel over a real game.</p>
     </div>
     <div class="glass az" data-reveal>
       <div class="az-screen" id="azScreen">
@@ -226,27 +206,14 @@
       <h2 id="app-title">Everything in its place.</h2>
       <p>Your clips, the recorder and your disk space, each on its own page.</p>
     </div>
-    <div class="bento">
-      <article class="glass card b-lib" data-reveal data-tilt style="--i:0">
-        <h3>Library</h3>
-        <p>Every clip with its thumbnail and length. Open one to watch it, trim it or edit it.</p>
-        <div class="screen"><picture><source type="image/avif" srcset="img/library-800.avif 793w, img/library-1600.avif 1586w" sizes="(max-width: 1060px) 90vw, 680px"><img src="img/library-800.webp" srcset="img/library-800.webp 793w, img/library-1600.webp 1586w" sizes="(max-width: 1060px) 90vw, 680px" width="1586" height="780" loading="lazy" decoding="async" alt="The QClips library: a grid of clips from VALORANT, Modern Warfare III, Marvel Rivals and Battlefield 6, with thumbnails and lengths."></picture></div>
-      </article>
-      <article class="glass card b-cap" data-reveal data-tilt style="--i:1">
-        <h3>Capture and replay</h3>
-        <p>Replay length, quality, encoder and frame rate on one page. The replay keeps running while you play.</p>
-        <div class="screen"><picture><source type="image/avif" srcset="img/capture-800.avif 793w, img/capture-1600.avif 1586w" sizes="(max-width: 1060px) 90vw, 480px"><img src="img/capture-800.webp" srcset="img/capture-800.webp 793w, img/capture-1600.webp 1586w" sizes="(max-width: 1060px) 90vw, 480px" width="1586" height="993" loading="lazy" decoding="async" alt="The Capture and replay page with Instant replay on and the video settings."></picture></div>
-      </article>
-      <article class="glass card b-sto" data-reveal data-tilt style="--i:0">
+    <div class="glass panel app-one" data-reveal>
+      <div class="app-text">
         <h3>Storage</h3>
         <p>See how much space your clips take, move them all to another drive with their edits, and set an optional size limit. Favourites are kept.</p>
-        <div class="screen"><picture><source type="image/avif" srcset="img/storage-800.avif 793w, img/storage-1600.avif 1586w" sizes="(max-width: 1060px) 90vw, 480px"><img src="img/storage-800.webp" srcset="img/storage-800.webp 793w, img/storage-1600.webp 1586w" sizes="(max-width: 1060px) 90vw, 480px" width="1586" height="460" loading="lazy" decoding="async" alt="The Storage page: the space clips take, the clips folder, file names and the storage limit."></picture></div>
-      </article>
-      <article class="glass card b-lite" data-reveal data-tilt style="--i:1">
-        <h3>“Clip saved”, over the game</h3>
-        <p>A small notice on the edge of the screen when a clip is saved, by key or by voice. Keep it out of your clips if you like.</p>
-        <div class="screen"><picture><source type="image/avif" srcset="img/toast-scene-480.avif 320w, img/toast-scene-960.avif 640w" sizes="(max-width: 1060px) 90vw, 680px"><img src="img/toast-scene-480.webp" srcset="img/toast-scene-480.webp 320w, img/toast-scene-960.webp 640w" sizes="(max-width: 1060px) 90vw, 680px" width="640" height="400" loading="lazy" decoding="async" alt="The “Saved last 30s” notification on the right edge of the screen over a game."></picture></div>
-      </article>
+        <h3>Capture and replay</h3>
+        <p>Replay length, quality, encoder and frame rate on one page. The replay keeps running while you play.</p>
+      </div>
+      <div class="screen"><picture><source type="image/avif" srcset="img/storage-800.avif 793w, img/storage-1600.avif 1586w" sizes="(max-width: 1060px) 90vw, 680px"><img src="img/storage-800.webp" srcset="img/storage-800.webp 793w, img/storage-1600.webp 1586w" sizes="(max-width: 1060px) 90vw, 680px" width="1586" height="460" loading="lazy" decoding="async" alt="The Storage page: the space clips take, the clips folder, file names and the storage limit."></picture></div>
     </div>
   </div>
 </section>
@@ -387,7 +354,9 @@
         <a class="btn ghost" href="https://github.com/F2isalq/QClips-Releases/releases/latest/download/QClips-Setup-Offline.exe">Download offline installer</a>
       </div>
     </div>
+    <p class="dl-note" id="install-note" data-reveal><b>The first time, Windows may say “Windows protected your PC”.</b> The installer isn’t code-signed yet. Click <strong>More info</strong>, then <strong>Run anyway</strong>. The files come from QClips’ own releases page on GitHub.</p>
     <p class="req" data-reveal>Needs Windows 10 version 2004 or later, or Windows 11, 64-bit. A graphics card with a video encoder is recommended. Voice commands are included. <a href="https://github.com/F2isalq/QClips-Releases/releases">All releases and what’s new</a></p>
+    <p class="discord-row" data-reveal><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M4 4.5h12a1.5 1.5 0 0 1 1.5 1.5v7a1.5 1.5 0 0 1-1.5 1.5H9l-3.5 3v-3H4A1.5 1.5 0 0 1 2.5 13V6A1.5 1.5 0 0 1 4 4.5z" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/></svg> Questions, clips and help from other players: <a href="https://discord.gg/5JWv6QUvh6">join the QClips Discord</a>.</p>
   </div>
 </section>
 
@@ -406,7 +375,7 @@
       <details>
         <summary>Where are my clips saved?</summary>
         <div class="a">
-          <p>In your Videos folder, under <code>Videos\QClips\Clips</code>, in a folder for each game or app. To keep them all in one folder instead, pick "All clips in one folder" in Settings, Storage (the game stays in the file name).</p>
+          <p>In your Videos folder, under <code>Videos\QClips\Clips</code>, in a folder for each game or app. To keep them all in one folder instead, pick “All clips in one folder” in Settings, Storage (the game stays in the file name).</p>
           <p>Settings, Storage shows how much space they take, lets you move every clip to another drive with its edits and favourites, and can set an optional size limit (the oldest clips go to the Recycle Bin; favourites are kept).</p>
         </div>
       </details>
@@ -432,6 +401,12 @@
         <summary>Can it get me banned in games with anti-cheat?</summary>
         <div class="a">
           <p>QClips doesn’t interact with games at all: no injection, no hooks, it never opens the game’s process and it needs no administrator rights. It records the screen with Windows Graphics Capture, the way Windows’ own tools do, and the sound through Windows’ audio system.</p>
+        </div>
+      </details>
+      <details>
+        <summary>NVIDIA’s app uses Alt+Z and Alt+F10 too. What if I have both?</summary>
+        <div class="a">
+          <p>Change the keys in one of them. In QClips, open Settings, Hotkeys (or the hotkeys in the Alt+Z panel), click a shortcut and press the new keys. Backspace clears one, and Restore defaults puts them all back.</p>
         </div>
       </details>
       <details id="hidden-games">
@@ -463,12 +438,23 @@
   </div>
 </section>
 
+<!-- The close: one more chance to download -->
+<section class="end-cta" aria-labelledby="end-title">
+  <div class="wrap" data-reveal>
+    <h2 id="end-title">Your next clutch is one key away.</h2>
+    <p>Free for Windows 10 and 11. No account, no ads, no telemetry.</p>
+    <a class="btn primary" href="https://github.com/F2isalq/QClips-Releases/releases/latest/download/QClips-Setup.exe"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M10 3v10m0 0l-4-4m4 4l4-4M4 16h12" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"/></svg> Download for Windows <small>5 MB</small></a>
+    <p class="end-alt">or <a href="https://discord.gg/5JWv6QUvh6">join the QClips Discord</a></p>
+  </div>
+</section>
+
 </main>
 
 <footer class="site-footer">
   <div class="wrap">
     <p class="f-brand"><img src="img/logo.png" alt="" width="24" height="24" loading="lazy"><span><b>QClips</b> Free game clipping for Windows.</span></p>
     <ul class="f-links">
+      <li><a href="https://discord.gg/5JWv6QUvh6">Discord</a></li>
       <li><a href="https://github.com/F2isalq/QClips-Releases/releases">Releases</a></li>
       <li><a href="streamers.html">For streamers</a></li>
       <li><a href="licenses.html">Licenses and credits</a></li>

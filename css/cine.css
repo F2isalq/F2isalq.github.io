@@ -38,8 +38,9 @@ html[dir="rtl"] .hero-film::after {
 .say-pin { min-height: 100svh; display: flex; align-items: center; padding-block: 72px; overflow-x: clip; }
 .say-grid { display: grid; grid-template-columns: minmax(0, 4fr) minmax(0, 8fr); gap: clamp(28px, 4vw, 64px); align-items: center; }
 .say h2 { font-size: clamp(2.2rem, 3.6vw, 3.4rem); }
-.azs h2, .eds h2 { font-size: clamp(2rem, 3vw, 2.75rem); }
-.say h2 .m, .azs h2 .m, .eds h2 .m, .safe .sec-head h2 .m { white-space: nowrap; }
+.eds h2 { font-size: clamp(2rem, 3vw, 2.75rem); }
+.azs h2 { font-size: clamp(1.9rem, 2.6vw, 2.5rem); }
+.say h2 .m, .eds h2 .m, .safe .sec-head h2 .m { white-space: nowrap; }
 @media (max-width: 420px) { .say h2 .m, .azs h2 .m, .eds h2 .m, .safe .sec-head h2 .m { white-space: normal; } }
 .say-copy p { margin-top: 24px; color: var(--muted); font-size: 1.15rem; max-width: 34em; }
 html[lang="ar"] .say h2 { line-height: 1.3; }
@@ -90,9 +91,9 @@ html[lang="ar"] .say-words { direction: rtl; }
   .say-heard { grid-column: 1 / -1; }
 }
 
-/* ---------- Alt+Z: the panel slides in over the game ---------- */
-.azs-pin, .eds-pin { min-height: 100svh; display: flex; align-items: center; padding-block: 72px; overflow-x: clip; }
-.azs-grid, .eds-grid { display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); gap: clamp(28px, 4vw, 64px); align-items: center; }
+/* ---------- the editor scene (and the Alt+Z points beside the demo) ---------- */
+.eds-pin { min-height: 100svh; display: flex; align-items: center; padding-block: 72px; overflow-x: clip; }
+.eds-grid { display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); gap: clamp(28px, 4vw, 64px); align-items: center; }
 .azs-copy > p { margin-top: 20px; color: var(--muted); font-size: 1.12rem; max-width: 34em; }
 .azs-points { list-style: none; margin: 26px 0 0; padding: 0; display: grid; gap: 6px; }
 .azs-points li, .eds-steps li {
@@ -104,17 +105,10 @@ html[lang="ar"] .say-words { direction: rtl; }
   background: rgba(255, 255, 255, .14); transition: background-color .35s;
 }
 .azs-points b, .eds-steps b { color: var(--text); display: block; }
-.scenes .azs-points li, .scenes .eds-steps li { opacity: .42; }
-.scenes .azs-points li.on, .scenes .eds-steps li.on { opacity: 1; background: rgba(255, 255, 255, .045); }
-.scenes .azs-points li.on::before, .scenes .eds-steps li.on::before { background: var(--blue); }
+.scenes .eds-steps li { opacity: .42; }
+.scenes .eds-steps li.on { opacity: 1; background: rgba(255, 255, 255, .045); }
+.scenes .eds-steps li.on::before { background: var(--blue); }
 
-.azs-frame { position: relative; aspect-ratio: 16 / 9; overflow: hidden; border-radius: 12px; background: #05070b; direction: ltr; }
-.azs-frame > img { position: absolute; top: 0; height: 100%; max-width: none; border-radius: 0; background: none; }
-.azs-frame > .azs-game { left: 0; width: 100%; object-fit: cover; }
-.azs-frame > .azs-panel, .azs-frame > .azs-player { right: 0; width: auto; }
-.azs-panel { z-index: 1; }
-.azs-player { z-index: 2; opacity: 0; }
-.azs-frame > .azs-toast { z-index: 3; right: .6%; top: 13.5%; height: auto; width: 16.9%; filter: drop-shadow(0 10px 20px rgba(0, 0, 0, .5)); }
 
 /* ---------- the editor, one part at a time ---------- */
 .eds-steps { list-style: none; margin: 26px 0 0; padding: 0; display: grid; gap: 6px; counter-reset: none; }
@@ -151,8 +145,8 @@ html[dir="rtl"] .more summary { padding: 20px 26px 20px 56px; }
 .more-link { padding: 4px 26px 24px; }
 
 @media (max-width: 900px) {
-  .azs-grid, .eds-grid { grid-template-columns: 1fr; }
-  .azs-pin, .eds-pin { min-height: 0; padding-block: 56px; }
+  .eds-grid { grid-template-columns: 1fr; }
+  .eds-pin { min-height: 0; padding-block: 56px; }
   .safe-grid { grid-template-columns: 1fr; }
   .safe-lite { grid-template-columns: 1fr; }
   .safe-lite .screen { grid-column: 1; grid-row: auto; }
@@ -184,3 +178,69 @@ html[dir="rtl"] .more summary { padding: 20px 26px 20px 56px; }
   .b-lite { grid-column: span 5; }
 }
 .b-lite .screen img { aspect-ratio: 16 / 8; object-fit: cover; object-position: 100% 0; }
+
+/* readable white on the main buttons (4.7:1 and up) and the skip link */
+.btn.primary { background: linear-gradient(180deg, #1773d6, #0a5fc0); }
+.btn.primary small { opacity: 1; }
+.skip { background: #0a5fc0; }
+
+/* a control the keyboard reaches is always shown, even before its section has risen into view */
+.js:not(.rm) [data-reveal]:focus-within { opacity: 1; transform: none; }
+.scenes .eds-steps li:focus-within { opacity: 1; }
+
+/* the note under the download cards: what Windows will say the first time */
+.dl-note {
+  margin-top: 18px; padding: 16px 20px; padding-inline-start: 48px; position: relative; border-radius: var(--r-md); color: var(--muted);
+  background: var(--glass); border: 1px solid var(--edge); max-width: 60em;
+}
+.dl-note::before {
+  content: "i"; position: absolute; inset-inline-start: 16px; top: 17px; width: 20px; height: 20px; border-radius: 50%;
+  display: grid; place-items: center; font-size: .78rem; font-weight: 800; font-style: italic; color: var(--bg); background: var(--blue-hi);
+}
+.dl-note b, .dl-note strong { color: var(--text); }
+
+/* Alt+Z: the points beside the panel you can play with */
+.try-grid { display: grid; grid-template-columns: minmax(0, 4fr) minmax(0, 7fr); gap: clamp(28px, 4vw, 64px); align-items: center; }
+.try-grid .az { max-width: none; margin: 0; }
+.try-hint { margin-top: 18px; color: var(--muted); font-size: .95rem; }
+.azs .az-ctl > span { flex-basis: 100%; }
+@media (max-width: 1060px) { .try-grid { grid-template-columns: 1fr; } }
+
+/* storage and capture: the words beside the storage page */
+.app-one { display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); gap: clamp(24px, 4vw, 56px); align-items: center; }
+.app-text h3 { font-size: 1.3rem; }
+.app-text p { color: var(--muted); margin: 8px 0 22px; }
+.app-text p:last-child { margin-bottom: 0; }
+
+/* a download button after the voice scene, and the page's closing call */
+.say-facts { margin-bottom: 28px; }
+.mid-cta { display: flex; flex-wrap: wrap; align-items: center; gap: 12px 20px; margin-bottom: clamp(60px, 9vw, 120px); color: var(--muted); }
+.end-cta { padding-block: clamp(72px, 10vw, 140px); text-align: center; }
+.end-cta p { margin: 18px auto 30px; color: var(--muted); max-width: 40em; }
+.end-cta h2 { font-size: clamp(2rem, 4vw, 3.36rem); }
+
+/* the offline installer is a link beside the main button, not a second button of the same weight */
+.cta-link { align-self: center; color: var(--muted); font-weight: 650; padding: 8px 4px; }
+.cta-link:hover { color: var(--text); }
+
+/* comfortable line length and no text under 13px */
+.sec-head p, .sync .sec-head p { max-width: 36em; }
+.badge, .gap { font-size: .8125rem; }
+@media (max-width: 1060px) {
+  .app-one { grid-template-columns: 1fr; }
+}
+@media (max-width: 560px) {
+  .safe .sec-head h2 { font-size: 1.7rem; }
+  .safe .sec-head h2 .m { white-space: nowrap; }
+}
+
+/* the official Discord, where players ask and share */
+.discord-row { display: flex; align-items: center; gap: 10px; margin-top: 14px; color: var(--muted); }
+.discord-row svg { width: 20px; height: 20px; flex: none; color: var(--blue-hi); }
+.end-cta .end-alt { margin: 18px auto 0; color: var(--muted); }
+
+/* the Alt+Z headline keeps to two lines beside the demo */
+@media (min-width: 1061px) { .try-grid { grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); } }
+.azs h2 { font-size: clamp(1.75rem, 2.3vw, 2.15rem); }
+@media (min-width: 1061px) { .azs h2 .m { white-space: nowrap; } }
+@media (max-width: 560px) { .azs h2 { font-size: 1.55rem; } .azs h2 .m { white-space: nowrap; } }

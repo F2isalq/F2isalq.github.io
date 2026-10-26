@@ -11,8 +11,24 @@
   function $$(s, c) { return Array.prototype.slice.call((c || doc).querySelectorAll(s)); }
 
   /* films play only while on screen, never on their own with reduced motion, and stop for good with the hero button */
-  var held = false, films = [];
-  function play(v) { var p = v.play(); if (p && p.catch) p.catch(function () {}); }
+  var held = false, films = [], shared = null;
+  // both films are the same clip: fetch it once and give both the same copy (if the fetch fails, each streams its own)
+  function load(v) {
+    if (v.getAttribute('data-ready')) return Promise.resolve();
+    if (!shared) {
+      var src = v.querySelector('source').src;
+      shared = fetch(src).then(function (r) { if (!r.ok) throw new Error(r.status); return r.blob(); })
+        .then(function (b) { return URL.createObjectURL(b); }, function () { return null; });
+    }
+    return shared.then(function (url) { if (url) v.src = url; v.setAttribute('data-ready', '1'); });
+  }
+  function play(v) {
+    load(v).then(function () {
+      var f = films.filter(function (x) { return x.v === v; })[0];
+      if (held || (f && !f.seen)) return; // paused or scrolled away while the clip was loading
+      var p = v.play(); if (p && p.catch) p.catch(function () {});
+    });
+  }
   function film(v, threshold) {
     if (!v || still || !IO) return;
     var f = { v: v, seen: false };
@@ -66,6 +82,12 @@
     }).observe(canvas);
   }
 
+  /* a section the keyboard enters is shown at once, so focus never lands on something still hidden */
+  doc.addEventListener('focusin', function (e) {
+    var r = e.target.closest && e.target.closest('[data-reveal]');
+    if (r) r.classList.add('in');
+  });
+
   /* the menu shows where you are */
   var navLinks = $$('#nav a[href^="#"]');
   if (IO && navLinks.length) {
@@ -118,23 +140,8 @@
   // the headline of the scene rises from behind its line once
   gsap.from('.say h2 .m', { yPercent: 105, duration: 1, stagger: .1, ease: 'expo.out', scrollTrigger: { trigger: '.say', start: 'top 70%', once: true } });
 
-  /* ---------- Alt+Z: the panel slides in, then each point shows on the real screens ---------- */
-  var points = $$('.azs-points li');
-  function mark(list, i) { list.forEach(function (el, k) { el.classList.toggle('on', k === i); }); }
-  function azsTimeline(vars) {
-    gsap.set('.azs-panel', { xPercent: 104 });
-    gsap.set('.azs-toast', { xPercent: 125 });
-    var t = gsap.timeline(vars);
-    t.to('.azs-panel', { xPercent: 0, duration: .16, ease: 'power3.out' }, .04)
-      .to('.azs-toast', { xPercent: 0, duration: .07, ease: 'power3.out' }, .27)
-      .to('.azs-toast', { xPercent: 125, duration: .05, ease: 'power2.in' }, .44)
-      .to('.azs-player', { opacity: 1, duration: .05 }, .47)
-      .to('.azs-player', { opacity: 0, duration: .05 }, .63)
-      .to({}, { duration: .1 }, .9);
-    return t;
-  }
-
   /* ---------- the editor: one part of the real editor at a time ---------- */
+  function mark(list, i) { list.forEach(function (el, k) { el.classList.toggle('on', k === i); }); }
   var edFrames = $$('.eds-frames img'), edSteps = $$('.eds-steps li'), edRail = $$('.eds-rail i'), edCur = -1;
   function edShow(i) {
     if (i === edCur) return;
@@ -146,27 +153,14 @@
   var mm = gsap.matchMedia();
   mm.add('(min-width: 901px)', function () {
     root.classList.add('scenes');
-    mark(points, -1);
-    azsTimeline({
-      defaults: { ease: 'none' },
-      scrollTrigger: {
-        trigger: '.azs-pin', start: 'top top', end: '+=220%', pin: true, scrub: .6, anticipatePin: 1,
-        onUpdate: function (s) { var p = s.progress; mark(points, p < .24 ? -1 : p < .45 ? 0 : p < .65 ? 1 : p < .82 ? 2 : 3); }
-      }
-    });
     edShow(0);
     ST.create({
-      trigger: '.eds-pin', start: 'top top', end: '+=300%', pin: true, anticipatePin: 1,
+      trigger: '.eds-pin', start: 'top top', end: '+=200%', pin: true, anticipatePin: 1,
       onUpdate: function (s) { edShow(Math.min(3, Math.floor(s.progress * 4))); }
     });
-    return function () { root.classList.remove('scenes'); mark(points, -1); };
+    return function () { root.classList.remove('scenes'); };
   });
-  mm.add('(max-width: 900px)', function () {
-    // on a phone the panel plays once as it comes into view; the editor reads as a list with its screens
-    var t = azsTimeline({ paused: true, defaults: { ease: 'none', duration: 1 } });
-    t.timeScale(.35);
-    ST.create({ trigger: '.azs-stage', start: 'top 75%', once: true, onEnter: function () { t.tweenFromTo(0, .44); } });
-  });
+  // on a phone the editor reads as a list, each part with its screen
 
   // the headlines of the sections rise from behind their line once
   $$('.azs h2, .eds h2, .safe .sec-head h2, .sync h2').forEach(function (h) {
