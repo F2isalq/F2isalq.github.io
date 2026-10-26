@@ -10,27 +10,16 @@
   function $(s, c) { return (c || doc).querySelector(s); }
   function $$(s, c) { return Array.prototype.slice.call((c || doc).querySelectorAll(s)); }
 
-  /* films play only while on screen, never on their own with reduced motion, and stop for good with the hero button */
-  var held = false, films = [], shared = null;
-  // both films are the same clip: fetch it once and give both the same copy (if the fetch fails, each streams its own)
-  function load(v) {
-    if (v.getAttribute('data-ready')) return Promise.resolve();
-    if (!shared) {
-      var src = v.querySelector('source').src;
-      shared = fetch(src).then(function (r) { if (!r.ok) throw new Error(r.status); return r.blob(); })
-        .then(function (b) { return URL.createObjectURL(b); }, function () { return null; });
-    }
-    return shared.then(function (url) { if (url) v.src = url; v.setAttribute('data-ready', '1'); });
-  }
-  function play(v) {
-    load(v).then(function () {
-      var f = films.filter(function (x) { return x.v === v; })[0];
-      if (held || (f && !f.seen)) return; // paused or scrolled away while the clip was loading
-      var p = v.play(); if (p && p.catch) p.catch(function () {});
-    });
-  }
+  /* films play only while on screen, never on their own with reduced motion, and stop for good with the hero button.
+     On phones and with the browser's data saver they stay still pictures: 2 MB of video is not worth a mobile plan.
+     Both films are the same clip, which the site lets the browser cache, so the second one plays from the cache. */
+  var conn = navigator.connection || {};
+  var lean = (win.matchMedia && win.matchMedia('(max-width: 900px)').matches) || conn.saveData === true;
+  if (lean) root.classList.add('lean');
+  var held = false, films = [];
+  function play(v) { var p = v.play(); if (p && p.catch) p.catch(function () {}); }
   function film(v, threshold) {
-    if (!v || still || !IO) return;
+    if (!v || still || lean || !IO) return;
     var f = { v: v, seen: false };
     films.push(f);
     new IntersectionObserver(function (es) {
@@ -48,6 +37,28 @@
     films.forEach(function (f) { if (held) f.v.pause(); else if (f.seen) play(f.v); });
     if (!held && waveOn && !wraf) wraf = requestAnimationFrame(drawWave);
   });
+
+  /* ---------- not on Windows (a phone opened from Discord, a Mac): the buttons save the link for the PC ---------- */
+  var ua = navigator.userAgent || '';
+  if (!/Windows NT/.test(ua) && /Android|iPhone|iPad|iPod|Macintosh|Linux|CrOS/.test(ua)) {
+    var AR = root.lang === 'ar';
+    var L = AR ? { save: 'احفظ الرابط لجهازك', copied: 'انتسخ الرابط، افتحه على جهاز ويندوز', note: 'QClips لويندوز. افتح qclips.app على جهازك عشان تنزّله.' }
+      : { save: 'Save the link for your PC', copied: 'Link copied. Open it on your Windows PC', note: 'QClips is for Windows. Open qclips.app on your PC to download it.' };
+    var pageUrl = location.origin + location.pathname.replace(/index\.html$/, '');
+    var shareIcon = '<svg viewBox="0 0 20 20" aria-hidden="true"><path d="M8 12l4-4m-5.5 1.5L5 11a3 3 0 0 0 4.2 4.2l1.5-1.5m-1.4-7.4L10.8 5A3 3 0 0 1 15 9.2l-1.5 1.5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>';
+    root.classList.add('not-windows');
+    $$('a[href*="releases/latest/download/QClips-Setup"]').forEach(function (a) {
+      a.innerHTML = shareIcon + '<span>' + L.save + '</span>';
+      a.addEventListener('click', function (e) {
+        e.preventDefault();
+        var label = $('span', a), done = function () { label.textContent = L.copied; setTimeout(function () { label.textContent = L.save; }, 3500); };
+        if (navigator.share) navigator.share({ title: 'QClips', text: L.note, url: pageUrl }).catch(function () {});
+        else if (navigator.clipboard) navigator.clipboard.writeText(pageUrl).then(done, function () {});
+      });
+    });
+    var cta = $('.hero .cta');
+    if (cta) { var p = doc.createElement('p'); p.className = 'pc-note'; p.textContent = L.note; cta.parentNode.insertBefore(p, cta.nextSibling); }
+  }
 
   /* ---------- the microphone waveform ---------- */
   var canvas = $('#sayWave'), speak = 0, level = 0, waveOn = false, wraf = 0, t0 = performance.now();
@@ -116,7 +127,7 @@
 
   gsap.set(words, { opacity: .22 });
   gsap.set('.say-heard', { opacity: 0, y: 8 });
-  gsap.set('.say-toast', { xPercent: 118 });
+  gsap.set('.say-toast', { xPercent: 118, transformOrigin: '100% 0%' }); // the frame is always left to right, the notice at its right edge
   var rtl = root.dir === 'rtl';
   gsap.set('.say-lib', { opacity: 0, xPercent: rtl ? -14 : 14, rotateY: rtl ? 16 : -16 });
 
@@ -133,7 +144,8 @@
     .to('.say-words .hot', { color: accent, duration: .04 }, .5)
     .to('.say-heard', { opacity: 1, y: 0, duration: .06, ease: 'power2.out' }, .56)
     .to('.say-toast', { xPercent: 0, duration: .12, ease: 'power3.out' }, .62)
-    .to('.say-screen', { scale: .72, opacity: .55, duration: .2, ease: 'power2.inOut' }, .78)
+    .to('.say-toast', { scale: 1.25, duration: .12, ease: 'power2.out' }, .7)
+    .to('.say-screen', { scale: .8, duration: .2, ease: 'power2.inOut' }, .78)
     .to('.say-lib', { opacity: 1, xPercent: 0, rotateY: 0, duration: .2, ease: 'power2.out' }, .8)
     .to({}, { duration: .04 });
 

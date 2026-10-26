@@ -63,7 +63,7 @@ html[dir="rtl"] .say-screen { transform-origin: 100% 0; }
 .say-heard { margin: 0; font-size: .82rem; font-weight: 650; color: var(--muted); white-space: nowrap; display: inline-flex; align-items: center; gap: 8px; }
 .say-heard::before { content: ""; width: 8px; height: 8px; border-radius: 50%; background: #3ccf7d; }
 html[lang="ar"] .say-words { direction: rtl; }
-.say-lib { position: absolute; inset-inline-end: -2%; bottom: 0; width: 66%; z-index: 3; }
+.say-lib { position: absolute; inset-inline-end: -2%; bottom: 0; width: 66%; z-index: 1; }
 
 .say-facts { list-style: none; margin: 0 0 clamp(60px, 9vw, 120px); padding: 0; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 14px; }
 .say-facts li {
@@ -172,12 +172,6 @@ html[dir="rtl"] .more summary { padding: 20px 26px 20px 56px; }
 .rm .film-toggle { display: none; }
 @media (prefers-reduced-motion: reduce) { .film-toggle { display: none; } }
 
-/* the app cards: the wide storage page gets the wide card, the "Clip saved" picture keeps to the corner with the notice */
-@media (min-width: 1061px) {
-  .b-sto { grid-column: span 7; }
-  .b-lite { grid-column: span 5; }
-}
-.b-lite .screen img { aspect-ratio: 16 / 8; object-fit: cover; object-position: 100% 0; }
 
 /* readable white on the main buttons (4.7:1 and up) and the skip link */
 .btn.primary { background: linear-gradient(180deg, #1773d6, #0a5fc0); }
@@ -206,11 +200,6 @@ html[dir="rtl"] .more summary { padding: 20px 26px 20px 56px; }
 .azs .az-ctl > span { flex-basis: 100%; }
 @media (max-width: 1060px) { .try-grid { grid-template-columns: 1fr; } }
 
-/* storage and capture: the words beside the storage page */
-.app-one { display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); gap: clamp(24px, 4vw, 56px); align-items: center; }
-.app-text h3 { font-size: 1.3rem; }
-.app-text p { color: var(--muted); margin: 8px 0 22px; }
-.app-text p:last-child { margin-bottom: 0; }
 
 /* a download button after the voice scene, and the page's closing call */
 .say-facts { margin-bottom: 28px; }
@@ -227,7 +216,6 @@ html[dir="rtl"] .more summary { padding: 20px 26px 20px 56px; }
 .sec-head p, .sync .sec-head p { max-width: 36em; }
 .badge, .gap { font-size: .8125rem; }
 @media (max-width: 1060px) {
-  .app-one { grid-template-columns: 1fr; }
 }
 @media (max-width: 560px) {
   .safe .sec-head h2 { font-size: 1.7rem; }
@@ -244,3 +232,23 @@ html[dir="rtl"] .more summary { padding: 20px 26px 20px 56px; }
 .azs h2 { font-size: clamp(1.75rem, 2.3vw, 2.15rem); }
 @media (min-width: 1061px) { .azs h2 .m { white-space: nowrap; } }
 @media (max-width: 560px) { .azs h2 { font-size: 1.55rem; } .azs h2 .m { white-space: nowrap; } }
+
+/* phones and data saver: the films stay still pictures, so there is nothing to pause */
+.lean .film-toggle { display: none; }
+/* not on Windows: say so under the hero buttons */
+.pc-note { margin-top: 14px; color: var(--text); font-weight: 600; }
+
+/* the Discord line wraps as one sentence */
+.discord-row { align-items: flex-start; }
+.discord-row svg { margin-top: .2em; }
+
+/* comfortable line length, readable captions, no key cap under 13px */
+.dl-note, .req { max-width: 62ch; }
+.faq .a p { max-width: 68ch; }
+.cap { color: var(--muted); }
+kbd { font-size: max(.82em, 13px); }
+
+@media (max-width: 560px) {
+  .cmp .tag { font-size: .72rem; }
+  .cmp .after .tag { top: auto; bottom: 10px; }
+}
