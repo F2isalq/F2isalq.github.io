@@ -177,3 +177,10 @@ html[dir="rtl"] .more summary { padding: 20px 26px 20px 56px; }
 .film-toggle[aria-pressed="true"] .ic-play { display: block; }
 .rm .film-toggle { display: none; }
 @media (prefers-reduced-motion: reduce) { .film-toggle { display: none; } }
+
+/* the app cards: the wide storage page gets the wide card, the "Clip saved" picture keeps to the corner with the notice */
+@media (min-width: 1061px) {
+  .b-sto { grid-column: span 7; }
+  .b-lite { grid-column: span 5; }
+}
+.b-lite .screen img { aspect-ratio: 16 / 8; object-fit: cover; object-position: 100% 0; }
